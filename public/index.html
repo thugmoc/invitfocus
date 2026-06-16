@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INVITEFOCUS BETA</title>
+  <style>
+    :root {
+      --primary: #2E75B6;
+      --accent: #F96167;
+      --bg: #F8FBFF;
+      --surface: #FFFFFF;
+      --text: #1A1A2E;
+      --muted: #889098;
+      --radius: 20px;
+      --shadow: 0 18px 48px rgba(46, 117, 182, 0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); }
+    body { line-height: 1.6; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header { padding: 32px 0; }
+    .nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .nav a { font-weight: 600; color: var(--text); }
+    .hero { display: grid; gap: 32px; align-items: center; padding: 48px 0; }
+    .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; letter-spacing: -0.04em; }
+    .hero p { max-width: 610px; color: var(--muted); margin: 24px 0; font-size: 1.08rem; }
+    .btn-primary { display: inline-flex; align-items: center; justify-content: center; background: var(--primary); color: white; padding: 16px 28px; border-radius: 999px; font-weight: 700; box-shadow: var(--shadow); transition: transform 200ms ease, box-shadow 200ms ease; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 22px 56px rgba(46, 117, 182, 0.18); }
+    .hero-grid { display: grid; gap: 16px; }
+    .features { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 64px 0; }
+    .feature-card { background: var(--surface); border-radius: var(--radius); padding: 28px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05); }
+    .feature-card h3 { margin-bottom: 12px; font-size: 1.15rem; }
+    .section { padding: 64px 0; }
+    .section h2 { font-size: clamp(2rem, 3vw, 2.75rem); margin-bottom: 16px; }
+    .section p { color: var(--muted); max-width: 720px; }
+    .grid-4 { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 32px; }
+    .card-compact { background: var(--surface); border-radius: 18px; padding: 24px; border: 1px solid rgba(216, 236, 239, 0.9); }
+    .team { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .team-card { padding: 24px; border-radius: 18px; background: var(--surface); box-shadow: 0 16px 36px rgba(46, 117, 182, 0.08); }
+    .team-card h3 { margin-bottom: 8px; }
+    .footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 32px 0; border-top: 1px solid rgba(34, 34, 34, 0.08); color: var(--muted); }
+    @media (max-width: 720px) {
+      .nav { flex-direction: column; align-items: flex-start; }
+      .hero { padding: 28px 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="nav">
+      <a href="#home"><strong>INVITEFOCUS BETA</strong></a>
+      <nav>
+        <a href="#features">Fonctions</a>
+        <a href="#team">Équipe</a>
+        <a href="#cta">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero" id="home">
+      <div>
+        <p style="color: var(--accent); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;">BETA exclusive</p>
+        <h1>Diagnostic financier automatisé pour PME en Afrique de l’Ouest.</h1>
+        <p>Collectez les données, générez un rapport clair et professionnel, puis engagez vos clients en 24-48h avec des recommandations actionnables.</p>
+        <a class="btn-primary" href="#cta">Démarrer la BETA</a>
+      </div>
+      <div class="hero-grid">
+        <div class="card-compact">
+          <p style="font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em;">Rapports prêts</p>
+          <p style="font-size: 2rem; font-weight: 700; margin: 12px 0;">F1 / F2 / F3</p>
+          <p>Diagnostic financier, pilotage opérationnel, stratégie de croissance.</p>
+        </div>
+        <div class="card-compact">
+          <p style="font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em;">Pipeline</p>
+          <p style="font-size: 2rem; font-weight: 700; margin: 12px 0;">Python + Claude</p>
+          <p>Automatisation intelligente avec analyse IA et génération PDF.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <h2>Pourquoi INVITEFOCUS BETA ?</h2>
+      <p>Une plateforme conçue pour les cabinets de conseil et les PME qui cherchent à industrialiser leurs diagnostics financiers sans perdre en qualité.</p>
+      <div class="features">
+        <article class="feature-card">
+          <h3>Onboarding rapide</h3>
+          <p>Collecte sécurisée des documents et suivi clair du statut client.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Analyse IA puissante</h3>
+          <p>Claude API génère des recommandations immédiates pour le client.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Rapports PDF professionnels</h3>
+          <p>Export prêt à présenter, formaté pour un diagnostic clair et actionnable.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Tableau de pilotage</h3>
+          <p>Suivi des clients, KPIs et pipeline de production en temps réel.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-4">
+        <div class="card-compact">
+          <h3>320-1920px</h3>
+          <p>Design mobile-first avec un rendu fluide sur tous les écrans.</p>
+        </div>
+        <div class="card-compact">
+          <h3>WCAG 2.1 AA</h3>
+          <p>Contraste, focus et navigation conformes aux normes d’accessibilité.</p>
+        </div>
+        <div class="card-compact">
+          <h3>Data-driven</h3>
+          <p>Transformer les documents clients en insights structurés.</p>
+        </div>
+        <div class="card-compact">
+          <h3>Prêt à héberger</h3>
+          <p>Page statique simple, facile à déployer sur Netlify ou Vercel.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="team">
+      <h2>Équipe BETA</h2>
+      <div class="team">
+        <div class="team-card">
+          <h3>Aminata</h3>
+          <p>Responsable commercial et relation client.</p>
+        </div>
+        <div class="team-card">
+          <h3>Bi Boty</h3>
+          <p>Responsable technique et génération de rapports.</p>
+        </div>
+        <div class="team-card">
+          <h3>Khalif</h3>
+          <p>Supervision produit et validation finale.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cta">
+      <div class="card-compact" style="text-align:center;">
+        <h2>Prêt à lancer votre BETA ?</h2>
+        <p>Utilisez le dossier client existant pour accélérer l’analyse et démarrer immédiatement.</p>
+        <a class="btn-primary" href="https://drive.google.com/drive/folders/1A62XdE0I6I2TB7-NbC3BiLRCoQOSZQi1?usp=sharing" target="_blank">Accéder aux données clients</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>INVITEFOCUS BETA — Diagnostic financier rapide</span>
+      <span>© 2026 INVITEFOCUS</span>
+    </footer>
+  </main>
+</body>
+</html>

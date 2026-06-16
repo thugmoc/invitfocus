@@ -1,0 +1,9 @@
+anthropic
+openpyxl
+pandas
+google-auth
+jinja2
+reportlab
+pyairtable
+supabase
+python-dotenv

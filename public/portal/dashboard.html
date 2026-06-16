@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mon espace — INVITEFOCUS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/api/env.js"></script>
+<style>
+  :root { --primary: #2E75B6; --bg: #F8FBFF; --text: #1A1A2E; --muted: #889098; --success: #27AE60; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+         background: var(--bg); color: var(--text); }
+  header { background: white; padding: 20px 32px; display: flex; justify-content: space-between;
+           align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  header h1 { font-size: 1.2rem; }
+  header button { background: none; border: 1px solid #D8DFE5; padding: 8px 16px; border-radius: 8px;
+                  cursor: pointer; color: var(--muted); }
+  main { max-width: 900px; margin: 0 auto; padding: 32px; }
+  .status-badge { display: inline-block; padding: 6px 14px; border-radius: 999px; font-size: 0.8rem;
+                  font-weight: 700; background: #E8F0FB; color: var(--primary); margin-bottom: 24px; }
+  .card { background: white; border-radius: 16px; padding: 28px; margin-bottom: 20px;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
+  .card h2 { font-size: 1.1rem; margin-bottom: 12px; }
+  .doc-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0;
+             border-bottom: 1px solid #F0F0F0; }
+  .doc-row:last-child { border-bottom: none; }
+  .pill { font-size: 0.75rem; padding: 4px 10px; border-radius: 999px; font-weight: 600; }
+  .pill.received { background: #E8F8EF; color: var(--success); }
+  .pill.pending  { background: #FFF4E5; color: #F39C12; }
+  .btn-download { display: inline-block; background: var(--primary); color: white; padding: 12px 24px;
+                  border-radius: 10px; font-weight: 700; text-decoration: none; }
+  #loading { text-align: center; padding: 60px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <header>
+    <h1>INVITEFOCUS — Mon espace</h1>
+    <button id="logoutBtn">Déconnexion</button>
+  </header>
+
+  <main id="loading">Chargement...</main>
+
+<script src="/js/supabase-client.js"></script>
+<script>
+  document.getElementById('logoutBtn').addEventListener('click', signOut);
+
+  async function loadDashboard() {
+    const session = await requireAuth();
+    if (!session) return;
+
+    const { data: client, error } = await sb
+      .from('clients')
+      .select('*, reports(*), documents(*)')
+      .eq('user_id', session.user.id)
+      .single();
+
+    const main = document.getElementById('loading');
+    main.id = '';
+
+    if (error || !client) {
+      main.innerHTML = '<div class="card"><p>Aucun dossier trouvé pour ce compte. Contactez votre consultant.</p></div>';
+      return;
+    }
+
+    const statusLabels = {
+      lead: 'Prospect', onboarded: 'Intégré', collecting: 'Collecte en cours',
+      validating: 'Validation', analyzing: 'Analyse en cours',
+      delivered: 'Rapport livré', feedback: 'En attente de retour'
+    };
+
+    const docsHtml = (client.documents || []).map(d => `
+      <div class="doc-row">
+        <span>${d.type}</span>
+        <span class="pill ${d.status === 'received' || d.status === 'verified' ? 'received' : 'pending'}">
+          ${d.status === 'received' || d.status === 'verified' ? 'Reçu' : 'En attente'}
+        </span>
+      </div>`).join('') || '<p>Aucun document encore.</p>';
+
+    const latestReport = (client.reports || [])[0];
+
+    main.innerHTML = `
+      <div class="status-badge">${statusLabels[client.status] || client.status}</div>
+      <div class="card">
+        <h2>Bonjour ${client.name}</h2>
+        <p>Entreprise : <strong>${client.company}</strong></p>
+      </div>
+      <div class="card">
+        <h2>Documents</h2>
+        ${docsHtml}
+      </div>
+      ${latestReport ? `
+      <div class="card">
+        <h2>Votre diagnostic financier</h2>
+        <p style="margin-bottom:16px;color:var(--muted)">Score global : <strong>${latestReport.score}/10</strong></p>
+        <a class="btn-download" href="${latestReport.pdf_url}" target="_blank">Télécharger le rapport PDF</a>
+      </div>` : `
+      <div class="card">
+        <h2>Votre diagnostic financier</h2>
+        <p style="color:var(--muted)">Votre rapport est en cours de préparation.</p>
+      </div>`}
+    `;
+  }
+
+  loadDashboard();
+</script>
+</body>
+</html>

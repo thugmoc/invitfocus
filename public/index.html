@@ -113,6 +113,24 @@
     cursor: pointer; transition: all 150ms var(--ease); }
   .audience-tag:hover { border-color: var(--color-primary); color: var(--color-primary); }
 
+  .services-section { background: var(--color-surface-alt); }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); margin-top: var(--space-3xl); }
+  .service-card {
+    background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+    padding: var(--space-2xl); transition: all 200ms var(--ease); position: relative;
+  }
+  .service-card:hover { border-color: var(--color-primary); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(46, 117, 182, 0.08); }
+  .service-icon {
+    font-size: 2.4rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-lg);
+    width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+    background: var(--color-surface-alt); border-radius: 8px;
+  }
+  .service-card h3 { margin-bottom: var(--space-md); }
+  .service-card p { color: var(--color-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: var(--space-lg); }
+  .service-cta { display: inline-flex; align-items: center; gap: var(--space-sm); font-weight: 600; font-size: 0.9rem;
+    color: var(--color-primary); transition: all 150ms var(--ease); }
+  .service-cta:hover { transform: translateX(4px); }
+
   .faq-item { border-bottom: 1px solid var(--color-border); padding: var(--space-lg) 0; }
   .faq-question { display: flex; justify-content: space-between; align-items: center; cursor: pointer;
     font-weight: 600; font-size: 1rem; gap: var(--space-md); }
@@ -175,6 +193,7 @@
         <li><a href="#pourquoi">Pourquoi</a></li>
         <li><a href="#process">Comment</a></li>
         <li><a href="#audience">Pour qui</a></li>
+        <li><a href="#services">Services</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="/portal/login.html">Espace client</a></li>
         <li><a href="#start" class="btn btn-primary">Démarrer</a></li>
@@ -185,6 +204,7 @@
       <a href="#pourquoi">Pourquoi</a>
       <a href="#process">Comment</a>
       <a href="#audience">Pour qui</a>
+      <a href="#services">Services</a>
       <a href="#faq">FAQ</a>
       <a href="/portal/login.html">Espace client</a>
       <a href="#start" class="btn btn-primary">Démarrer</a>
@@ -280,6 +300,36 @@
       <div class="audience-tag">Agro-alimentaire & Élevage</div>
       <div class="audience-tag">Services & Professionnel</div>
       <div class="audience-tag">Technologie & Créatif</div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="services-section">
+  <div class="container">
+    <div class="section-head">
+      <span class="label">Offre complète</span>
+      <h2>Nos services.</h2>
+      <p class="lede">Une infrastructure entière pour structurer, sécuriser et accélérer votre entreprise. Du diagnostic au pilotage quotidien.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">◐</div>
+        <h3>Assistance Comptable</h3>
+        <p>Classement et saisie comptable, suivi de trésorerie quotidien, états financiers et démarches fiscales auprès des autorités. Votre données comptables, structurées et toujours à jour.</p>
+        <a href="#start" class="service-cta">Démarrer →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚖</div>
+        <h3>Services Juridiques</h3>
+        <p>Formalisation et conformité, création d'entreprise, négociation contractuelle et mise en conformité fiscale. Vous opérez en toute légalité et sécurité juridique.</p>
+        <a href="#start" class="service-cta">En savoir plus →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">◆</div>
+        <h3>Stratégie & Growth</h3>
+        <p>Business plan et modélisation financière, conseil stratégique, identification des leviers de croissance et développement de partenariats. Votre feuille de route vers l'échelle.</p>
+        <a href="#start" class="service-cta">Découvrir →</a>
+      </div>
     </div>
   </div>
 </section>

@@ -8,77 +8,143 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/api/env.js"></script>
 <style>
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
+  :root {
+    --primary: #2E75B6;
+    --secondary: #1C5A96;
+    --accent: #F96167;
+    --success: #27AE60;
+    --warning: #F39C12;
+    --light: #F8FBFF;
+    --dark: #1A1A2E;
+    --text: #333333;
+    --text-light: #666666;
+    --border: #E8E8E8;
+  }
 
+  html, body { background: var(--light); }
+
+  /* PRO HEADER */
+  .client-header { background: white; border-bottom: 1px solid var(--border); padding: 1.5rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+  .client-header-content { max-width: 1400px; margin: 0 auto; padding: 0 var(--space-xl); display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
+  .client-logo-box { width: 44px; height: 44px; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; }
+  .client-company-info h2 { font-size: 1.2rem; color: var(--dark); margin: 0 0 2px; font-weight: 700; }
+  .client-company-info p { font-size: 0.85rem; color: var(--text-light); margin: 0; }
+  .client-user-profile { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; background: var(--light); transition: all 0.3s ease; }
+  .client-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.9rem; }
+
+  /* TABS STICKY */
+  .client-tabs { display: flex; gap: 0.5px; background: white; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 2rem; padding: 0.5rem; position: sticky; top: 64px; z-index: 99; }
+  .client-tab-button { flex: 1; padding: 1rem; border: none; background: white; color: var(--text-light); font-weight: 600; cursor: pointer; transition: all 0.3s ease; border-radius: 6px; font-size: 0.95rem; }
+  .client-tab-button.active { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; }
+  .client-tab-button:hover:not(.active) { background: var(--light); }
+
+  .tab-content { display: none; animation: fadeIn 0.3s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ACTION PLAN CARDS */
   .action-plan { margin-bottom: var(--space-2xl); }
   .action-month {
-    background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg);
-    padding: var(--space-lg); margin-bottom: var(--space-md);
+    background: white; border: 1px solid var(--border); border-radius: 12px;
+    padding: var(--space-lg); margin-bottom: var(--space-md); transition: all 0.3s ease;
   }
-  .action-month.current { border-left: 4px solid var(--color-primary); background: #F0F7FF; }
-  .action-month h3 { margin-bottom: var(--space-sm); color: var(--color-primary); font-weight: 600; }
-  .action-service { font-weight: 500; margin-bottom: var(--space-sm); }
+  .action-month:hover { transform: translateX(4px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+  .action-month.current { border-left: 4px solid var(--primary); background: linear-gradient(135deg, rgba(46,117,182,0.05) 0%, white 100%); }
+  .action-month h3 { margin-bottom: var(--space-sm); color: var(--primary); font-weight: 700; font-size: 1.1rem; }
+  .action-service { font-weight: 600; margin-bottom: var(--space-sm); font-size: 0.95rem; }
   .action-tasks { list-style: none; padding-left: var(--space-md); }
-  .action-tasks li { padding: 6px 0; font-size: 0.9rem; color: var(--color-muted); }
-  .action-tasks li::before { content: "→ "; color: var(--color-primary); font-weight: 600; margin-right: 4px; }
+  .action-tasks li { padding: 8px 0; font-size: 0.9rem; color: var(--text-light); }
+  .action-tasks li::before { content: "✓ "; color: var(--success); font-weight: 700; margin-right: 6px; }
 
-  .service-status { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg); padding: var(--space-md); background: var(--color-surface-alt); border-radius: var(--radius-md); }
-  .service-status-label { font-weight: 600; }
-  .service-status-value { color: var(--color-muted); font-size: 0.9rem; }
-  .service-status.active .service-status-value { color: var(--color-success); font-weight: 600; }
+  .service-status { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg); padding: var(--space-md); background: white; border: 1px solid var(--border); border-radius: 12px; border-left: 4px solid var(--primary); }
+  .service-status-label { font-weight: 700; font-size: 0.95rem; }
+  .service-status-value { color: var(--text-light); font-size: 0.9rem; }
+  .service-status.active .service-status-value { color: var(--success); font-weight: 700; }
+
+  /* STAT CARDS */
+  .client-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+  .client-stat-card { background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); transition: all 0.3s ease; }
+  .client-stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-color: var(--primary); }
+  .client-stat-label { font-size: 0.8rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; font-weight: 700; }
+  .client-stat-value { font-size: 2.2rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+  .client-stat-trend { font-size: 0.85rem; color: var(--success); }
 
   .report-cta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg); flex-wrap: wrap; }
-  .doc-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 0.9rem; }
+  .doc-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
   .doc-row:last-child { border-bottom: none; }
-  .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-lg); }
+  .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
   @media (max-width: 920px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* CONTAINER */
+  .client-container { max-width: 1400px; margin: 0 auto; padding: 2rem 20px; }
+
+  .client-card { background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); }
+  .client-card-title { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin: 0 0 var(--space-md); }
+
+  @media (max-width: 768px) {
+    .client-header-content { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .client-tabs { flex-wrap: wrap; }
+    .client-tab-button { flex: 1; min-width: 100px; }
+    .client-stat-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
-<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-<div class="app-shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">INVITEFOCUS<span class="sub">Espace client</span></div>
-    <ul class="sidebar-nav">
-      <li><a href="/portal/dashboard.html" class="active"><span class="icon">⌂</span> Accueil</a></li>
-      <li><a href="/portal/documents.html"><span class="icon">▤</span> Documents</a></li>
-      <li><a href="/portal/messages.html"><span class="icon">✉</span> Messages</a></li>
-      <li><a href="/portal/profile.html"><span class="icon">●</span> Mon profil</a></li>
-    </ul>
-    <div class="sidebar-footer"><button id="logoutBtn">Déconnexion</button></div>
-  </aside>
-
-  <div class="main-area">
-    <div class="topbar">
-      <button class="menu-toggle" id="menuToggle">☰</button>
-      <h1>Accueil</h1>
-      <span></span>
-    </div>
-    <main class="content">
-      <div style="display:flex;gap:var(--space-md);margin-bottom:var(--space-lg);flex-wrap:wrap">
-        <button class="btn btn-ghost" data-tab="overview" style="flex:0;font-weight:600">Aperçu</button>
-        <button class="btn btn-ghost" data-tab="comptable" style="flex:0;font-weight:600">◐ Comptable</button>
-        <button class="btn btn-ghost" data-tab="juridique" style="flex:0;font-weight:600">⚖ Juridique</button>
-        <button class="btn btn-ghost" data-tab="growth" style="flex:0;font-weight:600">◆ Growth</button>
+<header class="client-header">
+  <div class="client-header-content">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <div class="client-logo-box">IF</div>
+      <div class="client-company-info">
+        <h2 id="companyNameHeader">INVITEFOCUS</h2>
+        <p>Espace client</p>
       </div>
+    </div>
+    <div class="client-user-profile">
+      <div class="client-avatar" id="clientAvatarHeader">--</div>
+      <div>
+        <div style="font-weight: 600; font-size: 0.9rem;" id="clientNameHeader">Client</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div style="background: var(--light); min-height: 100vh;">
+  <div class="client-container">
+    <!-- TABS -->
+    <div class="client-tabs">
+      <button class="client-tab-button active" data-tab="overview" onclick="switchClientTab('overview')">📊 Plan d'action</button>
+      <button class="client-tab-button" data-tab="comptable" onclick="switchClientTab('comptable')">◐ Comptable</button>
+      <button class="client-tab-button" data-tab="juridique" onclick="switchClientTab('juridique')">⚖ Juridique</button>
+      <button class="client-tab-button" data-tab="growth" onclick="switchClientTab('growth')">◆ Growth</button>
+      <button class="client-tab-button" data-tab="documents" onclick="switchClientTab('documents')">📋 Documents</button>
+    </div>
+
+    <main>
 
       <div id="tab-overview" class="tab-content active">
         <div id="actionPlanContainer" style="display:none"></div>
         <div id="welcomeContainer"></div>
       </div>
 
-      <div id="tab-comptable" class="tab-content" style="display:none">
-        <div class="card"><h2 class="card-title">Assistance Comptable</h2><div id="comptableContent"></div></div>
+      <div id="tab-comptable" class="tab-content">
+        <div class="client-card"><h2 class="client-card-title">◐ Assistance Comptable</h2><div id="comptableContent"></div></div>
       </div>
 
-      <div id="tab-juridique" class="tab-content" style="display:none">
-        <div class="card"><h2 class="card-title">Services Juridiques</h2><div id="juridiqueContent"></div></div>
+      <div id="tab-juridique" class="tab-content">
+        <div class="client-card"><h2 class="client-card-title">⚖ Services Juridiques</h2><div id="juridiqueContent"></div></div>
       </div>
 
-      <div id="tab-growth" class="tab-content" style="display:none">
-        <div class="card"><h2 class="card-title">Stratégie & Growth</h2><div id="growthContent"></div></div>
+      <div id="tab-growth" class="tab-content">
+        <div class="client-card"><h2 class="client-card-title">◆ Stratégie & Growth</h2><div id="growthContent"></div></div>
+      </div>
+
+      <div id="tab-documents" class="tab-content">
+        <div class="client-card">
+          <h2 class="client-card-title">📋 Mes documents</h2>
+          <p style="color: var(--text-light); margin-bottom: 1.5rem;">Consultez et téléchargez vos documents.</p>
+          <a href="/portal/documents.html" class="btn btn-primary" style="display: inline-block;">Gérer mes documents →</a>
+        </div>
       </div>
     </main>
   </div>
@@ -88,80 +154,67 @@
 <script>
   let currentClient = null;
 
-  document.getElementById('logoutBtn').addEventListener('click', signOut);
-  document.getElementById('menuToggle').addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('sidebarBackdrop').classList.toggle('open');
-  });
-  document.getElementById('sidebarBackdrop').addEventListener('click', () => {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarBackdrop').classList.remove('open');
-  });
-
   // Tab navigation
-  document.querySelectorAll('[data-tab]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const tabName = e.target.dataset.tab;
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.getElementById('tab-' + tabName).classList.add('active');
-      document.querySelectorAll('[data-tab]').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-    });
-  });
+  function switchClientTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.client-tab-button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tabName).classList.add('active');
+    event.target.classList.add('active');
+  }
 
   async function renderActionPlan(client) {
     const actionPlan = `
-      <div class="card" style="margin-bottom:var(--space-2xl)">
-        <h2 class="card-title">Votre plan d'action sur 12 mois</h2>
-        <p style="color:var(--color-muted);margin-bottom:var(--space-lg)">Basé sur votre diagnostic, voici comment structurer vos trois enjeux critiques, mois par mois.</p>
+      <div style="margin-bottom:var(--space-2xl)">
+        <h2 style="font-size:1.3rem;font-weight:700;color:var(--dark);margin-bottom:var(--space-lg)">📅 Votre plan d'action sur 12 mois</h2>
+        <p style="color:var(--text-light);margin-bottom:var(--space-2xl);max-width:700px">Basé sur votre diagnostic financier, voici comment nous structurons vos trois enjeux critiques, mois par mois. Chaque phase construit sur la précédente.</p>
         <div class="action-plan">
           <div class="action-month ${client.status === 'onboarded' || client.status === 'collecting' ? 'current' : ''}">
-            <div style="display:flex;justify-content:space-between">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem">
               <div>
-                <h3>Mois 1-2 : Formalisation</h3>
-                <div class="action-service">⚖ Services Juridiques</div>
+                <h3 style="font-size:1.1rem;font-weight:700;color:var(--primary);margin-bottom:0.5rem">⚖ Mois 1-2 : Formalisation Juridique</h3>
+                <div class="action-service">Services Juridiques</div>
               </div>
-              <span class="pill ${client.status === 'onboarded' || client.status === 'collecting' ? 'current' : 'upcoming'}" style="height:fit-content">
+              <span style="display:inline-block;padding:0.4rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;${client.status === 'onboarded' || client.status === 'collecting' ? 'background:rgba(39,174,96,0.1);color:#27AE60' : 'background:rgba(243,156,18,0.1);color:#F39C12'}">
                 ${client.status === 'onboarded' || client.status === 'collecting' ? 'En cours' : 'À venir'}
               </span>
             </div>
             <ul class="action-tasks">
-              <li>Formalisation de votre structure légale</li>
-              <li>Numérotation et enregistrement fiscal</li>
-              <li>Première conformité contractuelle</li>
+              <li>Formalisation de votre structure légale et statuts</li>
+              <li>Numérotation fiscale et enregistrement NINEA</li>
+              <li>Conformité contractuelle de base</li>
             </ul>
           </div>
 
           <div class="action-month ${client.status === 'validating' || client.status === 'analyzing' ? 'current' : ''}">
-            <div style="display:flex;justify-content:space-between">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem">
               <div>
-                <h3>Mois 3-6 : Comptabilité structurée</h3>
-                <div class="action-service">◐ Assistance Comptable</div>
+                <h3 style="font-size:1.1rem;font-weight:700;color:var(--primary);margin-bottom:0.5rem">◐ Mois 3-6 : Comptabilité Structurée</h3>
+                <div class="action-service">Assistance Comptable</div>
               </div>
-              <span class="pill ${client.status === 'validating' || client.status === 'analyzing' ? 'current' : 'upcoming'}" style="height:fit-content">
+              <span style="display:inline-block;padding:0.4rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;${client.status === 'validating' || client.status === 'analyzing' ? 'background:rgba(39,174,96,0.1);color:#27AE60' : 'background:rgba(243,156,18,0.1);color:#F39C12'}">
                 ${client.status === 'validating' || client.status === 'analyzing' ? 'En cours' : 'À venir'}
               </span>
             </div>
             <ul class="action-tasks">
-              <li>Classement et saisie comptable rétrospective</li>
-              <li>Mise en place de la trésorerie automatisée</li>
-              <li>États financiers mensuels validés</li>
+              <li>Classement et saisie comptable complète</li>
+              <li>Mise en place du suivi de trésorerie automatisé</li>
+              <li>États financiers mensuels certifiés et validés</li>
             </ul>
           </div>
 
           <div class="action-month ${client.status === 'delivered' || client.status === 'feedback' ? 'current' : ''}">
-            <div style="display:flex;justify-content:space-between">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem">
               <div>
-                <h3>Mois 7-12 : Croissance pilotée</h3>
-                <div class="action-service">◆ Stratégie & Growth</div>
+                <h3 style="font-size:1.1rem;font-weight:700;color:var(--primary);margin-bottom:0.5rem">◆ Mois 7-12 : Stratégie & Croissance</h3>
+                <div class="action-service">Stratégie & Growth</div>
               </div>
-              <span class="pill ${client.status === 'delivered' || client.status === 'feedback' ? 'current' : 'upcoming'}" style="height:fit-content">
+              <span style="display:inline-block;padding:0.4rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;${client.status === 'delivered' || client.status === 'feedback' ? 'background:rgba(39,174,96,0.1);color:#27AE60' : 'background:rgba(243,156,18,0.1);color:#F39C12'}">
                 ${client.status === 'delivered' || client.status === 'feedback' ? 'En cours' : 'À venir'}
               </span>
             </div>
             <ul class="action-tasks">
-              <li>Business plan actualisé avec nouvelles données</li>
-              <li>Identification des leviers de croissance</li>
+              <li>Business plan actualisé avec données réelles</li>
+              <li>Identification des leviers de croissance clés</li>
               <li>Préparation pour levée de fonds ou expansion</li>
             </ul>
           </div>
@@ -173,25 +226,29 @@
 
   async function renderServiceTab(serviceName, client) {
     const serviceStatus = {
-      comptable: { active: ['validating', 'analyzing', 'delivered'], status: 'Assistance Comptable' },
-      juridique: { active: ['onboarded', 'collecting', 'validating'], status: 'Services Juridiques' },
-      growth: { active: ['delivered', 'feedback'], status: 'Stratégie & Growth' }
+      comptable: { active: ['validating', 'analyzing', 'delivered'], status: 'Assistance Comptable', desc: 'Classement comptable, suivi de trésorerie, états financiers et conformité fiscale.' },
+      juridique: { active: ['onboarded', 'collecting', 'validating'], status: 'Services Juridiques', desc: 'Formalisation légale, création d\'entreprise, conformité fiscale et contractuelle.' },
+      growth: { active: ['delivered', 'feedback'], status: 'Stratégie & Growth', desc: 'Business plan, conseil stratégique, identification des leviers de croissance et développement.' }
     }[serviceName];
 
     const isActive = serviceStatus.active.includes(client.status);
+    const progressPercent = isActive ? 65 : 0;
 
     return `
       <div class="service-status ${isActive ? 'active' : ''}">
-        <span class="service-status-label">${serviceStatus.status}</span>
-        <span class="service-status-value">${isActive ? 'Actif' : 'Planifié'}</span>
+        <div>
+          <div class="service-status-label">${serviceStatus.status}</div>
+          <p style="color:var(--text-light);font-size:0.9rem;margin-top:0.5rem;margin-bottom:0">${serviceStatus.desc}</p>
+        </div>
+        <span class="service-status-value">${isActive ? '✓ Actif' : '◯ Planifié'}</span>
       </div>
-      <p style="color:var(--color-muted);margin-bottom:var(--space-lg)">
-        ${serviceName === 'comptable' ? 'Classement comptable, suivi de trésorerie, états financiers et conformité fiscale.' :
-          serviceName === 'juridique' ? 'Formalisation, création, conformité légale et contrats.' :
-          'Business plan, conseil stratégique et identification des leviers de croissance.'}
-      </p>
-      <div style="padding:var(--space-lg);background:var(--color-surface-alt);border-radius:var(--radius-md)">
-        <p style="color:var(--color-muted);font-size:0.9rem">Nous vous tiendrons à jour ici avec les tâches et documents spécifiques au fil de la progression.</p>
+      <div style="margin-top:var(--space-2xl);padding:1.5rem;background:white;border:1px solid var(--border);border-radius:12px;text-align:center">
+        <div style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.5rem;font-weight:600">PROGRESSION</div>
+        <div style="font-size:2rem;font-weight:700;color:var(--primary);margin-bottom:1rem">${progressPercent}%</div>
+        <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div style="height:100%;background:linear-gradient(90deg, #2E75B6 0%, #1C5A96 100%);width:${progressPercent}%;transition:width 0.3s ease"></div>
+        </div>
+        <p style="color:var(--text-light);font-size:0.85rem;margin-top:1rem;margin-bottom:0">${isActive ? 'Service en cours de déploiement' : 'Service prévu dans le plan d\'action'}</p>
       </div>
     `;
   }
@@ -213,21 +270,13 @@
 
     currentClient = client;
 
+    // Update header
+    const initials = client.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    document.getElementById('clientNameHeader').textContent = client.name;
+    document.getElementById('companyNameHeader').textContent = client.company;
+    document.getElementById('clientAvatarHeader').textContent = initials;
+
     // Aperçu tab
-    const docTypeLabels = {
-      admin: 'Documents administratifs', bilan: 'Bilan comptable', resultat: 'Compte de résultat',
-      facture_vente: 'Factures de vente', facture_achat: 'Factures d\'achat',
-      releve_bancaire: 'Relevés bancaires', autre: 'Autres pièces',
-    };
-
-    const docsHtml = (client.documents || []).slice(0, 3).map(d => `
-      <div class="doc-row">
-        <span>${docTypeLabels[d.type] || d.type}</span>
-        <span class="pill ${d.status === 'received' || d.status === 'verified' ? 'delivered' : 'collecting'}">
-          ${d.status === 'received' || d.status === 'verified' ? 'Reçu' : 'En attente'}
-        </span>
-      </div>`).join('') || '<p style="color:var(--color-muted)">Aucun document encore.</p>';
-
     const latestReport = (client.reports || [])[0];
 
     const actionPlanHtml = await renderActionPlan(client);
@@ -237,18 +286,24 @@
     document.getElementById('welcomeContainer').innerHTML = `
       <div class="grid-2">
         <div>
-          <div class="card" style="margin-bottom:var(--space-lg)">
-            <h2 class="card-title">Bonjour ${client.name}</h2>
-            <p style="color:var(--color-muted);margin-bottom:var(--space-md)"><strong>${client.company}</strong></p>
-            <a class="btn btn-ghost" href="/portal/documents.html" style="display:inline-block">Gérer mes documents →</a>
+          <div class="client-card">
+            <h2 class="client-card-title">Bienvenue, ${client.name.split(' ')[0]}</h2>
+            <p style="color:var(--text-light);margin-bottom:var(--space-md)"><strong>${client.company}</strong></p>
+            <p style="color:var(--text-light);font-size:0.9rem;line-height:1.6">Suivez la progression de vos trois enjeux critiques mois par mois. Votre plan d'action est généré selon votre diagnostic initial.</p>
           </div>
         </div>
-        <div class="card">
-          <h2 class="card-title">Diagnostic</h2>
+        <div class="client-card">
+          <h2 class="client-card-title">📊 Diagnostic Financier</h2>
           ${latestReport ? `
-            <p style="margin-bottom:var(--space-md);color:var(--color-muted)">Score : <strong>${latestReport.score || '—'}/10</strong></p>
-            <a class="btn btn-primary" href="${latestReport.pdf_url}" target="_blank" style="width:100%">Télécharger le rapport</a>
-          ` : `<p style="color:var(--color-muted)">Votre rapport est en cours de préparation.</p>`}
+            <div class="client-stat-grid" style="margin-bottom:0">
+              <div class="client-stat-card">
+                <div class="client-stat-label">Score global</div>
+                <div class="client-stat-value">${latestReport.score || '—'}</div>
+                <div class="client-stat-trend">/10</div>
+              </div>
+            </div>
+            <a class="btn btn-primary" href="${latestReport.pdf_url}" target="_blank" style="width:100%;margin-top:1rem">Télécharger le rapport</a>
+          ` : `<p style="color:var(--text-light)">Votre rapport est en cours de préparation.</p>`}
         </div>
       </div>
     `;

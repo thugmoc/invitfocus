@@ -134,6 +134,8 @@ tbody tr:hover { background: var(--color-surface-alt); cursor: pointer; }
 .pill.collecting, .pill.validating { background: #FFF4E5; color: var(--color-warning); }
 .pill.analyzing { background: #F0E6FF; color: #7C4DBE; }
 .pill.delivered, .pill.feedback { background: #E8F8EF; color: var(--color-success); }
+.pill.current { background: #E8F8EF; color: var(--color-success); }
+.pill.upcoming { background: #F0E6FF; color: #7C4DBE; }
 
 .empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-muted); }
 

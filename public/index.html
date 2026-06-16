@@ -68,20 +68,24 @@
   .nav-mobile-panel.open { display: flex; }
 
   /* ── HERO ──────────────────────────────────────────────────── */
-  .hero { padding: var(--space-4xl) 0 var(--space-3xl); }
-  .hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-4xl); align-items: center; }
-  .hero-content h1 { margin-bottom: var(--space-lg); }
-  .hero-content .lede { margin-bottom: var(--space-2xl); max-width: 500px; }
-  .hero-actions { display: flex; gap: var(--space-md); flex-wrap: wrap; }
+  .hero { padding: var(--space-4xl) 0; background: linear-gradient(135deg, #F8FBFF 0%, #FFFFFF 100%); }
+  .hero-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+  .hero-inner h1 { margin-bottom: var(--space-lg); }
+  .hero-inner .lede { margin-bottom: var(--space-3xl); max-width: 650px; margin-left: auto; margin-right: auto; }
+  .hero-cta { display: flex; gap: var(--space-md); flex-wrap: wrap; justify-content: center; }
 
-  .value-stack { display: flex; flex-direction: column; gap: var(--space-md); }
-  .value-card {
-    background: var(--color-surface-alt); border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg); padding: var(--space-lg);
-    display: grid; grid-template-columns: 1fr 1.8fr; gap: var(--space-md); align-items: center;
+  .services-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); margin: var(--space-4xl) 0; }
+  .service-trio-card {
+    background: white; border: 2px solid var(--color-border); border-radius: var(--radius-lg);
+    padding: var(--space-2xl); transition: all 200ms var(--ease);
   }
-  .value-number { font-size: 2.2rem; font-weight: 700; color: var(--color-primary); }
-  .value-text { font-size: 0.9rem; color: var(--color-muted); line-height: 1.6; }
+  .service-trio-card:hover { border-color: var(--color-primary); transform: translateY(-8px); box-shadow: 0 16px 40px rgba(46, 117, 182, 0.12); }
+  .service-trio-icon { font-size: 3rem; margin-bottom: var(--space-lg); }
+  .service-trio-card h3 { margin-bottom: var(--space-md); font-size: 1.3rem; }
+  .service-trio-card p { color: var(--color-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: var(--space-lg); }
+  .service-trio-list { text-align: left; color: var(--color-muted); font-size: 0.85rem; list-style: none; }
+  .service-trio-list li { margin-bottom: var(--space-sm); padding-left: 24px; position: relative; }
+  .service-trio-list li::before { content: "✓"; position: absolute; left: 0; color: var(--color-success); font-weight: bold; }
 
   /* ── SECTIONS ──────────────────────────────────────────────── */
   section { padding: var(--space-4xl) 0; }
@@ -113,23 +117,6 @@
     cursor: pointer; transition: all 150ms var(--ease); }
   .audience-tag:hover { border-color: var(--color-primary); color: var(--color-primary); }
 
-  .services-section { background: var(--color-surface-alt); }
-  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); margin-top: var(--space-3xl); }
-  .service-card {
-    background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg);
-    padding: var(--space-2xl); transition: all 200ms var(--ease); position: relative;
-  }
-  .service-card:hover { border-color: var(--color-primary); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(46, 117, 182, 0.08); }
-  .service-icon {
-    font-size: 2.4rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-lg);
-    width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
-    background: var(--color-surface-alt); border-radius: 8px;
-  }
-  .service-card h3 { margin-bottom: var(--space-md); }
-  .service-card p { color: var(--color-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: var(--space-lg); }
-  .service-cta { display: inline-flex; align-items: center; gap: var(--space-sm); font-weight: 600; font-size: 0.9rem;
-    color: var(--color-primary); transition: all 150ms var(--ease); }
-  .service-cta:hover { transform: translateX(4px); }
 
   .faq-item { border-bottom: 1px solid var(--color-border); padding: var(--space-lg) 0; }
   .faq-question { display: flex; justify-content: space-between; align-items: center; cursor: pointer;
@@ -167,9 +154,7 @@
     margin-top: var(--space-2xl); color: var(--color-muted); font-size: 0.85rem; }
 
   @media (max-width: 1024px) {
-    .hero-grid { grid-template-columns: 1fr; }
-    .grid-3, .audience-grid, .timeline-grid { grid-template-columns: 1fr; }
-    .value-card { grid-template-columns: 1fr; }
+    .grid-3, .audience-grid, .timeline-grid, .services-trio { grid-template-columns: 1fr; }
     .footer-content { grid-template-columns: 1fr; }
   }
   @media (max-width: 768px) {
@@ -190,10 +175,9 @@
     <nav>
       <a href="#" class="logo">INVITEFOCUS</a>
       <ul class="nav-links">
-        <li><a href="#pourquoi">Pourquoi</a></li>
-        <li><a href="#process">Comment</a></li>
+        <li><a href="#services-detail">Diagnostic</a></li>
+        <li><a href="#process">Processus</a></li>
         <li><a href="#audience">Pour qui</a></li>
-        <li><a href="#services">Services</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="/portal/login.html">Espace client</a></li>
         <li><a href="#start" class="btn btn-primary">Démarrer</a></li>
@@ -201,10 +185,9 @@
       <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
     </nav>
     <div class="nav-mobile-panel" id="navMobilePanel">
-      <a href="#pourquoi">Pourquoi</a>
-      <a href="#process">Comment</a>
+      <a href="#services-detail">Diagnostic</a>
+      <a href="#process">Processus</a>
       <a href="#audience">Pour qui</a>
-      <a href="#services">Services</a>
       <a href="#faq">FAQ</a>
       <a href="/portal/login.html">Espace client</a>
       <a href="#start" class="btn btn-primary">Démarrer</a>
@@ -213,52 +196,72 @@
 </header>
 
 <section class="hero">
-  <div class="container hero-grid">
-    <div class="hero-content">
-      <span class="label">Diagnostic financier structurant</span>
-      <h1>Un diagnostic qui sert à quelque chose.</h1>
-      <p class="lede">INVITEFOCUS combine extraction automatisée de données et analyse structurée pour livrer en 24-48h ce que le conseil traditionnel met deux semaines à produire — une roadmap financière, pas un rapport de conformité.</p>
-      <div class="hero-actions">
-        <a href="#start" class="btn btn-primary">Réserver une démo</a>
-        <a href="#pourquoi" class="btn btn-ghost">Voir le modèle</a>
-      </div>
+  <div class="container hero-inner">
+    <span class="label">Infrastructure pour PME africaines</span>
+    <h1>Trois enjeux critiques. Une seule infrastructure.</h1>
+    <p class="lede">Comptabilité structurée, conformité juridique, stratégie de croissance. Pas de plateforme disparate. Pas de consultant fragmenté. Un écosystème cohérent qui vous donne les fondations pour échelle.</p>
+    <div class="hero-cta">
+      <a href="#start" class="btn btn-primary">Démarrer le diagnostic</a>
+      <a href="#services-detail" class="btn btn-ghost">Voir les services</a>
     </div>
-    <div class="value-stack">
-      <div class="value-card">
-        <div class="value-number">24-48h</div>
-        <div class="value-text">Délai de livraison du rapport complet, documenté et prêt à l'action.</div>
+
+    <div class="services-trio">
+      <div class="service-trio-card">
+        <div class="service-trio-icon">◐</div>
+        <h3>Assistance Comptable</h3>
+        <p>Vos données financières structurées et à jour, chaque jour.</p>
+        <ul class="service-trio-list">
+          <li>Classement & saisie comptable</li>
+          <li>Suivi de trésorerie quotidien</li>
+          <li>États financiers aux normes</li>
+          <li>Conformité fiscale</li>
+        </ul>
       </div>
-      <div class="value-card">
-        <div class="value-number">3</div>
-        <div class="value-text">Volets du diagnostic : solidité (risques), pilotage (actions immédiates), stratégie (croissance).</div>
+      <div class="service-trio-card">
+        <div class="service-trio-icon">⚖</div>
+        <h3>Services Juridiques</h3>
+        <p>Vous opérez en toute légalité et sécurité.</p>
+        <ul class="service-trio-list">
+          <li>Formalisation & structure légale</li>
+          <li>Création d'entreprise</li>
+          <li>Négociation contractuelle</li>
+          <li>Mise en conformité fiscale</li>
+        </ul>
       </div>
-      <div class="value-card">
-        <div class="value-number">100%</div>
-        <div class="value-text">Confidentialité totale. Zéro partage externe. Audit trail complet de qui accède à quoi.</div>
+      <div class="service-trio-card">
+        <div class="service-trio-icon">◆</div>
+        <h3>Stratégie & Growth</h3>
+        <p>Votre feuille de route vers l'échelle.</p>
+        <ul class="service-trio-list">
+          <li>Business plan & modélisation</li>
+          <li>Conseil stratégique</li>
+          <li>Leviers de croissance</li>
+          <li>Développement partenariats</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<section id="pourquoi">
+<section id="services-detail">
   <div class="container">
     <div class="section-head">
-      <span class="label">Le constat</span>
-      <h2>Pourquoi INVITEFOCUS existe.</h2>
-      <p class="lede">Les PME africaines ont rarement un problème de potentiel. Elles ont un problème de preuve : pas de diagnostic rapide, crédible et abordable pour convaincre partenaires, investisseurs, ou prêteurs.</p>
+      <span class="label">Le point d'entrée</span>
+      <h2>Comment ça commence : le diagnostic.</h2>
+      <p class="lede">Avant de structurer vos 3 enjeux critiques, vous devez savoir où vous êtes exactement : solidité financière, risques immédiats, levier de croissance. C'est le diagnostic INVITEFOCUS.</p>
     </div>
     <div class="grid-3">
       <div class="reason-card">
-        <h3>Diagnostic lent</h3>
-        <p>8-10h de travail manuel chez un cabinet traditionnel. Coût élevé, délai long, données incomplètes à cause de l'intervention manuelle.</p>
+        <h3>Solidité financière</h3>
+        <p>Analyse complète de votre risque : solvabilité, trésorerie, structure de coûts, dépendances. Vous savez où sont les failles avant que le marché les découvre.</p>
       </div>
       <div class="reason-card">
-        <h3>Infrastructure manquante</h3>
-        <p>Pas de plateforme fiable pour consolider documents, extraire les données clés, et structurer l'analyse à l'échelle africaine de manière économe.</p>
+        <h3>Pilotage immédiat</h3>
+        <p>3-5 actions concrètes identifiées pour les 90 prochains jours : blocages à débloquer, optimisations rapides, décisions critiques à prendre.</p>
       </div>
       <div class="reason-card">
-        <h3>Coût prohibitif</h3>
-        <p>Le conseil structurant (audit, conseil en croissance) reste inaccessible aux PME sous 50M CFA de CA. Le diagnostic doit être démocratique.</p>
+        <h3>Feuille de route</h3>
+        <p>Un plan d'action structuré sur 12 mois : dans quel ordre engager les services (Comptabilité → Juridique → Growth), pour quels bénéfices, avec quel budget.</p>
       </div>
     </div>
   </div>
@@ -267,22 +270,22 @@
 <section id="process" class="timeline-section">
   <div class="container">
     <div class="section-head">
-      <span class="label">Le flux</span>
-      <h2>Comment ça marche.</h2>
-      <p class="lede">Trois étapes sans intervention manuelle coûteuse entre l'upload et la livraison du rapport.</p>
+      <span class="label">De la donnée à l'action</span>
+      <h2>Le flux du diagnostic à la transformation.</h2>
+      <p class="lede">Un processus clair et progressif : données → diagnostic → plan d'action → engagement des services sur 12 mois.</p>
     </div>
     <div class="timeline-grid">
       <div class="timeline-step" data-step="1">
-        <h3>Vous consolidez</h3>
-        <p>Bilan, compte de résultat, factures, relevés bancaires des 12 derniers mois. Tous les documents dans votre espace sécurisé.</p>
+        <h3>Vous fournirez les données</h3>
+        <p>Bilan, compte de résultat, factures, relevés bancaires des 12 derniers mois, documents administratifs. Sécurisé, chiffré, accessible 24/7.</p>
       </div>
       <div class="timeline-step" data-step="2">
-        <h3>Nous analysons</h3>
-        <p>Extraction automatisée, validation manuelle, analyse structurée en trois volets : risques financiers, pilotage opérationnel, stratégie de croissance.</p>
+        <h3>Nous structurons l'analyse</h3>
+        <p>Extraction automatisée + validation manuelle. Trois axes : solidité (risques identifiés), pilotage (actions 90j), stratégie (plan 12m).</p>
       </div>
       <div class="timeline-step" data-step="3">
-        <h3>Vous agissez</h3>
-        <p>Rapport PDF livré. Appel de 90 min avec un consultant pour clarifier les priorités et débloquer l'action immédiate.</p>
+        <h3>Vous démarrez les services</h3>
+        <p>Rapport + appel de restitution. Vous activez Comptabilité, Juridique, Growth selon votre plan. Progression mesurable chaque mois.</p>
       </div>
     </div>
   </div>
@@ -291,9 +294,9 @@
 <section id="audience">
   <div class="container">
     <div class="section-head">
-      <span class="label">Secteurs clés</span>
-      <h2>Pour qui.</h2>
-      <p class="lede">INVITEFOCUS est construit pour les PME de l'Afrique de l'Ouest ayant une comptabilité formalisée, des ambitions claires, et besoin de crédibilité auprès d'un tiers (banquier, investisseur, partenaire).</p>
+      <span class="label">Qui sommes-nous pour</span>
+      <h2>Pour qui, exactement.</h2>
+      <p class="lede">Vous êtes une PME africaine entre 5M et 500M CFA de CA. Vous avez une comptabilité formalisée. Vous avez des ambitions claires. Et vous avez besoin de crédibilité auprès d'un banquier, investisseur, ou partenaire — ou simplement de clarté interne pour prendre les bonnes décisions.</p>
     </div>
     <div class="audience-grid">
       <div class="audience-tag">Commerce & Distribution</div>
@@ -304,35 +307,6 @@
   </div>
 </section>
 
-<section id="services" class="services-section">
-  <div class="container">
-    <div class="section-head">
-      <span class="label">Offre complète</span>
-      <h2>Nos services.</h2>
-      <p class="lede">Une infrastructure entière pour structurer, sécuriser et accélérer votre entreprise. Du diagnostic au pilotage quotidien.</p>
-    </div>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon">◐</div>
-        <h3>Assistance Comptable</h3>
-        <p>Classement et saisie comptable, suivi de trésorerie quotidien, états financiers et démarches fiscales auprès des autorités. Votre données comptables, structurées et toujours à jour.</p>
-        <a href="#start" class="service-cta">Démarrer →</a>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">⚖</div>
-        <h3>Services Juridiques</h3>
-        <p>Formalisation et conformité, création d'entreprise, négociation contractuelle et mise en conformité fiscale. Vous opérez en toute légalité et sécurité juridique.</p>
-        <a href="#start" class="service-cta">En savoir plus →</a>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">◆</div>
-        <h3>Stratégie & Growth</h3>
-        <p>Business plan et modélisation financière, conseil stratégique, identification des leviers de croissance et développement de partenariats. Votre feuille de route vers l'échelle.</p>
-        <a href="#start" class="service-cta">Découvrir →</a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <section id="faq">
   <div class="container" style="max-width:700px">
@@ -367,17 +341,17 @@
 
 <section class="cta-banner">
   <div class="container">
-    <h2>Prêt à structurer votre diagnostic ?</h2>
-    <p>Quelques minutes pour démarrer. Aucun paiement maintenant.</p>
-    <a href="#start" class="btn btn-primary">Réserver votre place BETA</a>
+    <h2>Prêt à débuter ?</h2>
+    <p>Diagnostic en 48h, puis plan d'action structuré sur 12 mois. Aucun engagement immédiat.</p>
+    <a href="#start" class="btn btn-primary">Démarrer maintenant</a>
   </div>
 </section>
 
 <section id="start" style="background:var(--color-surface-alt)">
   <div class="container lead-form">
     <div class="section-head" style="text-align:center">
-      <h2>Démarrer le diagnostic</h2>
-      <p class="lede">Laissez vos coordonnées. Nous validerons votre dossier et vous enverrons un lien de connexion sous 24h.</p>
+      <h2>Donnez-nous les premières informations</h2>
+      <p class="lede">Quelques minutes. Nous validerons votre profil et vous enverrons un lien sécurisé pour démarrer le dossier sous 24h.</p>
     </div>
     <form id="leadForm">
       <div class="lead-form-row">
@@ -407,21 +381,21 @@
   <div class="container">
     <div class="footer-content">
       <div class="footer-col">
-        <h4>Produit</h4>
-        <a href="#pourquoi">Pourquoi</a>
-        <a href="#process">Comment</a>
+        <h4>Infrastructure</h4>
+        <a href="#services-detail">Diagnostic</a>
+        <a href="#process">Processus</a>
         <a href="#audience">Pour qui</a>
         <a href="#faq">FAQ</a>
       </div>
       <div class="footer-col">
-        <h4>Ressources</h4>
+        <h4>Produit</h4>
         <a href="/portal/login.html">Espace client</a>
         <a href="mailto:hello@invitefocus.local">Contact</a>
       </div>
       <div class="footer-col">
-        <h4>À propos</h4>
-        <a href="#">Blog</a>
+        <h4>Légal</h4>
         <a href="#">Politique de confidentialité</a>
+        <a href="#">Conditions d'utilisation</a>
       </div>
     </div>
     <div class="footer-bottom">© 2026 INVITEFOCUS — Dakar, Senegal</div>

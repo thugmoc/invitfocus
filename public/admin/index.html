@@ -148,6 +148,12 @@
     analyzing: 'Analyse', delivered: 'Livré', feedback: 'Feedback'
   };
 
+  const DOC_TYPE_LABELS = {
+    admin: 'Documents administratifs', bilan: 'Bilan comptable', resultat: 'Compte de résultat',
+    facture_vente: 'Factures de vente', facture_achat: 'Factures d\'achat',
+    releve_bancaire: 'Relevés bancaires', autre: 'Autres pièces',
+  };
+
   function getToken() { return localStorage.getItem('if_admin_token'); }
   function setToken(t) { localStorage.setItem('if_admin_token', t); }
   function clearToken() { localStorage.removeItem('if_admin_token'); }
@@ -201,7 +207,7 @@
     document.getElementById('documentsBody').innerHTML = allDocs.length ? allDocs.map(d => `
       <tr>
         <td>${d.clientName}</td>
-        <td>${d.type}</td>
+        <td>${DOC_TYPE_LABELS[d.type] || d.type}</td>
         <td><span class="pill ${d.status === 'received' || d.status === 'verified' ? 'delivered' : 'collecting'}">${d.status}</span></td>
         <td>${fmtDate(d.created_at)}</td>
       </tr>`).join('') : `<tr><td colspan="4"><div class="empty-state">Aucun document encore.</div></td></tr>`;

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mes documents — INVITEFOCUS</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/api/env.js"></script>
+<style>
+  :root {
+    --primary: #2E75B6; --bg: #F8FBFF; --text: #1A1A2E; --muted: #889098;
+    --success: #27AE60; --warning: #F39C12; --danger: #E74C3C; --border: #D8DFE5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+         background: var(--bg); color: var(--text); }
+  header { background: white; padding: 20px 32px; display: flex; justify-content: space-between;
+           align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  header h1 { font-size: 1.2rem; }
+  header nav { display: flex; gap: 16px; align-items: center; }
+  header a { color: var(--muted); font-size: 0.9rem; text-decoration: none; }
+  header button { background: none; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px;
+                  cursor: pointer; color: var(--muted); }
+  main { max-width: 760px; margin: 0 auto; padding: 32px; }
+  .intro { margin-bottom: 24px; }
+  .intro p { color: var(--muted); margin-top: 4px; }
+
+  .category-card {
+    background: white; border-radius: 16px; padding: 24px; margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  }
+  .category-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .category-head h2 { font-size: 1.05rem; }
+  .category-required { font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .category-required.required { background: #FFF4E5; color: var(--warning); }
+  .category-required.optional { background: #F0F0F0; color: var(--muted); }
+  .category-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+
+  .dropzone {
+    border: 2px dashed var(--border); border-radius: 10px; padding: 20px; text-align: center;
+    cursor: pointer; transition: border-color 150ms ease, background 150ms ease; margin-bottom: 12px;
+  }
+  .dropzone:hover, .dropzone.dragover { border-color: var(--primary); background: #F0F6FF; }
+  .dropzone input { display: none; }
+  .dropzone .label { font-size: 0.9rem; color: var(--text); font-weight: 600; }
+  .dropzone .hint { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  .file-row {
+    display: flex; justify-content: space-between; align-items: center; padding: 10px 14px;
+    background: #F8F9FF; border-radius: 8px; margin-bottom: 8px; font-size: 0.88rem;
+  }
+  .file-row .name { display: flex; align-items: center; gap: 8px; overflow: hidden; }
+  .file-row .name span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-row .status { font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; flex-shrink: 0; }
+  .file-row .status.uploading { background: #E8F0FB; color: var(--primary); }
+  .file-row .status.done { background: #E8F8EF; color: var(--success); }
+  .file-row .status.error { background: #FDEAEA; color: var(--danger); }
+  .file-row .remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; flex-shrink: 0; }
+
+  #globalMsg { text-align: center; padding: 40px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <header>
+    <h1>INVITEFOCUS — Mes documents</h1>
+    <nav>
+      <a href="/portal/dashboard.html">← Mon espace</a>
+      <button id="logoutBtn">Déconnexion</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="intro">
+      <h2 style="font-size:1.3rem">Déposez vos pièces comptables</h2>
+      <p>Plus votre dossier est complet, plus le diagnostic sera précis. Formats acceptés : PDF, Excel, JPG, PNG (max 20 Mo par fichier).</p>
+    </div>
+    <div id="categories"></div>
+    <div id="globalMsg" style="display:none"></div>
+  </main>
+
+<script src="/js/supabase-client.js"></script>
+<script>
+  document.getElementById('logoutBtn').addEventListener('click', signOut);
+
+  const CATEGORIES = [
+    { key: 'admin',          label: 'Documents administratifs', desc: 'NINEA, RCCM, statuts de la société', required: true },
+    { key: 'bilan',          label: 'Bilan comptable',           desc: 'Dernier bilan disponible (Excel ou PDF)', required: true },
+    { key: 'resultat',       label: 'Compte de résultat',        desc: 'Compte de résultat / P&L de l\'exercice', required: true },
+    { key: 'facture_vente',  label: 'Factures de vente (entrées)', desc: 'Factures émises à vos clients', required: true },
+    { key: 'facture_achat',  label: 'Factures d\'achat (sorties)', desc: 'Factures fournisseurs et dépenses', required: true },
+    { key: 'releve_bancaire',label: 'Relevés bancaires',          desc: 'Relevés des 3 à 6 derniers mois', required: false },
+    { key: 'autre',          label: 'Autres pièces',              desc: 'Tout autre document utile au diagnostic', required: false },
+  ];
+
+  let clientId = null;
+
+  function fileIcon(name) {
+    const ext = name.split('.').pop().toLowerCase();
+    if (['xls', 'xlsx', 'csv'].includes(ext)) return '📊';
+    if (['pdf'].includes(ext)) return '📄';
+    if (['jpg', 'jpeg', 'png'].includes(ext)) return '🖼️';
+    return '📎';
+  }
+
+  function renderCategories() {
+    const container = document.getElementById('categories');
+    container.innerHTML = CATEGORIES.map(cat => `
+      <div class="category-card" data-cat="${cat.key}">
+        <div class="category-head">
+          <h2>${cat.label}</h2>
+          <span class="category-required ${cat.required ? 'required' : 'optional'}">${cat.required ? 'Requis' : 'Optionnel'}</span>
+        </div>
+        <p class="category-desc">${cat.desc}</p>
+        <label class="dropzone" data-cat="${cat.key}">
+          <input type="file" multiple data-cat="${cat.key}" />
+          <div class="label">Cliquez ou déposez vos fichiers ici</div>
+          <div class="hint">PDF, Excel, JPG, PNG</div>
+        </label>
+        <div class="file-list" data-cat="${cat.key}"></div>
+      </div>
+    `).join('');
+
+    document.querySelectorAll('.dropzone input').forEach(input => {
+      input.addEventListener('change', (e) => handleFiles(e.target.dataset.cat, e.target.files));
+    });
+    document.querySelectorAll('.dropzone').forEach(zone => {
+      zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        handleFiles(zone.dataset.cat, e.dataTransfer.files);
+      });
+    });
+  }
+
+  async function loadExistingDocs() {
+    const { data: docs } = await sb
+      .from('documents')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('created_at', { ascending: false });
+
+    (docs || []).forEach(d => {
+      const list = document.querySelector(`.file-list[data-cat="${d.type}"]`);
+      if (!list) return;
+      const row = document.createElement('div');
+      row.className = 'file-row';
+      row.innerHTML = `
+        <div class="name">${fileIcon(d.file_name || '')}<span>${d.file_name}</span></div>
+        <span class="status done">Reçu</span>
+        <button class="remove" data-id="${d.id}" data-path="${d.storage_path || ''}">✕</button>
+      `;
+      list.appendChild(row);
+    });
+
+    document.querySelectorAll('.remove').forEach(btn => {
+      btn.addEventListener('click', () => removeDocument(btn.dataset.id, btn.dataset.path, btn));
+    });
+  }
+
+  async function removeDocument(docId, storagePath, btnEl) {
+    if (storagePath) await sb.storage.from('documents').remove([storagePath]);
+    await sb.from('documents').delete().eq('id', docId);
+    btnEl.closest('.file-row').remove();
+  }
+
+  async function handleFiles(category, fileList) {
+    const list = document.querySelector(`.file-list[data-cat="${category}"]`);
+    for (const file of Array.from(fileList)) {
+      if (file.size > 20 * 1024 * 1024) {
+        alert(`"${file.name}" dépasse 20 Mo et n'a pas été envoyé.`);
+        continue;
+      }
+
+      const row = document.createElement('div');
+      row.className = 'file-row';
+      row.innerHTML = `
+        <div class="name">${fileIcon(file.name)}<span>${file.name}</span></div>
+        <span class="status uploading">Envoi...</span>
+      `;
+      list.appendChild(row);
+
+      const storagePath = `${clientId}/${category}/${Date.now()}_${file.name}`;
+
+      const { error: uploadError } = await sb.storage.from('documents').upload(storagePath, file);
+
+      if (uploadError) {
+        row.querySelector('.status').className = 'status error';
+        row.querySelector('.status').textContent = 'Erreur';
+        continue;
+      }
+
+      const { error: insertError } = await sb.from('documents').insert({
+        client_id: clientId,
+        type: category,
+        file_name: file.name,
+        storage_path: storagePath,
+        status: 'received',
+      });
+
+      if (insertError) {
+        row.querySelector('.status').className = 'status error';
+        row.querySelector('.status').textContent = 'Erreur';
+        continue;
+      }
+
+      row.querySelector('.status').className = 'status done';
+      row.querySelector('.status').textContent = 'Reçu';
+    }
+  }
+
+  async function init() {
+    const session = await requireAuth();
+    if (!session) return;
+
+    const { data: client, error } = await sb
+      .from('clients')
+      .select('id, status')
+      .eq('user_id', session.user.id)
+      .single();
+
+    if (error || !client) {
+      document.getElementById('categories').style.display = 'none';
+      const msg = document.getElementById('globalMsg');
+      msg.style.display = 'block';
+      msg.textContent = 'Aucun dossier trouvé pour ce compte. Contactez votre consultant.';
+      return;
+    }
+
+    clientId = client.id;
+    renderCategories();
+    await loadExistingDocs();
+
+    if (client.status === 'lead' || client.status === 'onboarded') {
+      await sb.from('clients').update({ status: 'collecting' }).eq('id', clientId);
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

@@ -30,6 +30,8 @@
   .pill.pending  { background: #FFF4E5; color: #F39C12; }
   .btn-download { display: inline-block; background: var(--primary); color: white; padding: 12px 24px;
                   border-radius: 10px; font-weight: 700; text-decoration: none; }
+  .btn-outline { display: inline-block; background: white; color: var(--primary); padding: 12px 24px;
+                 border: 1px solid var(--primary); border-radius: 10px; font-weight: 700; text-decoration: none; }
   #loading { text-align: center; padding: 60px; color: var(--muted); }
 </style>
 </head>
@@ -69,9 +71,15 @@
       delivered: 'Rapport livré', feedback: 'En attente de retour'
     };
 
+    const docTypeLabels = {
+      admin: 'Documents administratifs', bilan: 'Bilan comptable', resultat: 'Compte de résultat',
+      facture_vente: 'Factures de vente', facture_achat: 'Factures d\'achat',
+      releve_bancaire: 'Relevés bancaires', autre: 'Autres pièces',
+    };
+
     const docsHtml = (client.documents || []).map(d => `
       <div class="doc-row">
-        <span>${d.type}</span>
+        <span>${docTypeLabels[d.type] || d.type} — ${d.file_name || ''}</span>
         <span class="pill ${d.status === 'received' || d.status === 'verified' ? 'received' : 'pending'}">
           ${d.status === 'received' || d.status === 'verified' ? 'Reçu' : 'En attente'}
         </span>
@@ -88,6 +96,7 @@
       <div class="card">
         <h2>Documents</h2>
         ${docsHtml}
+        <a class="btn-outline" href="/portal/documents.html" style="margin-top:16px;display:inline-block">Ajouter des documents</a>
       </div>
       ${latestReport ? `
       <div class="card">

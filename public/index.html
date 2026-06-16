@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="INVITEFOCUS — Diagnostic financier automatisé par IA pour PME ouest-africaines. Résultats en 24-48h." />
-<title>INVITEFOCUS — Diagnostic financier en 24-48h</title>
+<meta name="description" content="INVITEFOCUS — Diagnostic financier structurant en 24-48h pour PME africaines. Infrastructure de référence du marché." />
+<title>INVITEFOCUS — Diagnostic qui sert à quelque chose</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/api/env.js"></script>
 <style>
@@ -13,157 +13,155 @@
     --color-primary-dark: #1C5A96;
     --color-primary-light: #5B9FD9;
     --color-accent: #F96167;
-    --color-accent-dark: #E73847;
     --color-surface: #FFFFFF;
     --color-surface-alt: #F8FBFF;
     --color-border: #D8DFE5;
     --color-text: #1A1A2E;
     --color-muted: #889098;
     --color-success: #27AE60;
-    --color-warning: #F39C12;
-
-    --space-xs: 4px;  --space-sm: 8px;   --space-md: 16px; --space-lg: 24px;
+    --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px;
     --space-xl: 32px; --space-2xl: 48px; --space-3xl: 64px; --space-4xl: 96px;
-
-    --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px;
-
-    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --radius-md: 8px; --radius-lg: 12px; --ease: cubic-bezier(0.4, 0, 0.2, 1);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: var(--color-text); background: var(--color-surface);
     line-height: 1.6; -webkit-font-smoothing: antialiased;
   }
-  a { color: inherit; }
-  .container { max-width: 1160px; margin: 0 auto; padding: 0 var(--space-lg); }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-lg); }
 
-  h1 { font-size: 2.75rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
-  h2 { font-size: 2.25rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
-  h3 { font-size: 1.4rem; font-weight: 600; line-height: 1.3; }
-  .lede { font-size: 1.125rem; color: var(--color-muted); line-height: 1.7; }
+  h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+  h3 { font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
+  .lede { font-size: 1.05rem; color: var(--color-muted); line-height: 1.7; }
+  .label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-primary); }
 
-  /* ── NAV ─────────────────────────────────────────────────── */
+  /* ── HEADER ────────────────────────────────────────────────── */
   header {
-    position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.92);
+    position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-border);
   }
   nav { display: flex; justify-content: space-between; align-items: center; padding: var(--space-md) 0; }
-  .logo { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em; text-decoration: none; }
+  .logo { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; }
   .nav-links { display: flex; gap: var(--space-2xl); align-items: center; list-style: none; }
-  .nav-links a { text-decoration: none; font-weight: 500; font-size: 0.92rem; color: var(--color-text); }
+  .nav-links a { font-weight: 500; font-size: 0.9rem; transition: color 150ms var(--ease); }
+  .nav-links a:hover { color: var(--color-primary); }
+
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: var(--space-sm);
-    font-weight: 600; font-size: 0.92rem; border-radius: var(--radius-md); border: 1px solid transparent;
-    padding: 11px 22px; cursor: pointer; text-decoration: none; transition: opacity 150ms var(--ease), transform 150ms var(--ease);
+    font-weight: 600; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid transparent;
+    padding: 10px 20px; cursor: pointer; transition: all 150ms var(--ease);
   }
   .btn-primary { background: var(--color-text); color: white; }
-  .btn-primary:hover { opacity: 0.88; }
+  .btn-primary:hover { background: var(--color-primary); transform: translateY(-1px); }
   .btn-ghost { background: transparent; color: var(--color-text); border-color: var(--color-border); }
   .btn-ghost:hover { border-color: var(--color-text); }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* ── HERO ────────────────────────────────────────────────── */
-  .hero { padding: var(--space-4xl) 0 var(--space-3xl); border-bottom: 1px solid var(--color-border); }
-  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-4xl); align-items: start; }
-  .eyebrow {
-    display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em;
-    text-transform: uppercase; color: var(--color-primary); margin-bottom: var(--space-md);
-  }
-  .hero h1 { margin-bottom: var(--space-lg); }
-  .hero .lede { max-width: 480px; margin-bottom: var(--space-xl); }
-  .hero-actions { display: flex; gap: var(--space-md); }
-
-  .proof-card {
-    background: var(--color-surface-alt); border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl); padding: var(--space-xl);
-  }
-  .proof-row { display: flex; justify-content: space-between; align-items: baseline;
-    padding: var(--space-md) 0; border-bottom: 1px solid var(--color-border); }
-  .proof-row:last-child { border-bottom: none; }
-  .proof-num { font-size: 1.6rem; font-weight: 700; color: var(--color-text); }
-  .proof-label { font-size: 0.85rem; color: var(--color-muted); max-width: 200px; text-align: right; }
-
-  /* ── LEAD FORM ───────────────────────────────────────────── */
-  .lead-form { margin-top: var(--space-xl); border-top: 1px solid var(--color-border); padding-top: var(--space-xl); }
-  .lead-form label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: var(--space-xs); color: var(--color-muted); }
-  .lead-form input, .lead-form select {
-    width: 100%; padding: 11px 14px; border-radius: var(--radius-md); border: 1px solid var(--color-border);
-    font-size: 0.95rem; margin-bottom: var(--space-md); font-family: inherit;
-  }
-  .lead-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
-  #leadMsg { font-size: 0.88rem; margin-top: var(--space-sm); }
-  #leadMsg.success { color: var(--color-success); }
-  #leadMsg.error { color: var(--color-accent-dark); }
-
-  /* ── SECTIONS ────────────────────────────────────────────── */
-  section { padding: var(--space-4xl) 0; }
-  .section-head { max-width: 600px; margin-bottom: var(--space-2xl); }
-  .section-head .lede { margin-top: var(--space-sm); }
-
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); }
-  .method-card { border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-xl); }
-  .method-step { font-size: 0.78rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; margin-bottom: var(--space-md); }
-  .method-card h3 { margin-bottom: var(--space-sm); }
-  .method-card p { color: var(--color-muted); font-size: 0.95rem; }
-
-  .market-section { background: var(--color-text); color: white; }
-  .market-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); margin-top: var(--space-2xl); }
-  .market-stat { border-left: 2px solid var(--color-primary-light); padding-left: var(--space-lg); }
-  .market-stat .num { font-size: 2.5rem; font-weight: 700; margin-bottom: var(--space-xs); }
-  .market-stat .label { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
-
-  .pricing-card {
-    border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: var(--space-2xl);
-    display: flex; flex-direction: column; gap: var(--space-lg); max-width: 480px;
-  }
-  .pricing-badge {
-    display: inline-block; background: var(--color-surface-alt); color: var(--color-primary);
-    font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; width: fit-content;
-  }
-  .pricing-price { font-size: 2.75rem; font-weight: 700; }
-  .pricing-price .strike { font-size: 1.1rem; color: var(--color-muted); text-decoration: line-through; margin-left: var(--space-sm); font-weight: 400; }
-  .pricing-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); font-size: 0.95rem; }
-  .pricing-list li { display: flex; gap: var(--space-sm); }
-  .pricing-list li::before { content: '—'; color: var(--color-primary); flex-shrink: 0; }
-
-  footer { border-top: 1px solid var(--color-border); padding: var(--space-2xl) 0; }
-  .footer-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md); }
-  .footer-row, .footer-row a { color: var(--color-muted); font-size: 0.88rem; text-decoration: none; }
-
-  /* ── MOBILE NAV ──────────────────────────────────────────── */
-  .menu-toggle {
-    display: none; background: none; border: 1px solid var(--color-border); border-radius: var(--radius-md);
-    width: 38px; height: 38px; cursor: pointer; font-size: 1.1rem; align-items: center; justify-content: center;
-  }
-  .nav-mobile-panel {
-    display: none; flex-direction: column; gap: var(--space-sm); padding: var(--space-md) 0;
-    border-top: 1px solid var(--color-border);
-  }
-  .nav-mobile-panel a { text-decoration: none; color: var(--color-text); font-weight: 500; padding: var(--space-sm) 0; }
+  .menu-toggle { display: none; background: none; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+    width: 38px; height: 38px; cursor: pointer; font-size: 1.1rem; }
+  .nav-mobile-panel { display: none; flex-direction: column; gap: var(--space-sm); padding: var(--space-md) 0;
+    border-top: 1px solid var(--color-border); }
+  .nav-mobile-panel a { font-weight: 500; padding: var(--space-sm) 0; }
   .nav-mobile-panel.open { display: flex; }
 
-  /* ── FAQ ─────────────────────────────────────────────────── */
-  .faq-item { border-bottom: 1px solid var(--color-border); padding: var(--space-lg) 0; }
-  .faq-question {
-    display: flex; justify-content: space-between; align-items: center; cursor: pointer;
-    font-weight: 600; font-size: 1.02rem; gap: var(--space-md);
+  /* ── HERO ──────────────────────────────────────────────────── */
+  .hero { padding: var(--space-4xl) 0 var(--space-3xl); }
+  .hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--space-4xl); align-items: center; }
+  .hero-content h1 { margin-bottom: var(--space-lg); }
+  .hero-content .lede { margin-bottom: var(--space-2xl); max-width: 500px; }
+  .hero-actions { display: flex; gap: var(--space-md); flex-wrap: wrap; }
+
+  .value-stack { display: flex; flex-direction: column; gap: var(--space-md); }
+  .value-card {
+    background: var(--color-surface-alt); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); padding: var(--space-lg);
+    display: grid; grid-template-columns: 1fr 1.8fr; gap: var(--space-md); align-items: center;
   }
+  .value-number { font-size: 2.2rem; font-weight: 700; color: var(--color-primary); }
+  .value-text { font-size: 0.9rem; color: var(--color-muted); line-height: 1.6; }
+
+  /* ── SECTIONS ──────────────────────────────────────────────── */
+  section { padding: var(--space-4xl) 0; }
+  .section-head { max-width: 700px; margin-bottom: var(--space-3xl); }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); }
+  .reason-card { padding: var(--space-2xl) var(--space-lg); border-left: 3px solid var(--color-primary); }
+  .reason-card h3 { margin-bottom: var(--space-md); }
+  .reason-card p { color: var(--color-muted); font-size: 0.95rem; }
+
+  .timeline-section { background: var(--color-surface-alt); }
+  .timeline-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); margin-top: var(--space-3xl); }
+  .timeline-step {
+    position: relative; padding: var(--space-2xl) var(--space-lg);
+    background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  }
+  .timeline-step::before {
+    content: attr(data-step); position: absolute; top: -18px; left: 20px;
+    width: 36px; height: 36px; background: var(--color-primary); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem;
+  }
+  .timeline-step h3 { margin-bottom: var(--space-sm); }
+  .timeline-step p { color: var(--color-muted); font-size: 0.9rem; }
+
+  .audience-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); margin-top: var(--space-2xl); }
+  .audience-tag { background: white; border: 1px solid var(--color-border); padding: var(--space-md);
+    border-radius: var(--radius-md); text-align: center; font-size: 0.85rem; font-weight: 500;
+    cursor: pointer; transition: all 150ms var(--ease); }
+  .audience-tag:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+  .faq-item { border-bottom: 1px solid var(--color-border); padding: var(--space-lg) 0; }
+  .faq-question { display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+    font-weight: 600; font-size: 1rem; gap: var(--space-md); }
   .faq-question .chevron { transition: transform 200ms var(--ease); color: var(--color-muted); flex-shrink: 0; }
   .faq-item.open .faq-question .chevron { transform: rotate(180deg); }
-  .faq-answer {
-    max-height: 0; overflow: hidden; transition: max-height 250ms var(--ease);
-    color: var(--color-muted); font-size: 0.95rem; line-height: 1.7;
-  }
-  .faq-item.open .faq-answer { max-height: 240px; padding-top: var(--space-md); }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height 250ms var(--ease);
+    color: var(--color-muted); font-size: 0.95rem; line-height: 1.7; }
+  .faq-item.open .faq-answer { max-height: 300px; padding-top: var(--space-md); }
 
-  @media (max-width: 860px) {
-    .hero-grid, .market-grid, .grid-3 { grid-template-columns: 1fr; }
-    .lead-form-row { grid-template-columns: 1fr; }
-    h1 { font-size: 2.1rem; }
+  .cta-banner { background: var(--color-text); color: white; padding: var(--space-3xl) 0; text-align: center; }
+  .cta-banner h2 { color: white; margin-bottom: var(--space-md); }
+  .cta-banner p { font-size: 1.1rem; margin-bottom: var(--space-2xl); color: rgba(255, 255, 255, 0.8); }
+
+  .lead-form { max-width: 600px; margin: 0 auto; }
+  .lead-form label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: var(--space-xs);
+    color: var(--color-muted); }
+  .lead-form input, .lead-form select { width: 100%; padding: 11px 14px; border-radius: var(--radius-md);
+    border: 1px solid var(--color-border); font-size: 0.95rem; margin-bottom: var(--space-md); font-family: inherit;
+    background: white;
+  }
+  .lead-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+  #leadMsg { font-size: 0.88rem; margin-top: var(--space-sm); text-align: center; }
+  #leadMsg.success { color: var(--color-success); }
+  #leadMsg.error { color: var(--color-accent); }
+
+  footer { border-top: 1px solid var(--color-border); padding: var(--space-3xl) 0; }
+  .footer-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3xl); }
+  .footer-col h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--color-muted);
+    margin-bottom: var(--space-lg); }
+  .footer-col a { display: block; font-size: 0.9rem; color: var(--color-muted); margin-bottom: var(--space-sm);
+    transition: color 150ms var(--ease); }
+  .footer-col a:hover { color: var(--color-primary); }
+  .footer-bottom { text-align: center; border-top: 1px solid var(--color-border); padding-top: var(--space-2xl);
+    margin-top: var(--space-2xl); color: var(--color-muted); font-size: 0.85rem; }
+
+  @media (max-width: 1024px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .grid-3, .audience-grid, .timeline-grid { grid-template-columns: 1fr; }
+    .value-card { grid-template-columns: 1fr; }
+    .footer-content { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    h1 { font-size: 2rem; }
     .nav-links { display: none; }
     .menu-toggle { display: flex; }
+    .lead-form-row { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; }
+    .btn { width: 100%; }
+    .audience-grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 </head>
@@ -174,174 +172,179 @@
     <nav>
       <a href="#" class="logo">INVITEFOCUS</a>
       <ul class="nav-links">
-        <li><a href="#methode">Méthode</a></li>
-        <li><a href="#tarif">Tarif BETA</a></li>
+        <li><a href="#pourquoi">Pourquoi</a></li>
+        <li><a href="#process">Comment</a></li>
+        <li><a href="#audience">Pour qui</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="/portal/login.html">Espace client</a></li>
-        <li><a href="#demarrer" class="btn btn-primary">Démarrer le diagnostic</a></li>
+        <li><a href="#start" class="btn btn-primary">Démarrer</a></li>
       </ul>
       <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
     </nav>
     <div class="nav-mobile-panel" id="navMobilePanel">
-      <a href="#methode">Méthode</a>
-      <a href="#tarif">Tarif BETA</a>
+      <a href="#pourquoi">Pourquoi</a>
+      <a href="#process">Comment</a>
+      <a href="#audience">Pour qui</a>
       <a href="#faq">FAQ</a>
       <a href="/portal/login.html">Espace client</a>
-      <a href="#demarrer" class="btn btn-primary">Démarrer le diagnostic</a>
+      <a href="#start" class="btn btn-primary">Démarrer</a>
     </div>
   </div>
 </header>
 
 <section class="hero">
   <div class="container hero-grid">
-    <div>
-      <span class="eyebrow">Diagnostic financier piloté par IA</span>
-      <h1>Un diagnostic financier complet en 24-48h, pas en deux semaines.</h1>
-      <p class="lede">INVITEFOCUS combine extraction automatisée de données et analyse experte pour livrer un rapport structuré — risques, pilotage opérationnel, stratégie de croissance — à un coût et un délai que le conseil traditionnel ne peut pas tenir.</p>
+    <div class="hero-content">
+      <span class="label">Diagnostic financier structurant</span>
+      <h1>Un diagnostic qui sert à quelque chose.</h1>
+      <p class="lede">INVITEFOCUS combine extraction automatisée de données et analyse structurée pour livrer en 24-48h ce que le conseil traditionnel met deux semaines à produire — une roadmap financière, pas un rapport de conformité.</p>
       <div class="hero-actions">
-        <a href="#demarrer" class="btn btn-primary">Démarrer le diagnostic</a>
-        <a href="#methode" class="btn btn-ghost">Voir la méthode</a>
+        <a href="#start" class="btn btn-primary">Réserver une démo</a>
+        <a href="#pourquoi" class="btn btn-ghost">Voir le modèle</a>
       </div>
     </div>
-    <div class="proof-card">
-      <div class="proof-row"><span class="proof-num">24-48h</span><span class="proof-label">délai de livraison du rapport complet</span></div>
-      <div class="proof-row"><span class="proof-num">3 volets</span><span class="proof-label">diagnostic, pilotage, stratégie de croissance</span></div>
-      <div class="proof-row"><span class="proof-num">1 500€</span><span class="proof-label">tarif du programme BETA, contre 2 500€ en tarif normal</span></div>
+    <div class="value-stack">
+      <div class="value-card">
+        <div class="value-number">24-48h</div>
+        <div class="value-text">Délai de livraison du rapport complet, documenté et prêt à l'action.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-number">3</div>
+        <div class="value-text">Volets du diagnostic : solidité (risques), pilotage (actions immédiates), stratégie (croissance).</div>
+      </div>
+      <div class="value-card">
+        <div class="value-number">100%</div>
+        <div class="value-text">Confidentialité totale. Zéro partage externe. Audit trail complet de qui accède à quoi.</div>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="methode">
+<section id="pourquoi">
   <div class="container">
     <div class="section-head">
-      <h2>Comment ça fonctionne</h2>
-      <p class="lede">Trois étapes, sans intervention manuelle entre l'upload de vos documents et la livraison du rapport.</p>
+      <span class="label">Le constat</span>
+      <h2>Pourquoi INVITEFOCUS existe.</h2>
+      <p class="lede">Les PME africaines ont rarement un problème de potentiel. Elles ont un problème de preuve : pas de diagnostic rapide, crédible et abordable pour convaincre partenaires, investisseurs, ou prêteurs.</p>
     </div>
     <div class="grid-3">
-      <div class="method-card">
-        <div class="method-step">ÉTAPE 1</div>
-        <h3>Vous transmettez vos documents</h3>
-        <p>Bilan, compte de résultat, factures — déposés en sécurité dans votre espace client dédié.</p>
+      <div class="reason-card">
+        <h3>Diagnostic lent</h3>
+        <p>8-10h de travail manuel chez un cabinet traditionnel. Coût élevé, délai long, données incomplètes à cause de l'intervention manuelle.</p>
       </div>
-      <div class="method-card">
-        <div class="method-step">ÉTAPE 2</div>
-        <h3>L'analyse est générée</h3>
-        <p>Extraction des données et analyse structurée en trois volets : diagnostic des risques, pilotage opérationnel, stratégie de croissance.</p>
+      <div class="reason-card">
+        <h3>Infrastructure manquante</h3>
+        <p>Pas de plateforme fiable pour consolider documents, extraire les données clés, et structurer l'analyse à l'échelle africaine de manière économe.</p>
       </div>
-      <div class="method-card">
-        <div class="method-step">ÉTAPE 3</div>
-        <h3>Vous recevez le rapport et un appel</h3>
-        <p>Rapport PDF livré dans votre espace client, suivi d'un appel de présentation avec un consultant.</p>
+      <div class="reason-card">
+        <h3>Coût prohibitif</h3>
+        <p>Le conseil structurant (audit, conseil en croissance) reste inaccessible aux PME sous 50M CFA de CA. Le diagnostic doit être démocratique.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="market-section">
-  <div class="container">
-    <div class="section-head" style="color:white">
-      <h2>Le constat qui motive INVITEFOCUS</h2>
-      <p class="lede" style="color:rgba(255,255,255,0.65)">Les PME ouest-africaines manquent rarement de potentiel — elles manquent d'un diagnostic financier rapide et abordable pour le prouver à leurs partenaires.</p>
-    </div>
-    <div class="market-grid">
-      <div class="market-stat">
-        <div class="num">8-10h</div>
-        <div class="label">temps moyen d'un diagnostic manuel chez un cabinet traditionnel</div>
-      </div>
-      <div class="market-stat">
-        <div class="num">24-48h</div>
-        <div class="label">délai cible INVITEFOCUS, données complètes reçues</div>
-      </div>
-      <div class="market-stat">
-        <div class="num">2</div>
-        <div class="label">consultants suffisent pour traiter le volume BETA actuel</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="tarif">
+<section id="process" class="timeline-section">
   <div class="container">
     <div class="section-head">
-      <h2>Programme BETA</h2>
-      <p class="lede">Places limitées pendant la phase de lancement.</p>
+      <span class="label">Le flux</span>
+      <h2>Comment ça marche.</h2>
+      <p class="lede">Trois étapes sans intervention manuelle coûteuse entre l'upload et la livraison du rapport.</p>
     </div>
-    <div class="pricing-card">
-      <span class="pricing-badge">Places limitées — BETA</span>
-      <div class="pricing-price">1 500€<span class="strike">2 500€</span></div>
-      <ul class="pricing-list">
-        <li>Diagnostic financier complet (F1 — risques et solidité)</li>
-        <li>Pilotage opérationnel (F2 — actions immédiates)</li>
-        <li>Stratégie de croissance (F3 — axes moyen terme)</li>
-        <li>Rapport PDF livré en 24-48h après données complètes</li>
-        <li>Appel de présentation avec un consultant</li>
-      </ul>
-      <a href="#demarrer" class="btn btn-primary">Réserver ma place BETA</a>
+    <div class="timeline-grid">
+      <div class="timeline-step" data-step="1">
+        <h3>Vous consolidez</h3>
+        <p>Bilan, compte de résultat, factures, relevés bancaires des 12 derniers mois. Tous les documents dans votre espace sécurisé.</p>
+      </div>
+      <div class="timeline-step" data-step="2">
+        <h3>Nous analysons</h3>
+        <p>Extraction automatisée, validation manuelle, analyse structurée en trois volets : risques financiers, pilotage opérationnel, stratégie de croissance.</p>
+      </div>
+      <div class="timeline-step" data-step="3">
+        <h3>Vous agissez</h3>
+        <p>Rapport PDF livré. Appel de 90 min avec un consultant pour clarifier les priorités et débloquer l'action immédiate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="audience">
+  <div class="container">
+    <div class="section-head">
+      <span class="label">Secteurs clés</span>
+      <h2>Pour qui.</h2>
+      <p class="lede">INVITEFOCUS est construit pour les PME de l'Afrique de l'Ouest ayant une comptabilité formalisée, des ambitions claires, et besoin de crédibilité auprès d'un tiers (banquier, investisseur, partenaire).</p>
+    </div>
+    <div class="audience-grid">
+      <div class="audience-tag">Commerce & Distribution</div>
+      <div class="audience-tag">Agro-alimentaire & Élevage</div>
+      <div class="audience-tag">Services & Professionnel</div>
+      <div class="audience-tag">Technologie & Créatif</div>
     </div>
   </div>
 </section>
 
 <section id="faq">
-  <div class="container" style="max-width:760px">
+  <div class="container" style="max-width:700px">
     <div class="section-head">
-      <h2>Questions fréquentes</h2>
+      <span class="label">Clarifications</span>
+      <h2>FAQ.</h2>
     </div>
     <div class="faq-list">
       <div class="faq-item">
-        <div class="faq-question">Quels documents dois-je fournir ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Documents administratifs (NINEA, RCCM), bilan, compte de résultat, factures de vente et d'achat, et idéalement vos relevés bancaires des derniers mois. Plus votre dossier est complet, plus le diagnostic est précis.</div>
+        <div class="faq-question">Quels documents sont requis ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Documents administratifs (NINEA, RCCM, statuts sociaux), dernier bilan comptable certifié, compte de résultat de l'exercice courant, et factures (vente + achat). Les relevés bancaires accélèrent la validation mais ne sont pas obligatoires.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-question">Le délai de 24-48h démarre quand ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Dès que votre dossier de documents est complet et validé par notre équipe. Le délai habituel pour réunir tous les documents est de 3 à 10 jours selon votre organisation comptable actuelle.</div>
+        <div class="faq-question">Le délai 24-48h est-il réaliste ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Oui, une fois votre dossier complet et validé. Compter 3-10 jours pour réunir les documents selon votre organisation actuelle. Nous vous briefons dès la première semaine sur ce qui manque et comment l'accélérer.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-question">Mes données sont-elles confidentielles ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Oui. Vos documents sont stockés de façon chiffrée et accessibles uniquement par vous et votre consultant dédié. Aucune donnée n'est partagée avec un tiers.</div>
+        <div class="faq-question">Confidentialité : comment ça marche ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Chiffrement de bout en bout, accès restreint à votre consultant dédié et audit trail complet. Aucun partage externe, aucune utilisation de vos données pour autre chose que votre diagnostic. Vous restez propriétaire.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-question">Que se passe-t-il après la livraison du rapport ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Un consultant INVITEFOCUS vous contacte pour planifier un appel de présentation des résultats et répondre à vos questions sur les recommandations.</div>
+        <div class="faq-question">Comment utiliser le rapport ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Le rapport est directement utilisable auprès de banquiers, investisseurs, ou partenaires commerciaux comme preuve de solidité financière et direction stratégique. L'appel de consultation vous aide à décider les trois actions immédiates.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Quel est votre modèle économique ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Nous sommes en programme BETA avec places limitées. Pas d'abonnement caché, pas de frais additionnels après le diagnostic. Tarification et contrats discutés au cas par cas selon taille, secteur, et complexité.</div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="demarrer" style="background:var(--color-surface-alt)">
-  <div class="container" style="max-width:640px">
-    <div class="section-head">
+<section class="cta-banner">
+  <div class="container">
+    <h2>Prêt à structurer votre diagnostic ?</h2>
+    <p>Quelques minutes pour démarrer. Aucun paiement maintenant.</p>
+    <a href="#start" class="btn btn-primary">Réserver votre place BETA</a>
+  </div>
+</section>
+
+<section id="start" style="background:var(--color-surface-alt)">
+  <div class="container lead-form">
+    <div class="section-head" style="text-align:center">
       <h2>Démarrer le diagnostic</h2>
-      <p class="lede">Laissez vos coordonnées — vous recevrez un lien de connexion à votre espace client par email.</p>
+      <p class="lede">Laissez vos coordonnées. Nous validerons votre dossier et vous enverrons un lien de connexion sous 24h.</p>
     </div>
     <form id="leadForm">
       <div class="lead-form-row">
-        <div>
-          <label for="name">Nom complet</label>
-          <input type="text" id="name" required />
-        </div>
-        <div>
-          <label for="company">Entreprise</label>
-          <input type="text" id="company" required />
-        </div>
+        <div><label for="name">Nom complet</label><input type="text" id="name" required /></div>
+        <div><label for="company">Entreprise</label><input type="text" id="company" required /></div>
       </div>
       <div class="lead-form-row">
-        <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" required />
-        </div>
-        <div>
-          <label for="phone">Téléphone</label>
-          <input type="tel" id="phone" />
-        </div>
+        <div><label for="email">Email</label><input type="email" id="email" required /></div>
+        <div><label for="phone">Téléphone</label><input type="tel" id="phone" /></div>
       </div>
       <label for="sector">Secteur d'activité</label>
       <select id="sector">
         <option value="">Sélectionner...</option>
-        <option>Commerce</option>
-        <option>Services</option>
-        <option>Industrie</option>
-        <option>Agro-alimentaire</option>
-        <option>Technologie</option>
+        <option>Commerce & Distribution</option>
+        <option>Agro-alimentaire & Élevage</option>
+        <option>Services & Professionnel</option>
+        <option>Technologie & Créatif</option>
         <option>Autre</option>
       </select>
       <button type="submit" class="btn btn-primary" id="leadSubmit" style="width:100%;margin-top:var(--space-md)">Envoyer ma demande</button>
@@ -351,9 +354,27 @@
 </section>
 
 <footer>
-  <div class="container footer-row">
-    <span>© 2026 INVITEFOCUS — Dakar</span>
-    <a href="/portal/login.html">Espace client</a>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>Produit</h4>
+        <a href="#pourquoi">Pourquoi</a>
+        <a href="#process">Comment</a>
+        <a href="#audience">Pour qui</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Ressources</h4>
+        <a href="/portal/login.html">Espace client</a>
+        <a href="mailto:hello@invitefocus.local">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>À propos</h4>
+        <a href="#">Blog</a>
+        <a href="#">Politique de confidentialité</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 INVITEFOCUS — Dakar, Senegal</div>
   </div>
 </footer>
 

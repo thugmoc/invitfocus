@@ -3,399 +3,507 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="INVITEFOCUS — Diagnostic financier structurant en 24-48h pour PME africaines. Infrastructure de référence du marché." />
-<title>INVITEFOCUS — Diagnostic qui sert à quelque chose</title>
+<meta name="description" content="INVITEFOCUS — Diagnostic et accompagnement structurant pour PME africaines." />
+<title>INVITEFOCUS</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/api/env.js"></script>
 <style>
   :root {
-    --color-primary: #2E75B6;
-    --color-primary-dark: #1C5A96;
-    --color-primary-light: #5B9FD9;
-    --color-accent: #F96167;
-    --color-surface: #FFFFFF;
-    --color-surface-alt: #F8FBFF;
-    --color-border: #D8DFE5;
-    --color-text: #1A1A2E;
-    --color-muted: #889098;
-    --color-success: #27AE60;
-    --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px;
-    --space-xl: 32px; --space-2xl: 48px; --space-3xl: 64px; --space-4xl: 96px;
-    --radius-md: 8px; --radius-lg: 12px; --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --primary: #2E75B6;
+    --primary-dark: #1C5A96;
+    --primary-light: #5B9FD9;
+    --accent: #F96167;
+    --success: #27AE60;
+    --dark: #0F1219;
+    --text: #2C2C2C;
+    --text-light: #6B7280;
+    --border: #E5E7EB;
+    --surface: #FFFFFF;
+    --surface-light: #F9FAFB;
   }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: var(--color-text); background: var(--color-surface);
-    line-height: 1.6; -webkit-font-smoothing: antialiased;
+    color: var(--text); background: var(--surface); line-height: 1.6;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   }
   a { color: inherit; text-decoration: none; }
-  .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--space-lg); }
 
-  h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
-  h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
-  h3 { font-size: 1.3rem; font-weight: 600; line-height: 1.3; }
-  .lede { font-size: 1.05rem; color: var(--color-muted); line-height: 1.7; }
-  .label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-primary); }
+  /* TYPOGRAPHY */
+  h1 { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 700; line-height: 1.15; color: var(--dark); }
+  h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 700; line-height: 1.25; color: var(--dark); }
+  h3 { font-size: 1.1rem; font-weight: 700; color: var(--dark); }
+  .subtitle { font-size: 1.05rem; color: var(--text-light); line-height: 1.7; }
+  .label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); }
 
-  /* ── HEADER ────────────────────────────────────────────────── */
+  /* HEADER */
   header {
-    position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-border);
+    position: sticky; top: 0; z-index: 100; background: var(--surface);
+    border-bottom: 1px solid var(--border); padding: 1.2rem 0; backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
   }
-  nav { display: flex; justify-content: space-between; align-items: center; padding: var(--space-md) 0; }
-  .logo { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; }
-  .nav-links { display: flex; gap: var(--space-2xl); align-items: center; list-style: none; }
-  .nav-links a { font-weight: 500; font-size: 0.9rem; transition: color 150ms var(--ease); }
-  .nav-links a:hover { color: var(--color-primary); }
+  .header-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--dark); }
+  nav { display: flex; gap: 3rem; align-items: center; list-style: none; }
+  nav a { font-size: 0.9rem; font-weight: 500; color: var(--text-light); transition: color 150ms; }
+  nav a:hover { color: var(--primary); }
 
   .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-sm);
-    font-weight: 600; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid transparent;
-    padding: 10px 20px; cursor: pointer; transition: all 150ms var(--ease);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 0.9rem; border-radius: 6px; border: none;
+    padding: 10px 24px; cursor: pointer; transition: all 150ms; text-decoration: none;
   }
-  .btn-primary { background: var(--color-text); color: white; }
-  .btn-primary:hover { background: var(--color-primary); transform: translateY(-1px); }
-  .btn-ghost { background: transparent; color: var(--color-text); border-color: var(--color-border); }
-  .btn-ghost:hover { border-color: var(--color-text); }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-secondary { background: var(--surface-light); color: var(--primary); border: 1.5px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--primary); background: white; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .menu-toggle { display: none; background: none; border: 1px solid var(--color-border); border-radius: var(--radius-md);
-    width: 38px; height: 38px; cursor: pointer; font-size: 1.1rem; }
-  .nav-mobile-panel { display: none; flex-direction: column; gap: var(--space-sm); padding: var(--space-md) 0;
-    border-top: 1px solid var(--color-border); }
-  .nav-mobile-panel a { font-weight: 500; padding: var(--space-sm) 0; }
-  .nav-mobile-panel.open { display: flex; }
+  .menu-toggle { display: none; background: none; border: 1px solid var(--border); border-radius: 6px; width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; }
+  .nav-mobile { display: none; flex-direction: column; gap: 12px; padding: 16px 0; border-top: 1px solid var(--border); }
+  .nav-mobile.open { display: flex; }
 
-  /* ── HERO ──────────────────────────────────────────────────── */
-  .hero { padding: var(--space-4xl) 0; background: linear-gradient(135deg, #F8FBFF 0%, #FFFFFF 100%); }
-  .hero-inner { max-width: 900px; margin: 0 auto; text-align: center; }
-  .hero-inner h1 { margin-bottom: var(--space-lg); }
-  .hero-inner .lede { margin-bottom: var(--space-3xl); max-width: 650px; margin-left: auto; margin-right: auto; }
-  .hero-cta { display: flex; gap: var(--space-md); flex-wrap: wrap; justify-content: center; }
+  /* SECTIONS */
+  section { padding: 5rem 0; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section-intro { max-width: 700px; margin-bottom: 4rem; }
 
-  .services-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); margin: var(--space-4xl) 0; }
-  .service-trio-card {
-    background: white; border: 2px solid var(--color-border); border-radius: var(--radius-lg);
-    padding: var(--space-2xl); transition: all 200ms var(--ease);
+  /* HERO */
+  .hero { padding: 8rem 0 6rem; background: linear-gradient(135deg, var(--surface-light) 0%, white 60%); }
+  .hero-content { max-width: 800px; }
+  .hero h1 { margin-bottom: 1.5rem; }
+  .hero .subtitle { margin-bottom: 2.5rem; max-width: 700px; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+  /* GRID 1 SERVICE = 1 COLONNE LARGE */
+  .services-container { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+  .service-item {
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    padding: 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+    align-items: center; transition: all 200ms;
   }
-  .service-trio-card:hover { border-color: var(--color-primary); transform: translateY(-8px); box-shadow: 0 16px 40px rgba(46, 117, 182, 0.12); }
-  .service-trio-icon { font-size: 3rem; margin-bottom: var(--space-lg); }
-  .service-trio-card h3 { margin-bottom: var(--space-md); font-size: 1.3rem; }
-  .service-trio-card p { color: var(--color-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: var(--space-lg); }
-  .service-trio-list { text-align: left; color: var(--color-muted); font-size: 0.85rem; list-style: none; }
-  .service-trio-list li { margin-bottom: var(--space-sm); padding-left: 24px; position: relative; }
-  .service-trio-list li::before { content: "✓"; position: absolute; left: 0; color: var(--color-success); font-weight: bold; }
+  .service-item:hover { border-color: var(--primary); }
+  .service-item:nth-child(2) { direction: rtl; }
+  .service-item:nth-child(2) > * { direction: ltr; }
 
-  /* ── SECTIONS ──────────────────────────────────────────────── */
-  section { padding: var(--space-4xl) 0; }
-  .section-head { max-width: 700px; margin-bottom: var(--space-3xl); }
-
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); }
-  .reason-card { padding: var(--space-2xl) var(--space-lg); border-left: 3px solid var(--color-primary); }
-  .reason-card h3 { margin-bottom: var(--space-md); }
-  .reason-card p { color: var(--color-muted); font-size: 0.95rem; }
-
-  .timeline-section { background: var(--color-surface-alt); }
-  .timeline-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2xl); margin-top: var(--space-3xl); }
-  .timeline-step {
-    position: relative; padding: var(--space-2xl) var(--space-lg);
-    background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  .service-visual {
+    aspect-ratio: 1 / 1; background: linear-gradient(135deg, rgba(46,117,182,0.1) 0%, rgba(249,97,103,0.05) 100%);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 4rem;
   }
-  .timeline-step::before {
-    content: attr(data-step); position: absolute; top: -18px; left: 20px;
-    width: 36px; height: 36px; background: var(--color-primary); color: white;
+  .service-content h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+  .service-content p { color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.7; }
+  .service-list { list-style: none; }
+  .service-list li { padding: 0.7rem 0; color: var(--text-light); font-size: 0.95rem; display: flex; gap: 0.5rem; }
+  .service-list li::before { content: "→"; color: var(--primary); font-weight: 700; }
+
+  /* 4 MODULES GRID */
+  .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .module-card {
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    padding: 2rem; text-align: left; transition: all 200ms;
+  }
+  .module-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .module-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .module-card h4 { color: var(--dark); margin-bottom: 0.8rem; font-size: 1rem; }
+  .module-card p { color: var(--text-light); font-size: 0.9rem; line-height: 1.6; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem; }
+  .stat-item { text-align: center; padding: 2rem; }
+  .stat-number { font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+  .stat-label { font-size: 0.9rem; color: var(--text-light); }
+
+  /* PROCESS */
+  .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-top: 3rem; }
+  .process-step {
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    padding: 2rem; text-align: center;
+  }
+  .process-number {
+    width: 48px; height: 48px; background: var(--primary); color: white;
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.9rem;
+    font-weight: 700; font-size: 1.2rem; margin: 0 auto 1rem;
   }
-  .timeline-step h3 { margin-bottom: var(--space-sm); }
-  .timeline-step p { color: var(--color-muted); font-size: 0.9rem; }
+  .process-step h4 { margin-bottom: 0.8rem; font-size: 1rem; }
+  .process-step p { color: var(--text-light); font-size: 0.9rem; }
 
-  .audience-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); margin-top: var(--space-2xl); }
-  .audience-tag { background: white; border: 1px solid var(--color-border); padding: var(--space-md);
-    border-radius: var(--radius-md); text-align: center; font-size: 0.85rem; font-weight: 500;
-    cursor: pointer; transition: all 150ms var(--ease); }
-  .audience-tag:hover { border-color: var(--color-primary); color: var(--color-primary); }
-
-
-  .faq-item { border-bottom: 1px solid var(--color-border); padding: var(--space-lg) 0; }
-  .faq-question { display: flex; justify-content: space-between; align-items: center; cursor: pointer;
-    font-weight: 600; font-size: 1rem; gap: var(--space-md); }
-  .faq-question .chevron { transition: transform 200ms var(--ease); color: var(--color-muted); flex-shrink: 0; }
-  .faq-item.open .faq-question .chevron { transform: rotate(180deg); }
-  .faq-answer { max-height: 0; overflow: hidden; transition: max-height 250ms var(--ease);
-    color: var(--color-muted); font-size: 0.95rem; line-height: 1.7; }
-  .faq-item.open .faq-answer { max-height: 300px; padding-top: var(--space-md); }
-
-  .cta-banner { background: var(--color-text); color: white; padding: var(--space-3xl) 0; text-align: center; }
-  .cta-banner h2 { color: white; margin-bottom: var(--space-md); }
-  .cta-banner p { font-size: 1.1rem; margin-bottom: var(--space-2xl); color: rgba(255, 255, 255, 0.8); }
-
-  .lead-form { max-width: 600px; margin: 0 auto; }
-  .lead-form label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: var(--space-xs);
-    color: var(--color-muted); }
-  .lead-form input, .lead-form select { width: 100%; padding: 11px 14px; border-radius: var(--radius-md);
-    border: 1px solid var(--color-border); font-size: 0.95rem; margin-bottom: var(--space-md); font-family: inherit;
-    background: white;
+  /* AUDIENCE */
+  .audience-tags { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+  .tag {
+    background: white; border: 1px solid var(--border); padding: 0.8rem 1.2rem;
+    border-radius: 6px; font-size: 0.9rem; font-weight: 500; cursor: pointer;
+    transition: all 150ms; color: var(--text);
   }
-  .lead-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
-  #leadMsg { font-size: 0.88rem; margin-top: var(--space-sm); text-align: center; }
-  #leadMsg.success { color: var(--color-success); }
-  #leadMsg.error { color: var(--color-accent); }
+  .tag:hover { border-color: var(--primary); color: var(--primary); }
 
-  footer { border-top: 1px solid var(--color-border); padding: var(--space-3xl) 0; }
-  .footer-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3xl); }
-  .footer-col h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--color-muted);
-    margin-bottom: var(--space-lg); }
-  .footer-col a { display: block; font-size: 0.9rem; color: var(--color-muted); margin-bottom: var(--space-sm);
-    transition: color 150ms var(--ease); }
-  .footer-col a:hover { color: var(--color-primary); }
-  .footer-bottom { text-align: center; border-top: 1px solid var(--color-border); padding-top: var(--space-2xl);
-    margin-top: var(--space-2xl); color: var(--color-muted); font-size: 0.85rem; }
+  /* FAQ */
+  .faq-container { max-width: 700px; margin-top: 2rem; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 1.5rem 0; }
+  .faq-question {
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer; font-weight: 600; color: var(--dark); transition: color 150ms;
+  }
+  .faq-question:hover { color: var(--primary); }
+  .faq-chevron { font-size: 1.2rem; transition: transform 200ms; }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height 300ms; color: var(--text-light); }
+  .faq-item.open .faq-answer { max-height: 500px; padding-top: 1rem; }
+
+  /* CTA SECTION */
+  .cta-section { background: var(--primary); color: white; padding: 4rem 0; text-align: center; }
+  .cta-section h2 { color: white; margin-bottom: 1rem; }
+
+  /* FORM */
+  .form-container { max-width: 600px; margin: 0 auto; }
+  .form-group { margin-bottom: 1.5rem; }
+  .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+  .form-group input, .form-group select {
+    width: 100%; padding: 12px 14px; border-radius: 6px; border: 1px solid var(--border);
+    font-size: 0.95rem; font-family: inherit; background: white; color: var(--text);
+    transition: border-color 150ms;
+  }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  #leadMsg { font-size: 0.85rem; margin-top: 1rem; text-align: center; }
+  #leadMsg.success { color: var(--success); }
+  #leadMsg.error { color: var(--accent); }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 3rem 0; }
+  .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+  .footer-col h4 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); margin-bottom: 1.5rem; }
+  .footer-col a { display: block; font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.8rem; transition: color 150ms; }
+  .footer-col a:hover { color: var(--primary); }
+  .footer-bottom { text-align: center; border-top: 1px solid var(--border); padding-top: 1.5rem; margin-top: 1.5rem; color: var(--text-light); font-size: 0.8rem; }
 
   @media (max-width: 1024px) {
-    .grid-3, .audience-grid, .timeline-grid, .services-trio { grid-template-columns: 1fr; }
-    .footer-content { grid-template-columns: 1fr; }
+    .service-item { grid-template-columns: 1fr; }
+    .service-item:nth-child(2) { direction: ltr; }
+    .footer-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 768px) {
-    h1 { font-size: 2rem; }
-    .nav-links { display: none; }
+    h1 { font-size: 1.8rem; }
+    nav { display: none; }
     .menu-toggle { display: flex; }
-    .lead-form-row { grid-template-columns: 1fr; }
-    .hero-actions { flex-direction: column; }
+    .nav-mobile.open { display: flex; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero-cta { flex-direction: column; }
     .btn { width: 100%; }
-    .audience-grid { grid-template-columns: repeat(2, 1fr); }
+    .modules-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
-  <div class="container">
+  <div class="header-container">
+    <a href="#" class="logo">INVITEFOCUS</a>
     <nav>
-      <a href="#" class="logo">INVITEFOCUS</a>
-      <ul class="nav-links">
-        <li><a href="#services-detail">Diagnostic</a></li>
-        <li><a href="#process">Processus</a></li>
-        <li><a href="#audience">Pour qui</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="/portal/login.html">Espace client</a></li>
-        <li><a href="#start" class="btn btn-primary">Démarrer</a></li>
-      </ul>
-      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-    </nav>
-    <div class="nav-mobile-panel" id="navMobilePanel">
-      <a href="#services-detail">Diagnostic</a>
+      <a href="#services">Services</a>
+      <a href="#modules">Modules</a>
       <a href="#process">Processus</a>
-      <a href="#audience">Pour qui</a>
       <a href="#faq">FAQ</a>
       <a href="/portal/login.html">Espace client</a>
-      <a href="#start" class="btn btn-primary">Démarrer</a>
-    </div>
+    </nav>
+    <a href="#start" class="btn btn-primary">Démarrer</a>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </div>
+  <div class="nav-mobile" id="navMobile">
+    <a href="#services">Services</a>
+    <a href="#modules">Modules</a>
+    <a href="#process">Processus</a>
+    <a href="#faq">FAQ</a>
+    <a href="/portal/login.html">Espace client</a>
+    <a href="#start" class="btn btn-primary" style="width:100%">Démarrer</a>
   </div>
 </header>
 
+<!-- HERO -->
 <section class="hero">
-  <div class="container hero-inner">
-    <span class="label">Infrastructure pour PME africaines</span>
-    <h1>Trois enjeux critiques. Une seule infrastructure.</h1>
-    <p class="lede">Comptabilité structurée, conformité juridique, stratégie de croissance. Pas de plateforme disparate. Pas de consultant fragmenté. Un écosystème cohérent qui vous donne les fondations pour échelle.</p>
+  <div class="container hero-content">
+    <h1>Diagnostic financier structurant pour PME africaines</h1>
+    <p class="subtitle">Analyse en 48h. 3 services clés. 4 modules IA. Feuille de route claire vers la croissance.</p>
     <div class="hero-cta">
       <a href="#start" class="btn btn-primary">Démarrer le diagnostic</a>
-      <a href="#services-detail" class="btn btn-ghost">Voir les services</a>
-    </div>
-
-    <div class="services-trio">
-      <div class="service-trio-card">
-        <div class="service-trio-icon">◐</div>
-        <h3>Assistance Comptable</h3>
-        <p>Vos données financières structurées et à jour, chaque jour.</p>
-        <ul class="service-trio-list">
-          <li>Classement & saisie comptable</li>
-          <li>Suivi de trésorerie quotidien</li>
-          <li>États financiers aux normes</li>
-          <li>Conformité fiscale</li>
-        </ul>
-      </div>
-      <div class="service-trio-card">
-        <div class="service-trio-icon">⚖</div>
-        <h3>Services Juridiques</h3>
-        <p>Vous opérez en toute légalité et sécurité.</p>
-        <ul class="service-trio-list">
-          <li>Formalisation & structure légale</li>
-          <li>Création d'entreprise</li>
-          <li>Négociation contractuelle</li>
-          <li>Mise en conformité fiscale</li>
-        </ul>
-      </div>
-      <div class="service-trio-card">
-        <div class="service-trio-icon">◆</div>
-        <h3>Stratégie & Growth</h3>
-        <p>Votre feuille de route vers l'échelle.</p>
-        <ul class="service-trio-list">
-          <li>Business plan & modélisation</li>
-          <li>Conseil stratégique</li>
-          <li>Leviers de croissance</li>
-          <li>Développement partenariats</li>
-        </ul>
-      </div>
+      <a href="#services" class="btn btn-secondary">En savoir plus</a>
     </div>
   </div>
 </section>
 
-<section id="services-detail">
+<!-- 3 SERVICES -->
+<section id="services">
   <div class="container">
-    <div class="section-head">
-      <span class="label">Le point d'entrée</span>
-      <h2>Comment ça commence : le diagnostic.</h2>
-      <p class="lede">Avant de structurer vos 3 enjeux critiques, vous devez savoir où vous êtes exactement : solidité financière, risques immédiats, levier de croissance. C'est le diagnostic INVITEFOCUS.</p>
+    <div class="section-intro">
+      <span class="label">3 piliers</span>
+      <h2>Services structurants</h2>
+      <p class="subtitle">Une infrastructure complète couvrant vos besoins comptable, juridique et stratégique.</p>
     </div>
-    <div class="grid-3">
-      <div class="reason-card">
-        <h3>Solidité financière</h3>
-        <p>Analyse complète de votre risque : solvabilité, trésorerie, structure de coûts, dépendances. Vous savez où sont les failles avant que le marché les découvre.</p>
+
+    <div class="services-container">
+      <!-- SERVICE 1 -->
+      <div class="service-item">
+        <div class="service-visual">◐</div>
+        <div class="service-content">
+          <h3>Assistance Comptable</h3>
+          <p>Classement, saisie, suivi trésorier et états financiers aux normes. Vos données financières structurées et à jour chaque jour.</p>
+          <ul class="service-list">
+            <li>Saisie comptable continue</li>
+            <li>Suivi trésorier quotidien</li>
+            <li>États financiers mensuels</li>
+            <li>Conformité fiscale</li>
+          </ul>
+        </div>
       </div>
-      <div class="reason-card">
-        <h3>Pilotage immédiat</h3>
-        <p>3-5 actions concrètes identifiées pour les 90 prochains jours : blocages à débloquer, optimisations rapides, décisions critiques à prendre.</p>
+
+      <!-- SERVICE 2 -->
+      <div class="service-item">
+        <div class="service-visual">⚖</div>
+        <div class="service-content">
+          <h3>Services Juridiques</h3>
+          <p>Formalisation, conformité, contrats et structuration légale. Vous opérez en toute légalité et sécurité juridique.</p>
+          <ul class="service-list">
+            <li>Formalisation légale</li>
+            <li>Création entreprise</li>
+            <li>Contrats & templates</li>
+            <li>Mise en conformité</li>
+          </ul>
+        </div>
       </div>
-      <div class="reason-card">
-        <h3>Feuille de route</h3>
-        <p>Un plan d'action structuré sur 12 mois : dans quel ordre engager les services (Comptabilité → Juridique → Growth), pour quels bénéfices, avec quel budget.</p>
+
+      <!-- SERVICE 3 -->
+      <div class="service-item">
+        <div class="service-visual">◆</div>
+        <div class="service-content">
+          <h3>Stratégie & Growth</h3>
+          <p>Business plan, modélisation, conseil stratégique et identification des leviers. Votre feuille de route vers l'échelle.</p>
+          <ul class="service-list">
+            <li>Business plan structuré</li>
+            <li>Conseil stratégique</li>
+            <li>Modélisation financière</li>
+            <li>Plan de croissance</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="process" class="timeline-section">
+<!-- 4 MODULES -->
+<section id="modules" style="background:var(--surface-light)">
   <div class="container">
-    <div class="section-head">
-      <span class="label">De la donnée à l'action</span>
-      <h2>Le flux du diagnostic à la transformation.</h2>
-      <p class="lede">Un processus clair et progressif : données → diagnostic → plan d'action → engagement des services sur 12 mois.</p>
+    <div class="section-intro">
+      <span class="label">Outils intelligents</span>
+      <h2>4 Modules IA & Simulation</h2>
+      <p class="subtitle">Explorez vos scénarios et optimisez vos décisions stratégiques.</p>
     </div>
-    <div class="timeline-grid">
-      <div class="timeline-step" data-step="1">
-        <h3>Vous fournirez les données</h3>
-        <p>Bilan, compte de résultat, factures, relevés bancaires des 12 derniers mois, documents administratifs. Sécurisé, chiffré, accessible 24/7.</p>
+
+    <div class="modules-grid">
+      <div class="module-card">
+        <div class="module-icon">🧩</div>
+        <h4>Builder Scénarios</h4>
+        <p>Construisez votre plan de croissance en assemblant des blocs métier. Drag & drop visuel avec hypothèses prédéfinies.</p>
       </div>
-      <div class="timeline-step" data-step="2">
-        <h3>Nous structurons l'analyse</h3>
-        <p>Extraction automatisée + validation manuelle. Trois axes : solidité (risques identifiés), pilotage (actions 90j), stratégie (plan 12m).</p>
+      <div class="module-card">
+        <div class="module-icon">⚡</div>
+        <h4>Simulateur Financier</h4>
+        <p>Impact instantané sur P&L, trésorerie et ratios clés. Comparaison des scénarios optimiste/réaliste/pessimiste.</p>
       </div>
-      <div class="timeline-step" data-step="3">
-        <h3>Vous démarrez les services</h3>
-        <p>Rapport + appel de restitution. Vous activez Comptabilité, Juridique, Growth selon votre plan. Progression mesurable chaque mois.</p>
+      <div class="module-card">
+        <div class="module-icon">📈</div>
+        <h4>Effet de Levier</h4>
+        <p>Visualisez avant/après pour chaque décision. Alertes sur risques de trésorerie et recommandations IA.</p>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">🤖</div>
+        <h4>IA Conversationnelle</h4>
+        <p>Discutez de vos scénarios en français. L'IA affine vos hypothèses et génère des alternatives intelligentes.</p>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="margin-top:4rem">
+      <div class="stat-item">
+        <div class="stat-number">48h</div>
+        <div class="stat-label">Diagnostic complet</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Scénarios explorables</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">📊</div>
+        <div class="stat-label">Rapports automatisés</div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="audience">
+<!-- PROCESS -->
+<section id="process">
   <div class="container">
-    <div class="section-head">
-      <span class="label">Qui sommes-nous pour</span>
-      <h2>Pour qui, exactement.</h2>
-      <p class="lede">Vous êtes une PME africaine entre 5M et 500M CFA de CA. Vous avez une comptabilité formalisée. Vous avez des ambitions claires. Et vous avez besoin de crédibilité auprès d'un banquier, investisseur, ou partenaire — ou simplement de clarté interne pour prendre les bonnes décisions.</p>
+    <div class="section-intro">
+      <span class="label">Parcours</span>
+      <h2>De la clarté à l'action</h2>
+      <p class="subtitle">Un processus structuré en 4 phases : diagnostic → scénarios → simulation → recommandations.</p>
     </div>
-    <div class="audience-grid">
-      <div class="audience-tag">Commerce & Distribution</div>
-      <div class="audience-tag">Agro-alimentaire & Élevage</div>
-      <div class="audience-tag">Services & Professionnel</div>
-      <div class="audience-tag">Technologie & Créatif</div>
+
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="process-number">1</div>
+        <h4>Diagnostic</h4>
+        <p>Analyse F1/F2/F3 de votre situation financière et stratégique en 24-48h.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-number">2</div>
+        <h4>Scénarios</h4>
+        <p>Construisez 2-3 plans de croissance avec le builder visuel et l'IA.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-number">3</div>
+        <h4>Simulation</h4>
+        <p>Explorez l'impact financier de chaque scénario en temps réel.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-number">4</div>
+        <h4>Plan d'action</h4>
+        <p>Feuille de route structurée et support continu pour l'exécution.</p>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- AUDIENCE -->
+<section style="background:var(--surface-light)">
+  <div class="container">
+    <div class="section-intro">
+      <span class="label">Pour qui</span>
+      <h2>PME africaines en croissance</h2>
+      <p class="subtitle">Nous accompagnons entreprises formalisées ayant une comptabilité structurée et des ambitions claires.</p>
+    </div>
+    <div class="audience-tags">
+      <span class="tag">Commerce & Distribution</span>
+      <span class="tag">Agro-alimentaire</span>
+      <span class="tag">Services Professionnel</span>
+      <span class="tag">Technologie & Créatif</span>
+      <span class="tag">Industrie</span>
+      <span class="tag">Fintech & Digital</span>
+    </div>
+  </div>
+</section>
 
+<!-- FAQ -->
 <section id="faq">
-  <div class="container" style="max-width:700px">
-    <div class="section-head">
-      <span class="label">Clarifications</span>
-      <h2>FAQ.</h2>
-    </div>
-    <div class="faq-list">
-      <div class="faq-item">
-        <div class="faq-question">Quels documents sont requis ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Documents administratifs (NINEA, RCCM, statuts sociaux), dernier bilan comptable certifié, compte de résultat de l'exercice courant, et factures (vente + achat). Les relevés bancaires accélèrent la validation mais ne sont pas obligatoires.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Le délai 24-48h est-il réaliste ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Oui, une fois votre dossier complet et validé. Compter 3-10 jours pour réunir les documents selon votre organisation actuelle. Nous vous briefons dès la première semaine sur ce qui manque et comment l'accélérer.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Confidentialité : comment ça marche ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Chiffrement de bout en bout, accès restreint à votre consultant dédié et audit trail complet. Aucun partage externe, aucune utilisation de vos données pour autre chose que votre diagnostic. Vous restez propriétaire.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Comment utiliser le rapport ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Le rapport est directement utilisable auprès de banquiers, investisseurs, ou partenaires commerciaux comme preuve de solidité financière et direction stratégique. L'appel de consultation vous aide à décider les trois actions immédiates.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Quel est votre modèle économique ?<span class="chevron">▾</span></div>
-        <div class="faq-answer">Nous sommes en programme BETA avec places limitées. Pas d'abonnement caché, pas de frais additionnels après le diagnostic. Tarification et contrats discutés au cas par cas selon taille, secteur, et complexité.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="cta-banner">
   <div class="container">
-    <h2>Prêt à débuter ?</h2>
-    <p>Diagnostic en 48h, puis plan d'action structuré sur 12 mois. Aucun engagement immédiat.</p>
-    <a href="#start" class="btn btn-primary">Démarrer maintenant</a>
+    <div class="section-intro">
+      <span class="label">Questions</span>
+      <h2>FAQ</h2>
+    </div>
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Qu'est-ce qui rend INVITEFOCUS différent?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">Nous combinons diagnostic structuré, outils de simulation (Builder, Simulateur, Levier) et IA conversationnelle. Pas juste un outil SaaS, mais un accompagnement stratégique complet avec modules intelligents.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Combien de temps prend le diagnostic?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">24-48h une fois votre dossier complet. Ensuite accès illimité aux 4 modules pour explorer vos scénarios et stratégies de croissance.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Comment fonctionne le simulateur?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">À partir de votre diagnostic, le simulateur recalcule P&L, trésorerie et ratios pour chaque scénario. Chaque hypothèse a un impact instantané et visualisé.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Puis-je exporter mes scénarios?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">Oui. Chaque scénario génère automatiquement un rapport PDF professionnel avec modèles financiers, graphiques et plan d'action.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Comment l'IA aide pour mes décisions?</span>
+          <span class="faq-chevron">▼</span>
+        </div>
+        <div class="faq-answer">Décrivez votre vision en français. L'IA génère les blocs, ajuste hypothèses et propose des alternatives intelligentes basées sur votre contexte.</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section id="start" style="background:var(--color-surface-alt)">
-  <div class="container lead-form">
-    <div class="section-head" style="text-align:center">
-      <h2>Donnez-nous les premières informations</h2>
-      <p class="lede">Quelques minutes. Nous validerons votre profil et vous enverrons un lien sécurisé pour démarrer le dossier sous 24h.</p>
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Prêt à structurer votre croissance?</h2>
+    <p class="subtitle" style="color:rgba(255,255,255,0.9);margin-top:1rem">Diagnostic en 48h. Puis exploration illimitée avec les 4 modules IA.</p>
+  </div>
+</section>
+
+<!-- FORM -->
+<section id="start" style="background:var(--surface-light);padding:4rem 0">
+  <div class="container form-container">
+    <div style="text-align:center;margin-bottom:3rem">
+      <h2>Démarrer le diagnostic</h2>
+      <p class="subtitle">Quelques minutes. Aucun paiement maintenant. Validation et accès sous 24h.</p>
     </div>
     <form id="leadForm">
-      <div class="lead-form-row">
-        <div><label for="name">Nom complet</label><input type="text" id="name" required /></div>
-        <div><label for="company">Entreprise</label><input type="text" id="company" required /></div>
+      <div class="form-row">
+        <div class="form-group"><label for="name">Nom complet</label><input type="text" id="name" required /></div>
+        <div class="form-group"><label for="company">Entreprise</label><input type="text" id="company" required /></div>
       </div>
-      <div class="lead-form-row">
-        <div><label for="email">Email</label><input type="email" id="email" required /></div>
-        <div><label for="phone">Téléphone</label><input type="tel" id="phone" /></div>
+      <div class="form-row">
+        <div class="form-group"><label for="email">Email</label><input type="email" id="email" required /></div>
+        <div class="form-group"><label for="phone">Téléphone</label><input type="tel" id="phone" /></div>
       </div>
-      <label for="sector">Secteur d'activité</label>
-      <select id="sector">
-        <option value="">Sélectionner...</option>
-        <option>Commerce & Distribution</option>
-        <option>Agro-alimentaire & Élevage</option>
-        <option>Services & Professionnel</option>
-        <option>Technologie & Créatif</option>
-        <option>Autre</option>
-      </select>
-      <button type="submit" class="btn btn-primary" id="leadSubmit" style="width:100%;margin-top:var(--space-md)">Envoyer ma demande</button>
+      <div class="form-group">
+        <label for="sector">Secteur d'activité</label>
+        <select id="sector">
+          <option value="">Sélectionner...</option>
+          <option>Commerce & Distribution</option>
+          <option>Agro-alimentaire</option>
+          <option>Services Professionnel</option>
+          <option>Technologie & Créatif</option>
+          <option>Industrie</option>
+          <option>Fintech & Digital</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" id="leadSubmit" style="width:100%;padding:12px;font-size:1rem">Envoyer ma demande</button>
       <div id="leadMsg"></div>
     </form>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div class="container">
-    <div class="footer-content">
+    <div class="footer-grid">
       <div class="footer-col">
-        <h4>Infrastructure</h4>
-        <a href="#services-detail">Diagnostic</a>
+        <h4>Produit</h4>
+        <a href="#services">Services</a>
+        <a href="#modules">Modules</a>
         <a href="#process">Processus</a>
-        <a href="#audience">Pour qui</a>
         <a href="#faq">FAQ</a>
       </div>
       <div class="footer-col">
-        <h4>Produit</h4>
+        <h4>Ressources</h4>
         <a href="/portal/login.html">Espace client</a>
         <a href="mailto:hello@invitefocus.local">Contact</a>
       </div>
       <div class="footer-col">
         <h4>Légal</h4>
-        <a href="#">Politique de confidentialité</a>
-        <a href="#">Conditions d'utilisation</a>
+        <a href="#">Confidentialité</a>
+        <a href="#">Conditions</a>
       </div>
     </div>
     <div class="footer-bottom">© 2026 INVITEFOCUS — Dakar, Senegal</div>
@@ -404,14 +512,17 @@
 
 <script src="/js/supabase-client.js"></script>
 <script>
+  // Mobile menu
   document.getElementById('menuToggle').addEventListener('click', () => {
-    document.getElementById('navMobilePanel').classList.toggle('open');
+    document.getElementById('navMobile').classList.toggle('open');
   });
 
+  // FAQ
   document.querySelectorAll('.faq-question').forEach(q => {
     q.addEventListener('click', () => q.closest('.faq-item').classList.toggle('open'));
   });
 
+  // Form
   document.getElementById('leadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = document.getElementById('leadSubmit');
@@ -449,7 +560,7 @@
 
     if (otpError) {
       msg.className = 'error';
-      msg.textContent = 'Demande reçue, mais erreur d\'envoi de l\'email : ' + otpError.message;
+      msg.textContent = 'Demande reçue, erreur d\'envoi email : ' + otpError.message;
       return;
     }
 

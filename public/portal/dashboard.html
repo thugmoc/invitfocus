@@ -117,6 +117,10 @@
       <button class="client-tab-button" data-tab="comptable" onclick="switchClientTab('comptable')">◐ Comptable</button>
       <button class="client-tab-button" data-tab="juridique" onclick="switchClientTab('juridique')">⚖ Juridique</button>
       <button class="client-tab-button" data-tab="growth" onclick="switchClientTab('growth')">◆ Growth</button>
+      <button class="client-tab-button" data-tab="builder" onclick="switchClientTab('builder')">🧩 Builder</button>
+      <button class="client-tab-button" data-tab="simulator" onclick="switchClientTab('simulator')">⚡ Simulateur</button>
+      <button class="client-tab-button" data-tab="leverage" onclick="switchClientTab('leverage')">📈 Levier</button>
+      <button class="client-tab-button" data-tab="ai" onclick="switchClientTab('ai')">🤖 IA</button>
       <button class="client-tab-button" data-tab="documents" onclick="switchClientTab('documents')">📋 Documents</button>
     </div>
 
@@ -137,6 +141,62 @@
 
       <div id="tab-growth" class="tab-content">
         <div class="client-card"><h2 class="client-card-title">◆ Stratégie & Growth</h2><div id="growthContent"></div></div>
+      </div>
+
+      <div id="tab-builder" class="tab-content">
+        <div class="client-card">
+          <h2 class="client-card-title">🧩 Builder Scénarios</h2>
+          <p style="color:var(--text-light);margin-bottom:1.5rem">Construisez votre plan de croissance en assemblant des blocs métier. Drag & drop visuel avec hypothèses prédéfinies.</p>
+          <div id="builderContent" style="min-height:400px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:8px;background:var(--light)">
+            <div style="text-align:center">
+              <div style="font-size:3rem;margin-bottom:1rem">🧩</div>
+              <p style="color:var(--text-light);margin-bottom:0.5rem">Module Builder en cours de développement</p>
+              <p style="font-size:0.9rem;color:var(--text-light)">Explorez vos scénarios de croissance avec une interface visuelle</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-simulator" class="tab-content">
+        <div class="client-card">
+          <h2 class="client-card-title">⚡ Simulateur Financier</h2>
+          <p style="color:var(--text-light);margin-bottom:1.5rem">Impact instantané sur P&L, trésorerie et ratios clés. Comparaison des scénarios optimiste/réaliste/pessimiste.</p>
+          <div id="simulatorContent" style="min-height:400px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:8px;background:var(--light)">
+            <div style="text-align:center">
+              <div style="font-size:3rem;margin-bottom:1rem">⚡</div>
+              <p style="color:var(--text-light);margin-bottom:0.5rem">Module Simulateur en cours de développement</p>
+              <p style="font-size:0.9rem;color:var(--text-light)">Visualisez l'impact financier de chaque décision en temps réel</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-leverage" class="tab-content">
+        <div class="client-card">
+          <h2 class="client-card-title">📈 Effet de Levier</h2>
+          <p style="color:var(--text-light);margin-bottom:1.5rem">Visualisez avant/après pour chaque décision. Alertes sur risques de trésorerie et recommandations IA.</p>
+          <div id="leverageContent" style="min-height:400px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:8px;background:var(--light)">
+            <div style="text-align:center">
+              <div style="font-size:3rem;margin-bottom:1rem">📈</div>
+              <p style="color:var(--text-light);margin-bottom:0.5rem">Module Effet de Levier en cours de développement</p>
+              <p style="font-size:0.9rem;color:var(--text-light)">Identifiez les leviers clés pour accélérer votre croissance</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-ai" class="tab-content">
+        <div class="client-card">
+          <h2 class="client-card-title">🤖 IA Conversationnelle</h2>
+          <p style="color:var(--text-light);margin-bottom:1.5rem">Discutez de vos scénarios en français. L'IA affine vos hypothèses et génère des alternatives intelligentes.</p>
+          <div id="aiContent" style="min-height:400px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:8px;background:var(--light)">
+            <div style="text-align:center">
+              <div style="font-size:3rem;margin-bottom:1rem">🤖</div>
+              <p style="color:var(--text-light);margin-bottom:0.5rem">Module IA Conversationnelle en cours de développement</p>
+              <p style="font-size:0.9rem;color:var(--text-light)">Posez vos questions et explorez vos stratégies avec l'IA</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="tab-documents" class="tab-content">

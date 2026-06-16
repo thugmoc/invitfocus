@@ -52,3 +52,5 @@ venv/
 # Reports & Credentials
 reports/
 credentials.json
+
+.vercel

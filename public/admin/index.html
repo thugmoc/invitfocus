@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>INVITEFOCUS — Admin</title>
+<style>
+  :root {
+    --color-primary: #2E75B6; --color-primary-dark: #1C5A96;
+    --color-accent: #F96167; --color-surface: #FFFFFF; --color-surface-alt: #F8FBFF;
+    --color-border: #D8DFE5; --color-text: #1A1A2E; --color-muted: #889098;
+    --color-success: #27AE60; --color-warning: #F39C12; --color-danger: #E74C3C;
+    --space-xs:4px; --space-sm:8px; --space-md:16px; --space-lg:24px; --space-xl:32px; --space-2xl:48px;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:12px; --radius-xl:16px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--color-surface-alt); color: var(--color-text);
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── GATE ────────────────────────────────────────────────── */
+  #gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  #gate .card { background: white; border-radius: var(--radius-xl); padding: var(--space-2xl); width: min(380px, 90%);
+                border: 1px solid var(--color-border); }
+  #gate h1 { font-size: 1.3rem; margin-bottom: var(--space-sm); }
+  #gate p { color: var(--color-muted); font-size: 0.9rem; margin-bottom: var(--space-lg); }
+  #gate input { width: 100%; padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--color-border);
+                margin-bottom: var(--space-md); font-size: 1rem; }
+  #gate button { width: 100%; padding: 13px; border-radius: var(--radius-md); border: none;
+                 background: var(--color-text); color: white; font-weight: 600; cursor: pointer; }
+  #gateMsg { margin-top: var(--space-sm); font-size: 0.85rem; color: var(--color-danger); }
+
+  /* ── APP SHELL ───────────────────────────────────────────── */
+  #app { display: none; }
+  header { background: white; border-bottom: 1px solid var(--color-border); padding: var(--space-lg) 0; }
+  .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-lg);
+                  display: flex; justify-content: space-between; align-items: center; }
+  .brand { font-weight: 700; font-size: 1.1rem; }
+  .brand .sub { display: block; font-size: 0.78rem; color: var(--color-muted); font-weight: 400; margin-top: 2px; }
+  #logoutBtn { background: none; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+               padding: 8px 16px; cursor: pointer; color: var(--color-muted); font-size: 0.85rem; }
+
+  main { max-width: 1280px; margin: 0 auto; padding: var(--space-xl) var(--space-lg); }
+
+  .tabs { display: flex; gap: var(--space-xs); background: white; border: 1px solid var(--color-border);
+          border-radius: var(--radius-md); padding: var(--space-xs); margin-bottom: var(--space-xl); width: fit-content; }
+  .tab-btn { padding: 9px 18px; border: none; background: none; border-radius: var(--radius-sm);
+             font-weight: 600; font-size: 0.88rem; color: var(--color-muted); cursor: pointer; }
+  .tab-btn.active { background: var(--color-text); color: white; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-lg); margin-bottom: var(--space-xl); }
+  .stat-card { background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); }
+  .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted);
+                font-weight: 700; margin-bottom: var(--space-sm); }
+  .stat-value { font-size: 1.9rem; font-weight: 700; }
+
+  .table-card { background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--color-surface-alt); }
+  th { text-align: left; padding: var(--space-md); font-size: 0.78rem; text-transform: uppercase;
+       letter-spacing: 0.04em; color: var(--color-muted); font-weight: 700; border-bottom: 1px solid var(--color-border); }
+  td { padding: var(--space-md); border-bottom: 1px solid var(--color-border); font-size: 0.92rem; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--color-surface-alt); }
+
+  .pill { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+  .pill.lead, .pill.onboarded { background: #E8F0FB; color: var(--color-primary); }
+  .pill.collecting, .pill.validating { background: #FFF4E5; color: var(--color-warning); }
+  .pill.analyzing { background: #F0E6FF; color: #7C4DBE; }
+  .pill.delivered, .pill.feedback { background: #E8F8EF; color: var(--color-success); }
+
+  .empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-muted); }
+  #refreshBtn { background: white; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+                padding: 8px 16px; cursor: pointer; font-size: 0.85rem; margin-bottom: var(--space-md); }
+
+  @media (max-width: 900px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    table { font-size: 0.82rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="card">
+    <h1>Accès Admin</h1>
+    <p>Réservé à l'équipe INVITEFOCUS.</p>
+    <input type="password" id="tokenInput" placeholder="Jeton d'accès" />
+    <button id="unlockBtn">Entrer</button>
+    <div id="gateMsg"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <div class="header-inner">
+      <div class="brand">INVITEFOCUS<span class="sub">Tableau de bord opérationnel</span></div>
+      <button id="logoutBtn">Se déconnecter</button>
+    </div>
+  </header>
+
+  <main>
+    <button id="refreshBtn">↻ Actualiser</button>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="overview">Vue d'ensemble</button>
+      <button class="tab-btn" data-tab="clients">Clients</button>
+      <button class="tab-btn" data-tab="documents">Documents</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-overview">
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="table-card">
+        <table>
+          <thead><tr><th>Client</th><th>Entreprise</th><th>Statut</th><th>Score qualité</th><th>Reçu le</th></tr></thead>
+          <tbody id="recentClientsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-clients">
+      <div class="table-card">
+        <table>
+          <thead><tr><th>Client</th><th>Email</th><th>Entreprise</th><th>Secteur</th><th>Statut</th><th>Docs</th><th>Rapports</th></tr></thead>
+          <tbody id="clientsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-documents">
+      <div class="table-card">
+        <table>
+          <thead><tr><th>Client</th><th>Type</th><th>Statut</th><th>Reçu le</th></tr></thead>
+          <tbody id="documentsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const STATUS_LABELS = {
+    lead: 'Prospect', onboarded: 'Intégré', collecting: 'Collecte', validating: 'Validation',
+    analyzing: 'Analyse', delivered: 'Livré', feedback: 'Feedback'
+  };
+
+  function getToken() { return localStorage.getItem('if_admin_token'); }
+  function setToken(t) { localStorage.setItem('if_admin_token', t); }
+  function clearToken() { localStorage.removeItem('if_admin_token'); }
+
+  async function fetchAdminData(token) {
+    const res = await fetch('/api/admin-data?token=' + encodeURIComponent(token));
+    if (!res.ok) throw new Error('Jeton invalide ou erreur serveur (' + res.status + ')');
+    return res.json();
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('fr-FR');
+  }
+
+  function render(clients) {
+    const total = clients.length;
+    const active = clients.filter(c => !['delivered', 'feedback'].includes(c.status)).length;
+    const delivered = clients.filter(c => c.status === 'delivered' || c.status === 'feedback').length;
+    const avgScore = total ? Math.round(clients.reduce((s, c) => s + (c.quality_score || 0), 0) / total) : 0;
+
+    document.getElementById('statGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Clients total</div><div class="stat-value">${total}</div></div>
+      <div class="stat-card"><div class="stat-label">Dossiers actifs</div><div class="stat-value">${active}</div></div>
+      <div class="stat-card"><div class="stat-label">Rapports livrés</div><div class="stat-value">${delivered}</div></div>
+      <div class="stat-card"><div class="stat-label">Score qualité moyen</div><div class="stat-value">${avgScore}/100</div></div>
+    `;
+
+    const recent = [...clients].slice(0, 8);
+    document.getElementById('recentClientsBody').innerHTML = recent.length ? recent.map(c => `
+      <tr>
+        <td>${c.name}</td>
+        <td>${c.company}</td>
+        <td><span class="pill ${c.status}">${STATUS_LABELS[c.status] || c.status}</span></td>
+        <td>${c.quality_score ?? '—'}</td>
+        <td>${fmtDate(c.created_at)}</td>
+      </tr>`).join('') : `<tr><td colspan="5"><div class="empty-state">Aucun client encore.</div></td></tr>`;
+
+    document.getElementById('clientsBody').innerHTML = clients.length ? clients.map(c => `
+      <tr>
+        <td>${c.name}</td>
+        <td>${c.email}</td>
+        <td>${c.company}</td>
+        <td>${c.sector || '—'}</td>
+        <td><span class="pill ${c.status}">${STATUS_LABELS[c.status] || c.status}</span></td>
+        <td>${(c.documents || []).length}</td>
+        <td>${(c.reports || []).length}</td>
+      </tr>`).join('') : `<tr><td colspan="7"><div class="empty-state">Aucun client encore.</div></td></tr>`;
+
+    const allDocs = clients.flatMap(c => (c.documents || []).map(d => ({ ...d, clientName: c.name })));
+    document.getElementById('documentsBody').innerHTML = allDocs.length ? allDocs.map(d => `
+      <tr>
+        <td>${d.clientName}</td>
+        <td>${d.type}</td>
+        <td><span class="pill ${d.status === 'received' || d.status === 'verified' ? 'delivered' : 'collecting'}">${d.status}</span></td>
+        <td>${fmtDate(d.created_at)}</td>
+      </tr>`).join('') : `<tr><td colspan="4"><div class="empty-state">Aucun document encore.</div></td></tr>`;
+  }
+
+  async function loadDashboard() {
+    const token = getToken();
+    try {
+      const { clients } = await fetchAdminData(token);
+      render(clients);
+    } catch (e) {
+      alert('Erreur de chargement : ' + e.message);
+    }
+  }
+
+  document.getElementById('unlockBtn').addEventListener('click', async () => {
+    const tokenInput = document.getElementById('tokenInput').value.trim();
+    const msg = document.getElementById('gateMsg');
+    if (!tokenInput) { msg.textContent = 'Merci de saisir un jeton.'; return; }
+
+    try {
+      await fetchAdminData(tokenInput);
+      setToken(tokenInput);
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadDashboard();
+    } catch (e) {
+      msg.textContent = 'Jeton invalide.';
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    clearToken();
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('gate').style.display = 'flex';
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', loadDashboard);
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Auto-unlock if a valid token is already stored
+  (async () => {
+    const token = getToken();
+    if (!token) return;
+    try {
+      const { clients } = await fetchAdminData(token);
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      render(clients);
+    } catch (e) {
+      clearToken();
+    }
+  })();
+</script>
+</body>
+</html>

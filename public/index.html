@@ -132,11 +132,38 @@
   .footer-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md); }
   .footer-row, .footer-row a { color: var(--color-muted); font-size: 0.88rem; text-decoration: none; }
 
+  /* ── MOBILE NAV ──────────────────────────────────────────── */
+  .menu-toggle {
+    display: none; background: none; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+    width: 38px; height: 38px; cursor: pointer; font-size: 1.1rem; align-items: center; justify-content: center;
+  }
+  .nav-mobile-panel {
+    display: none; flex-direction: column; gap: var(--space-sm); padding: var(--space-md) 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .nav-mobile-panel a { text-decoration: none; color: var(--color-text); font-weight: 500; padding: var(--space-sm) 0; }
+  .nav-mobile-panel.open { display: flex; }
+
+  /* ── FAQ ─────────────────────────────────────────────────── */
+  .faq-item { border-bottom: 1px solid var(--color-border); padding: var(--space-lg) 0; }
+  .faq-question {
+    display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+    font-weight: 600; font-size: 1.02rem; gap: var(--space-md);
+  }
+  .faq-question .chevron { transition: transform 200ms var(--ease); color: var(--color-muted); flex-shrink: 0; }
+  .faq-item.open .faq-question .chevron { transform: rotate(180deg); }
+  .faq-answer {
+    max-height: 0; overflow: hidden; transition: max-height 250ms var(--ease);
+    color: var(--color-muted); font-size: 0.95rem; line-height: 1.7;
+  }
+  .faq-item.open .faq-answer { max-height: 240px; padding-top: var(--space-md); }
+
   @media (max-width: 860px) {
     .hero-grid, .market-grid, .grid-3 { grid-template-columns: 1fr; }
     .lead-form-row { grid-template-columns: 1fr; }
     h1 { font-size: 2.1rem; }
     .nav-links { display: none; }
+    .menu-toggle { display: flex; }
   }
 </style>
 </head>
@@ -149,10 +176,19 @@
       <ul class="nav-links">
         <li><a href="#methode">Méthode</a></li>
         <li><a href="#tarif">Tarif BETA</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="/portal/login.html">Espace client</a></li>
         <li><a href="#demarrer" class="btn btn-primary">Démarrer le diagnostic</a></li>
       </ul>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
     </nav>
+    <div class="nav-mobile-panel" id="navMobilePanel">
+      <a href="#methode">Méthode</a>
+      <a href="#tarif">Tarif BETA</a>
+      <a href="#faq">FAQ</a>
+      <a href="/portal/login.html">Espace client</a>
+      <a href="#demarrer" class="btn btn-primary">Démarrer le diagnostic</a>
+    </div>
   </div>
 </header>
 
@@ -245,6 +281,32 @@
   </div>
 </section>
 
+<section id="faq">
+  <div class="container" style="max-width:760px">
+    <div class="section-head">
+      <h2>Questions fréquentes</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-question">Quels documents dois-je fournir ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Documents administratifs (NINEA, RCCM), bilan, compte de résultat, factures de vente et d'achat, et idéalement vos relevés bancaires des derniers mois. Plus votre dossier est complet, plus le diagnostic est précis.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Le délai de 24-48h démarre quand ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Dès que votre dossier de documents est complet et validé par notre équipe. Le délai habituel pour réunir tous les documents est de 3 à 10 jours selon votre organisation comptable actuelle.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Mes données sont-elles confidentielles ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Oui. Vos documents sont stockés de façon chiffrée et accessibles uniquement par vous et votre consultant dédié. Aucune donnée n'est partagée avec un tiers.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Que se passe-t-il après la livraison du rapport ?<span class="chevron">▾</span></div>
+        <div class="faq-answer">Un consultant INVITEFOCUS vous contacte pour planifier un appel de présentation des résultats et répondre à vos questions sur les recommandations.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="demarrer" style="background:var(--color-surface-alt)">
   <div class="container" style="max-width:640px">
     <div class="section-head">
@@ -297,6 +359,14 @@
 
 <script src="/js/supabase-client.js"></script>
 <script>
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('navMobilePanel').classList.toggle('open');
+  });
+
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => q.closest('.faq-item').classList.toggle('open'));
+  });
+
   document.getElementById('leadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = document.getElementById('leadSubmit');

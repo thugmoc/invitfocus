@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Messages — INVITEFOCUS</title>
+<link rel="stylesheet" href="/css/app-shell.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/api/env.js"></script>
+<style>
+  .compose { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+  .compose textarea { resize: none; height: 44px; padding-top: 11px; }
+</style>
+</head>
+<body>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">INVITEFOCUS<span class="sub">Espace client</span></div>
+    <ul class="sidebar-nav">
+      <li><a href="/portal/dashboard.html"><span class="icon">⌂</span> Accueil</a></li>
+      <li><a href="/portal/documents.html"><span class="icon">▤</span> Documents</a></li>
+      <li><a href="/portal/messages.html" class="active"><span class="icon">✉</span> Messages</a></li>
+      <li><a href="/portal/profile.html"><span class="icon">●</span> Mon profil</a></li>
+    </ul>
+    <div class="sidebar-footer"><button id="logoutBtn">Déconnexion</button></div>
+  </aside>
+
+  <div class="main-area">
+    <div class="topbar">
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <h1>Messages</h1>
+      <span></span>
+    </div>
+    <main class="content" style="max-width:680px">
+      <div class="card">
+        <h2 class="card-title">Échanger avec votre consultant</h2>
+        <div class="thread" id="thread"><div class="empty-state">Chargement...</div></div>
+        <form class="compose" id="composeForm">
+          <textarea id="messageBody" placeholder="Écrire un message..." required></textarea>
+          <button type="submit" class="btn btn-primary">Envoyer</button>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="/js/supabase-client.js"></script>
+<script>
+  document.getElementById('logoutBtn').addEventListener('click', signOut);
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarBackdrop').classList.toggle('open');
+  });
+  document.getElementById('sidebarBackdrop').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarBackdrop').classList.remove('open');
+  });
+
+  let clientId = null;
+
+  function renderThread(messages) {
+    const thread = document.getElementById('thread');
+    if (!messages.length) {
+      thread.innerHTML = '<div class="empty-state">Aucun message encore. Posez votre première question.</div>';
+      return;
+    }
+    thread.innerHTML = messages.map(m => `
+      <div class="msg ${m.sender}">
+        ${m.body}
+        <div class="msg-meta">${new Date(m.created_at).toLocaleString('fr-FR')}</div>
+      </div>
+    `).join('');
+    thread.scrollTop = thread.scrollHeight;
+  }
+
+  async function loadMessages() {
+    const { data } = await sb.from('messages').select('*').eq('client_id', clientId).order('created_at', { ascending: true });
+    renderThread(data || []);
+  }
+
+  document.getElementById('composeForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const textarea = document.getElementById('messageBody');
+    const body = textarea.value.trim();
+    if (!body) return;
+
+    await sb.from('messages').insert({ client_id: clientId, sender: 'client', body });
+    textarea.value = '';
+    await loadMessages();
+  });
+
+  async function init() {
+    const session = await requireAuth();
+    if (!session) return;
+
+    const { data: client, error } = await sb.from('clients').select('id').eq('user_id', session.user.id).single();
+    if (error || !client) {
+      document.getElementById('thread').innerHTML = '<div class="empty-state">Aucun dossier trouvé pour ce compte.</div>';
+      document.getElementById('composeForm').style.display = 'none';
+      return;
+    }
+    clientId = client.id;
+    await loadMessages();
+  }
+
+  init();
+</script>
+</body>
+</html>

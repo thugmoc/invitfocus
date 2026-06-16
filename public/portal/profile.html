@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mon profil — INVITEFOCUS</title>
+<link rel="stylesheet" href="/css/app-shell.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/api/env.js"></script>
+<style>
+  .field { margin-bottom: var(--space-md); }
+  #saveMsg { font-size: 0.88rem; margin-top: var(--space-sm); }
+  #saveMsg.success { color: var(--color-success); }
+  #saveMsg.error { color: var(--color-danger); }
+</style>
+</head>
+<body>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">INVITEFOCUS<span class="sub">Espace client</span></div>
+    <ul class="sidebar-nav">
+      <li><a href="/portal/dashboard.html"><span class="icon">⌂</span> Accueil</a></li>
+      <li><a href="/portal/documents.html"><span class="icon">▤</span> Documents</a></li>
+      <li><a href="/portal/messages.html"><span class="icon">✉</span> Messages</a></li>
+      <li><a href="/portal/profile.html" class="active"><span class="icon">●</span> Mon profil</a></li>
+    </ul>
+    <div class="sidebar-footer"><button id="logoutBtn">Déconnexion</button></div>
+  </aside>
+
+  <div class="main-area">
+    <div class="topbar">
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <h1>Mon profil</h1>
+      <span></span>
+    </div>
+    <main class="content" style="max-width:560px">
+      <div class="card">
+        <h2 class="card-title">Informations</h2>
+        <form id="profileForm">
+          <div class="field">
+            <label for="email">Email (non modifiable)</label>
+            <input type="email" id="email" disabled />
+          </div>
+          <div class="field">
+            <label for="name">Nom complet</label>
+            <input type="text" id="name" required />
+          </div>
+          <div class="field">
+            <label for="company">Entreprise</label>
+            <input type="text" id="company" required />
+          </div>
+          <div class="field">
+            <label for="phone">Téléphone</label>
+            <input type="tel" id="phone" />
+          </div>
+          <div class="field">
+            <label for="sector">Secteur d'activité</label>
+            <select id="sector">
+              <option value="">Sélectionner...</option>
+              <option>Commerce</option>
+              <option>Services</option>
+              <option>Industrie</option>
+              <option>Agro-alimentaire</option>
+              <option>Technologie</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" id="saveBtn" style="width:100%">Enregistrer</button>
+          <div id="saveMsg"></div>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="/js/supabase-client.js"></script>
+<script>
+  document.getElementById('logoutBtn').addEventListener('click', signOut);
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarBackdrop').classList.toggle('open');
+  });
+  document.getElementById('sidebarBackdrop').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarBackdrop').classList.remove('open');
+  });
+
+  async function init() {
+    const session = await requireAuth();
+    if (!session) return;
+
+    const { data: client, error } = await sb.from('clients').select('*').eq('user_id', session.user.id).single();
+    if (error || !client) {
+      document.querySelector('main').innerHTML = '<div class="card"><p>Aucun dossier trouvé pour ce compte.</p></div>';
+      return;
+    }
+
+    document.getElementById('email').value = client.email;
+    document.getElementById('name').value = client.name;
+    document.getElementById('company').value = client.company;
+    document.getElementById('phone').value = client.phone || '';
+    document.getElementById('sector').value = client.sector || '';
+
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveBtn');
+      const msg = document.getElementById('saveMsg');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Enregistrement...';
+
+      const { error: rpcError } = await sb.rpc('update_my_profile', {
+        p_name: document.getElementById('name').value.trim(),
+        p_phone: document.getElementById('phone').value.trim(),
+        p_company: document.getElementById('company').value.trim(),
+        p_sector: document.getElementById('sector').value || null,
+      });
+
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Enregistrer';
+
+      if (rpcError) {
+        msg.className = 'error';
+        msg.textContent = 'Erreur : ' + rpcError.message;
+        return;
+      }
+      msg.className = 'success';
+      msg.textContent = 'Profil mis à jour.';
+    });
+  }
+
+  init();
+</script>
+</body>
+</html>

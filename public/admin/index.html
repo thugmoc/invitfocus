@@ -4,83 +4,31 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>INVITEFOCUS — Admin</title>
+<link rel="stylesheet" href="/css/app-shell.css" />
 <style>
-  :root {
-    --color-primary: #2E75B6; --color-primary-dark: #1C5A96;
-    --color-accent: #F96167; --color-surface: #FFFFFF; --color-surface-alt: #F8FBFF;
-    --color-border: #D8DFE5; --color-text: #1A1A2E; --color-muted: #889098;
-    --color-success: #27AE60; --color-warning: #F39C12; --color-danger: #E74C3C;
-    --space-xs:4px; --space-sm:8px; --space-md:16px; --space-lg:24px; --space-xl:32px; --space-2xl:48px;
-    --radius-sm:6px; --radius-md:8px; --radius-lg:12px; --radius-xl:16px;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--color-surface-alt); color: var(--color-text);
-  }
-  a { color: inherit; text-decoration: none; }
-
-  /* ── GATE ────────────────────────────────────────────────── */
-  #gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-  #gate .card { background: white; border-radius: var(--radius-xl); padding: var(--space-2xl); width: min(380px, 90%);
-                border: 1px solid var(--color-border); }
-  #gate h1 { font-size: 1.3rem; margin-bottom: var(--space-sm); }
+  #gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--color-surface-alt); }
+  #gate .card { width: min(380px, 90%); }
+  #gate h1 { font-size: 1.3rem; margin: 0 0 var(--space-sm); }
   #gate p { color: var(--color-muted); font-size: 0.9rem; margin-bottom: var(--space-lg); }
-  #gate input { width: 100%; padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--color-border);
-                margin-bottom: var(--space-md); font-size: 1rem; }
-  #gate button { width: 100%; padding: 13px; border-radius: var(--radius-md); border: none;
-                 background: var(--color-text); color: white; font-weight: 600; cursor: pointer; }
+  #gate input { margin-bottom: var(--space-md); }
   #gateMsg { margin-top: var(--space-sm); font-size: 0.85rem; color: var(--color-danger); }
 
-  /* ── APP SHELL ───────────────────────────────────────────── */
   #app { display: none; }
-  header { background: white; border-bottom: 1px solid var(--color-border); padding: var(--space-lg) 0; }
-  .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 var(--space-lg);
-                  display: flex; justify-content: space-between; align-items: center; }
-  .brand { font-weight: 700; font-size: 1.1rem; }
-  .brand .sub { display: block; font-size: 0.78rem; color: var(--color-muted); font-weight: 400; margin-top: 2px; }
-  #logoutBtn { background: none; border: 1px solid var(--color-border); border-radius: var(--radius-md);
-               padding: 8px 16px; cursor: pointer; color: var(--color-muted); font-size: 0.85rem; }
+  .admin-section { display: none; }
+  .admin-section.active { display: block; }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg); flex-wrap: wrap; gap: var(--space-md); }
+  .search-input { max-width: 280px; }
 
-  main { max-width: 1280px; margin: 0 auto; padding: var(--space-xl) var(--space-lg); }
-
-  .tabs { display: flex; gap: var(--space-xs); background: white; border: 1px solid var(--color-border);
-          border-radius: var(--radius-md); padding: var(--space-xs); margin-bottom: var(--space-xl); width: fit-content; }
-  .tab-btn { padding: 9px 18px; border: none; background: none; border-radius: var(--radius-sm);
-             font-weight: 600; font-size: 0.88rem; color: var(--color-muted); cursor: pointer; }
-  .tab-btn.active { background: var(--color-text); color: white; }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-
-  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-lg); margin-bottom: var(--space-xl); }
-  .stat-card { background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); }
-  .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted);
-                font-weight: 700; margin-bottom: var(--space-sm); }
-  .stat-value { font-size: 1.9rem; font-weight: 700; }
-
-  .table-card { background: white; border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
-  table { width: 100%; border-collapse: collapse; }
-  thead { background: var(--color-surface-alt); }
-  th { text-align: left; padding: var(--space-md); font-size: 0.78rem; text-transform: uppercase;
-       letter-spacing: 0.04em; color: var(--color-muted); font-weight: 700; border-bottom: 1px solid var(--color-border); }
-  td { padding: var(--space-md); border-bottom: 1px solid var(--color-border); font-size: 0.92rem; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: var(--color-surface-alt); }
-
-  .pill { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
-  .pill.lead, .pill.onboarded { background: #E8F0FB; color: var(--color-primary); }
-  .pill.collecting, .pill.validating { background: #FFF4E5; color: var(--color-warning); }
-  .pill.analyzing { background: #F0E6FF; color: #7C4DBE; }
-  .pill.delivered, .pill.feedback { background: #E8F8EF; color: var(--color-success); }
-
-  .empty-state { text-align: center; padding: var(--space-2xl); color: var(--color-muted); }
-  #refreshBtn { background: white; border: 1px solid var(--color-border); border-radius: var(--radius-md);
-                padding: 8px 16px; cursor: pointer; font-size: 0.85rem; margin-bottom: var(--space-md); }
-
-  @media (max-width: 900px) {
-    .stat-grid { grid-template-columns: repeat(2, 1fr); }
-    table { font-size: 0.82rem; }
-  }
+  .client-detail-field { margin-bottom: var(--space-md); }
+  .msg-client-list { list-style: none; padding: 0; margin: 0; }
+  .msg-client-list li { padding: var(--space-md); border-bottom: 1px solid var(--color-border); cursor: pointer; display: flex; justify-content: space-between; }
+  .msg-client-list li:hover { background: var(--color-surface-alt); }
+  .msg-client-list li.active { background: #E8F0FB; }
+  .badge-count { background: var(--color-accent); color: white; border-radius: 999px; font-size: 0.7rem; padding: 1px 7px; }
+  .messages-grid { display: grid; grid-template-columns: 280px 1fr; gap: var(--space-lg); }
+  @media (max-width: 920px) { .messages-grid { grid-template-columns: 1fr; } }
+  .compose { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+  .compose textarea { resize: none; height: 44px; padding-top: 11px; }
 </style>
 </head>
 <body>
@@ -90,56 +38,116 @@
     <h1>Accès Admin</h1>
     <p>Réservé à l'équipe INVITEFOCUS.</p>
     <input type="password" id="tokenInput" placeholder="Jeton d'accès" />
-    <button id="unlockBtn">Entrer</button>
+    <button class="btn btn-primary" id="unlockBtn" style="width:100%">Entrer</button>
     <div id="gateMsg"></div>
   </div>
 </div>
 
-<div id="app">
-  <header>
-    <div class="header-inner">
-      <div class="brand">INVITEFOCUS<span class="sub">Tableau de bord opérationnel</span></div>
-      <button id="logoutBtn">Se déconnecter</button>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div id="app" class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">INVITEFOCUS<span class="sub">Tableau de bord opérationnel</span></div>
+    <ul class="sidebar-nav">
+      <li><a href="#" class="nav-link active" data-section="overview"><span class="icon">▦</span> Vue d'ensemble</a></li>
+      <li><a href="#" class="nav-link" data-section="pipeline"><span class="icon">⇄</span> Pipeline</a></li>
+      <li><a href="#" class="nav-link" data-section="clients"><span class="icon">☰</span> Clients</a></li>
+      <li><a href="#" class="nav-link" data-section="documents"><span class="icon">▤</span> Documents</a></li>
+      <li><a href="#" class="nav-link" data-section="messages"><span class="icon">✉</span> Messages</a></li>
+    </ul>
+    <div class="sidebar-footer"><button id="logoutBtn">Se déconnecter</button></div>
+  </aside>
+
+  <div class="main-area">
+    <div class="topbar">
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <h1 id="sectionTitle">Vue d'ensemble</h1>
+      <button class="btn btn-ghost btn-sm" id="refreshBtn">↻ Actualiser</button>
     </div>
-  </header>
 
-  <main>
-    <button id="refreshBtn">↻ Actualiser</button>
-
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="overview">Vue d'ensemble</button>
-      <button class="tab-btn" data-tab="clients">Clients</button>
-      <button class="tab-btn" data-tab="documents">Documents</button>
-    </div>
-
-    <div class="tab-panel active" id="tab-overview">
-      <div class="stat-grid" id="statGrid"></div>
-      <div class="table-card">
-        <table>
-          <thead><tr><th>Client</th><th>Entreprise</th><th>Statut</th><th>Score qualité</th><th>Reçu le</th></tr></thead>
-          <tbody id="recentClientsBody"></tbody>
-        </table>
+    <main class="content">
+      <div class="admin-section active" id="section-overview">
+        <div class="stat-grid" id="statGrid" style="margin-bottom:var(--space-xl)"></div>
+        <div class="card">
+          <h2 class="card-title">Clients récents</h2>
+          <table>
+            <thead><tr><th>Client</th><th>Entreprise</th><th>Statut</th><th>Score</th><th>Reçu le</th></tr></thead>
+            <tbody id="recentClientsBody"></tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-    <div class="tab-panel" id="tab-clients">
-      <div class="table-card">
-        <table>
-          <thead><tr><th>Client</th><th>Email</th><th>Entreprise</th><th>Secteur</th><th>Statut</th><th>Docs</th><th>Rapports</th></tr></thead>
-          <tbody id="clientsBody"></tbody>
-        </table>
+      <div class="admin-section" id="section-pipeline">
+        <div class="kanban" id="kanban"></div>
       </div>
-    </div>
 
-    <div class="tab-panel" id="tab-documents">
-      <div class="table-card">
-        <table>
-          <thead><tr><th>Client</th><th>Type</th><th>Statut</th><th>Reçu le</th></tr></thead>
-          <tbody id="documentsBody"></tbody>
-        </table>
+      <div class="admin-section" id="section-clients">
+        <div class="toolbar">
+          <input type="text" id="clientSearch" class="search-input" placeholder="Rechercher un client..." />
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>Client</th><th>Email</th><th>Entreprise</th><th>Secteur</th><th>Statut</th><th>Docs</th><th>Rapports</th></tr></thead>
+            <tbody id="clientsBody"></tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </main>
+
+      <div class="admin-section" id="section-documents">
+        <div class="card">
+          <table>
+            <thead><tr><th>Client</th><th>Type</th><th>Statut</th><th>Reçu le</th></tr></thead>
+            <tbody id="documentsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="admin-section" id="section-messages">
+        <div class="messages-grid">
+          <div class="card" style="padding:0">
+            <ul class="msg-client-list" id="msgClientList"></ul>
+          </div>
+          <div class="card">
+            <div id="msgThreadHeader" style="margin-bottom:var(--space-md);color:var(--color-muted);font-size:0.9rem">Sélectionnez un client</div>
+            <div class="thread" id="adminThread"></div>
+            <form class="compose" id="adminComposeForm" style="display:none">
+              <textarea id="adminMessageBody" placeholder="Répondre..." required></textarea>
+              <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<div class="drawer" id="clientDrawer">
+  <button class="drawer-close" id="drawerClose">✕</button>
+  <h2 class="card-title" id="drawerTitle">Client</h2>
+  <div class="client-detail-field"><label>Entreprise</label><div id="drawerCompany" style="font-weight:600"></div></div>
+  <div class="client-detail-field"><label>Email</label><div id="drawerEmail" style="color:var(--color-muted)"></div></div>
+  <div class="client-detail-field">
+    <label for="drawerStatus">Statut</label>
+    <select id="drawerStatus">
+      <option value="lead">Prospect</option>
+      <option value="onboarded">Intégré</option>
+      <option value="collecting">Collecte</option>
+      <option value="validating">Validation</option>
+      <option value="analyzing">Analyse</option>
+      <option value="delivered">Livré</option>
+      <option value="feedback">Feedback</option>
+    </select>
+  </div>
+  <div class="client-detail-field">
+    <label for="drawerScore">Score qualité (0-100)</label>
+    <input type="number" id="drawerScore" min="0" max="100" />
+  </div>
+  <div class="client-detail-field">
+    <label for="drawerNotes">Notes</label>
+    <textarea id="drawerNotes" rows="4" style="resize:vertical"></textarea>
+  </div>
+  <button class="btn btn-primary" id="drawerSave" style="width:100%">Enregistrer</button>
+  <div id="drawerMsg" style="margin-top:var(--space-sm);font-size:0.85rem"></div>
 </div>
 
 <script>
@@ -147,12 +155,15 @@
     lead: 'Prospect', onboarded: 'Intégré', collecting: 'Collecte', validating: 'Validation',
     analyzing: 'Analyse', delivered: 'Livré', feedback: 'Feedback'
   };
-
+  const PIPELINE_COLUMNS = ['lead', 'onboarded', 'collecting', 'validating', 'analyzing', 'delivered', 'feedback'];
   const DOC_TYPE_LABELS = {
     admin: 'Documents administratifs', bilan: 'Bilan comptable', resultat: 'Compte de résultat',
     facture_vente: 'Factures de vente', facture_achat: 'Factures d\'achat',
     releve_bancaire: 'Relevés bancaires', autre: 'Autres pièces',
   };
+
+  let allClients = [];
+  let activeMsgClientId = null;
 
   function getToken() { return localStorage.getItem('if_admin_token'); }
   function setToken(t) { localStorage.setItem('if_admin_token', t); }
@@ -164,12 +175,44 @@
     return res.json();
   }
 
-  function fmtDate(iso) {
-    if (!iso) return '—';
-    return new Date(iso).toLocaleDateString('fr-FR');
+  async function callAdminAction(action, params) {
+    const res = await fetch('/api/admin-action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: getToken(), action, ...params }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur serveur');
+    return data;
   }
 
-  function render(clients) {
+  function fmtDate(iso) { return iso ? new Date(iso).toLocaleDateString('fr-FR') : '—'; }
+
+  // ── NAVIGATION ────────────────────────────────────────────
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+      link.classList.add('active');
+      document.getElementById('section-' + link.dataset.section).classList.add('active');
+      document.getElementById('sectionTitle').textContent = link.textContent.trim();
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarBackdrop').classList.remove('open');
+    });
+  });
+
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarBackdrop').classList.toggle('open');
+  });
+  document.getElementById('sidebarBackdrop').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarBackdrop').classList.remove('open');
+  });
+
+  // ── OVERVIEW ──────────────────────────────────────────────
+  function renderOverview(clients) {
     const total = clients.length;
     const active = clients.filter(c => !['delivered', 'feedback'].includes(c.status)).length;
     const delivered = clients.filter(c => c.status === 'delivered' || c.status === 'feedback').length;
@@ -184,57 +227,192 @@
 
     const recent = [...clients].slice(0, 8);
     document.getElementById('recentClientsBody').innerHTML = recent.length ? recent.map(c => `
-      <tr>
-        <td>${c.name}</td>
-        <td>${c.company}</td>
+      <tr onclick="openDrawer('${c.id}')">
+        <td>${c.name}</td><td>${c.company}</td>
         <td><span class="pill ${c.status}">${STATUS_LABELS[c.status] || c.status}</span></td>
-        <td>${c.quality_score ?? '—'}</td>
-        <td>${fmtDate(c.created_at)}</td>
+        <td>${c.quality_score ?? '—'}</td><td>${fmtDate(c.created_at)}</td>
       </tr>`).join('') : `<tr><td colspan="5"><div class="empty-state">Aucun client encore.</div></td></tr>`;
+  }
 
+  // ── PIPELINE (KANBAN) ────────────────────────────────────
+  function renderPipeline(clients) {
+    const kanban = document.getElementById('kanban');
+    kanban.innerHTML = PIPELINE_COLUMNS.map(status => {
+      const colClients = clients.filter(c => c.status === status);
+      return `
+        <div class="kanban-col" data-status="${status}">
+          <div class="kanban-col-title"><span>${STATUS_LABELS[status]}</span><span>${colClients.length}</span></div>
+          ${colClients.map(c => `
+            <div class="kanban-card" draggable="true" data-id="${c.id}" onclick="openDrawer('${c.id}')">
+              <strong>${c.company}</strong><br><span style="color:var(--color-muted);font-size:0.8rem">${c.name}</span>
+            </div>
+          `).join('')}
+        </div>`;
+    }).join('');
+
+    document.querySelectorAll('.kanban-card').forEach(card => {
+      card.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', card.dataset.id);
+        card.classList.add('dragging');
+      });
+      card.addEventListener('dragend', () => card.classList.remove('dragging'));
+    });
+
+    document.querySelectorAll('.kanban-col').forEach(col => {
+      col.addEventListener('dragover', (e) => { e.preventDefault(); col.classList.add('dragover'); });
+      col.addEventListener('dragleave', () => col.classList.remove('dragover'));
+      col.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        col.classList.remove('dragover');
+        const clientId = e.dataTransfer.getData('text/plain');
+        const newStatus = col.dataset.status;
+        try {
+          await callAdminAction('update_client', { client_id: clientId, status: newStatus });
+          await loadAll();
+        } catch (err) { alert('Erreur : ' + err.message); }
+      });
+    });
+  }
+
+  // ── CLIENTS TABLE ─────────────────────────────────────────
+  function renderClientsTable(clients) {
     document.getElementById('clientsBody').innerHTML = clients.length ? clients.map(c => `
-      <tr>
-        <td>${c.name}</td>
-        <td>${c.email}</td>
-        <td>${c.company}</td>
-        <td>${c.sector || '—'}</td>
+      <tr onclick="openDrawer('${c.id}')">
+        <td>${c.name}</td><td>${c.email}</td><td>${c.company}</td><td>${c.sector || '—'}</td>
         <td><span class="pill ${c.status}">${STATUS_LABELS[c.status] || c.status}</span></td>
-        <td>${(c.documents || []).length}</td>
-        <td>${(c.reports || []).length}</td>
+        <td>${(c.documents || []).length}</td><td>${(c.reports || []).length}</td>
       </tr>`).join('') : `<tr><td colspan="7"><div class="empty-state">Aucun client encore.</div></td></tr>`;
+  }
 
+  document.getElementById('clientSearch').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    const filtered = allClients.filter(c =>
+      c.name.toLowerCase().includes(q) || c.company.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)
+    );
+    renderClientsTable(filtered);
+  });
+
+  // ── DOCUMENTS ─────────────────────────────────────────────
+  function renderDocuments(clients) {
     const allDocs = clients.flatMap(c => (c.documents || []).map(d => ({ ...d, clientName: c.name })));
     document.getElementById('documentsBody').innerHTML = allDocs.length ? allDocs.map(d => `
       <tr>
-        <td>${d.clientName}</td>
-        <td>${DOC_TYPE_LABELS[d.type] || d.type}</td>
+        <td>${d.clientName}</td><td>${DOC_TYPE_LABELS[d.type] || d.type}</td>
         <td><span class="pill ${d.status === 'received' || d.status === 'verified' ? 'delivered' : 'collecting'}">${d.status}</span></td>
         <td>${fmtDate(d.created_at)}</td>
       </tr>`).join('') : `<tr><td colspan="4"><div class="empty-state">Aucun document encore.</div></td></tr>`;
   }
 
-  async function loadDashboard() {
-    const token = getToken();
+  // ── MESSAGES ──────────────────────────────────────────────
+  function renderMsgClientList(clients) {
+    const withMsgs = clients.filter(c => (c.messages || []).length > 0);
+    const list = withMsgs.length ? withMsgs : clients;
+    document.getElementById('msgClientList').innerHTML = list.map(c => {
+      const unread = (c.messages || []).filter(m => m.sender === 'client' && !m.read).length;
+      return `<li data-id="${c.id}" onclick="openThread('${c.id}')">
+        <span>${c.company}</span>
+        ${unread ? `<span class="badge-count">${unread}</span>` : ''}
+      </li>`;
+    }).join('') || '<li>Aucun client</li>';
+  }
+
+  async function openThread(clientId) {
+    activeMsgClientId = clientId;
+    document.querySelectorAll('.msg-client-list li').forEach(li => li.classList.toggle('active', li.dataset.id === clientId));
+    const client = allClients.find(c => c.id === clientId);
+    document.getElementById('msgThreadHeader').textContent = client ? client.company : '';
+    document.getElementById('adminComposeForm').style.display = 'flex';
+
     try {
-      const { clients } = await fetchAdminData(token);
-      render(clients);
-    } catch (e) {
-      alert('Erreur de chargement : ' + e.message);
+      const { messages } = await callAdminAction('list_messages', { client_id: clientId });
+      const thread = document.getElementById('adminThread');
+      thread.innerHTML = (messages || []).map(m => `
+        <div class="msg ${m.sender}">${m.body}<div class="msg-meta">${new Date(m.created_at).toLocaleString('fr-FR')}</div></div>
+      `).join('') || '<div class="empty-state">Aucun message encore.</div>';
+      thread.scrollTop = thread.scrollHeight;
+    } catch (err) {
+      document.getElementById('adminThread').innerHTML = '<div class="empty-state">Erreur de chargement.</div>';
     }
+  }
+
+  document.getElementById('adminComposeForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const textarea = document.getElementById('adminMessageBody');
+    const body = textarea.value.trim();
+    if (!body || !activeMsgClientId) return;
+    try {
+      await callAdminAction('send_message', { client_id: activeMsgClientId, message_body: body });
+      textarea.value = '';
+      await openThread(activeMsgClientId);
+    } catch (err) { alert('Erreur : ' + err.message); }
+  });
+
+  // ── CLIENT DETAIL DRAWER ──────────────────────────────────
+  function openDrawer(clientId) {
+    const c = allClients.find(x => x.id === clientId);
+    if (!c) return;
+    document.getElementById('drawerTitle').textContent = c.name;
+    document.getElementById('drawerCompany').textContent = c.company;
+    document.getElementById('drawerEmail').textContent = c.email;
+    document.getElementById('drawerStatus').value = c.status;
+    document.getElementById('drawerScore').value = c.quality_score ?? '';
+    document.getElementById('drawerNotes').value = c.notes || '';
+    document.getElementById('drawerMsg').textContent = '';
+    document.getElementById('clientDrawer').dataset.clientId = clientId;
+    document.getElementById('clientDrawer').classList.add('open');
+    document.getElementById('drawerBackdrop').classList.add('open');
+  }
+  function closeDrawer() {
+    document.getElementById('clientDrawer').classList.remove('open');
+    document.getElementById('drawerBackdrop').classList.remove('open');
+  }
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  document.getElementById('drawerBackdrop').addEventListener('click', closeDrawer);
+
+  document.getElementById('drawerSave').addEventListener('click', async () => {
+    const clientId = document.getElementById('clientDrawer').dataset.clientId;
+    const msg = document.getElementById('drawerMsg');
+    try {
+      await callAdminAction('update_client', {
+        client_id: clientId,
+        status: document.getElementById('drawerStatus').value,
+        quality_score: Number(document.getElementById('drawerScore').value) || 0,
+        notes: document.getElementById('drawerNotes').value,
+      });
+      msg.style.color = 'var(--color-success)';
+      msg.textContent = 'Enregistré.';
+      await loadAll();
+    } catch (err) {
+      msg.style.color = 'var(--color-danger)';
+      msg.textContent = 'Erreur : ' + err.message;
+    }
+  });
+
+  window.openDrawer = openDrawer;
+  window.openThread = openThread;
+
+  // ── LOAD / GATE ───────────────────────────────────────────
+  async function loadAll() {
+    const { clients } = await fetchAdminData(getToken());
+    allClients = clients;
+    renderOverview(clients);
+    renderPipeline(clients);
+    renderClientsTable(clients);
+    renderDocuments(clients);
+    renderMsgClientList(clients);
   }
 
   document.getElementById('unlockBtn').addEventListener('click', async () => {
     const tokenInput = document.getElementById('tokenInput').value.trim();
     const msg = document.getElementById('gateMsg');
     if (!tokenInput) { msg.textContent = 'Merci de saisir un jeton.'; return; }
-
+    setToken(tokenInput);
     try {
-      await fetchAdminData(tokenInput);
-      setToken(tokenInput);
+      await loadAll();
       document.getElementById('gate').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      loadDashboard();
+      document.getElementById('app').style.display = 'flex';
     } catch (e) {
+      clearToken();
       msg.textContent = 'Jeton invalide.';
     }
   });
@@ -245,29 +423,16 @@
     document.getElementById('gate').style.display = 'flex';
   });
 
-  document.getElementById('refreshBtn').addEventListener('click', loadDashboard);
+  document.getElementById('refreshBtn').addEventListener('click', loadAll);
 
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  // Auto-unlock if a valid token is already stored
   (async () => {
     const token = getToken();
     if (!token) return;
     try {
-      const { clients } = await fetchAdminData(token);
+      await loadAll();
       document.getElementById('gate').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      render(clients);
-    } catch (e) {
-      clearToken();
-    }
+      document.getElementById('app').style.display = 'flex';
+    } catch (e) { clearToken(); }
   })();
 </script>
 </body>

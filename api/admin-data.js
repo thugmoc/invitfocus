@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
 
     const { data: clients, error } = await supabase
       .from('clients')
-      .select('*, documents(*), reports(*), tasks(*)')
+      .select('*, documents(*), reports(*), tasks(*), messages(*)')
       .order('created_at', { ascending: false });
 
     if (error) {

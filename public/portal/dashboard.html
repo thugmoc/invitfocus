@@ -4,48 +4,73 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Mon espace — INVITEFOCUS</title>
+<link rel="stylesheet" href="/css/app-shell.css" />
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/api/env.js"></script>
 <style>
-  :root { --primary: #2E75B6; --bg: #F8FBFF; --text: #1A1A2E; --muted: #889098; --success: #27AE60; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-         background: var(--bg); color: var(--text); }
-  header { background: white; padding: 20px 32px; display: flex; justify-content: space-between;
-           align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-  header h1 { font-size: 1.2rem; }
-  header button { background: none; border: 1px solid #D8DFE5; padding: 8px 16px; border-radius: 8px;
-                  cursor: pointer; color: var(--muted); }
-  main { max-width: 900px; margin: 0 auto; padding: 32px; }
-  .status-badge { display: inline-block; padding: 6px 14px; border-radius: 999px; font-size: 0.8rem;
-                  font-weight: 700; background: #E8F0FB; color: var(--primary); margin-bottom: 24px; }
-  .card { background: white; border-radius: 16px; padding: 28px; margin-bottom: 20px;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
-  .card h2 { font-size: 1.1rem; margin-bottom: 12px; }
-  .doc-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0;
-             border-bottom: 1px solid #F0F0F0; }
+  .report-cta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg); flex-wrap: wrap; }
+  .doc-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 0.9rem; }
   .doc-row:last-child { border-bottom: none; }
-  .pill { font-size: 0.75rem; padding: 4px 10px; border-radius: 999px; font-weight: 600; }
-  .pill.received { background: #E8F8EF; color: var(--success); }
-  .pill.pending  { background: #FFF4E5; color: #F39C12; }
-  .btn-download { display: inline-block; background: var(--primary); color: white; padding: 12px 24px;
-                  border-radius: 10px; font-weight: 700; text-decoration: none; }
-  .btn-outline { display: inline-block; background: white; color: var(--primary); padding: 12px 24px;
-                 border: 1px solid var(--primary); border-radius: 10px; font-weight: 700; text-decoration: none; }
-  #loading { text-align: center; padding: 60px; color: var(--muted); }
+  .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-lg); }
+  @media (max-width: 920px) { .grid-2 { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-  <header>
-    <h1>INVITEFOCUS — Mon espace</h1>
-    <button id="logoutBtn">Déconnexion</button>
-  </header>
 
-  <main id="loading">Chargement...</main>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">INVITEFOCUS<span class="sub">Espace client</span></div>
+    <ul class="sidebar-nav">
+      <li><a href="/portal/dashboard.html" class="active"><span class="icon">⌂</span> Accueil</a></li>
+      <li><a href="/portal/documents.html"><span class="icon">▤</span> Documents</a></li>
+      <li><a href="/portal/messages.html"><span class="icon">✉</span> Messages</a></li>
+      <li><a href="/portal/profile.html"><span class="icon">●</span> Mon profil</a></li>
+    </ul>
+    <div class="sidebar-footer"><button id="logoutBtn">Déconnexion</button></div>
+  </aside>
+
+  <div class="main-area">
+    <div class="topbar">
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <h1>Accueil</h1>
+      <span></span>
+    </div>
+    <main class="content" id="loading">Chargement...</main>
+  </div>
+</div>
 
 <script src="/js/supabase-client.js"></script>
 <script>
   document.getElementById('logoutBtn').addEventListener('click', signOut);
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarBackdrop').classList.toggle('open');
+  });
+  document.getElementById('sidebarBackdrop').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarBackdrop').classList.remove('open');
+  });
+
+  const STEPS = [
+    { key: 'start', label: 'Inscription', statuses: ['lead', 'onboarded'] },
+    { key: 'collect', label: 'Collecte', statuses: ['collecting', 'validating'] },
+    { key: 'analyze', label: 'Analyse', statuses: ['analyzing'] },
+    { key: 'done', label: 'Livré', statuses: ['delivered', 'feedback'] },
+  ];
+
+  function renderStepper(status) {
+    const currentIdx = STEPS.findIndex(s => s.statuses.includes(status));
+    return `<div class="stepper">${STEPS.map((s, i) => {
+      let cls = '';
+      if (i < currentIdx) cls = 'done';
+      else if (i === currentIdx) cls = 'current';
+      return `<div class="stepper-step ${cls}">
+        <div class="stepper-dot">${i < currentIdx ? '✓' : i + 1}</div>
+        <div class="stepper-label">${s.label}</div>
+      </div>`;
+    }).join('')}</div>`;
+  }
 
   async function loadDashboard() {
     const session = await requireAuth();
@@ -65,49 +90,46 @@
       return;
     }
 
-    const statusLabels = {
-      lead: 'Prospect', onboarded: 'Intégré', collecting: 'Collecte en cours',
-      validating: 'Validation', analyzing: 'Analyse en cours',
-      delivered: 'Rapport livré', feedback: 'En attente de retour'
-    };
-
     const docTypeLabels = {
       admin: 'Documents administratifs', bilan: 'Bilan comptable', resultat: 'Compte de résultat',
       facture_vente: 'Factures de vente', facture_achat: 'Factures d\'achat',
       releve_bancaire: 'Relevés bancaires', autre: 'Autres pièces',
     };
 
-    const docsHtml = (client.documents || []).map(d => `
+    const docsHtml = (client.documents || []).slice(0, 5).map(d => `
       <div class="doc-row">
         <span>${docTypeLabels[d.type] || d.type} — ${d.file_name || ''}</span>
-        <span class="pill ${d.status === 'received' || d.status === 'verified' ? 'received' : 'pending'}">
+        <span class="pill ${d.status === 'received' || d.status === 'verified' ? 'delivered' : 'collecting'}">
           ${d.status === 'received' || d.status === 'verified' ? 'Reçu' : 'En attente'}
         </span>
-      </div>`).join('') || '<p>Aucun document encore.</p>';
+      </div>`).join('') || '<p style="color:var(--color-muted)">Aucun document encore.</p>';
 
     const latestReport = (client.reports || [])[0];
 
     main.innerHTML = `
-      <div class="status-badge">${statusLabels[client.status] || client.status}</div>
-      <div class="card">
-        <h2>Bonjour ${client.name}</h2>
-        <p>Entreprise : <strong>${client.company}</strong></p>
+      <div class="card" style="margin-bottom:var(--space-lg)">
+        ${renderStepper(client.status)}
       </div>
-      <div class="card">
-        <h2>Documents</h2>
-        ${docsHtml}
-        <a class="btn-outline" href="/portal/documents.html" style="margin-top:16px;display:inline-block">Ajouter des documents</a>
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom:var(--space-lg)">
+            <h2 class="card-title">Bonjour ${client.name}</h2>
+            <p style="color:var(--color-muted)">Entreprise : <strong>${client.company}</strong></p>
+          </div>
+          <div class="card">
+            <h2 class="card-title">Documents récents</h2>
+            ${docsHtml}
+            <a class="btn btn-ghost" href="/portal/documents.html" style="margin-top:var(--space-md);display:inline-block">Gérer mes documents</a>
+          </div>
+        </div>
+        <div class="card">
+          <h2 class="card-title">Diagnostic financier</h2>
+          ${latestReport ? `
+            <p style="margin-bottom:var(--space-md);color:var(--color-muted)">Score global : <strong>${latestReport.score}/10</strong></p>
+            <a class="btn btn-primary" href="${latestReport.pdf_url}" target="_blank" style="width:100%">Télécharger le rapport</a>
+          ` : `<p style="color:var(--color-muted)">Votre rapport est en cours de préparation.</p>`}
+        </div>
       </div>
-      ${latestReport ? `
-      <div class="card">
-        <h2>Votre diagnostic financier</h2>
-        <p style="margin-bottom:16px;color:var(--muted)">Score global : <strong>${latestReport.score}/10</strong></p>
-        <a class="btn-download" href="${latestReport.pdf_url}" target="_blank">Télécharger le rapport PDF</a>
-      </div>` : `
-      <div class="card">
-        <h2>Votre diagnostic financier</h2>
-        <p style="color:var(--muted)">Votre rapport est en cours de préparation.</p>
-      </div>`}
     `;
   }
 

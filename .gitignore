@@ -7,3 +7,5 @@ invitefocus.log
 credentials.json
 .vercel
 node_modules/
+
+.vercel

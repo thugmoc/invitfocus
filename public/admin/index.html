@@ -18,6 +18,8 @@
   .admin-section.active { display: block; }
   .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg); flex-wrap: wrap; gap: var(--space-md); }
   .search-input { max-width: 280px; }
+  .service-tab-btn { border-color: var(--color-border) !important; }
+  .service-tab-btn.active { background: var(--color-primary) !important; color: white !important; }
 
   .client-detail-field { margin-bottom: var(--space-md); }
   .msg-client-list { list-style: none; padding: 0; margin: 0; }
@@ -66,17 +68,26 @@
 
     <main class="content">
       <div class="admin-section active" id="section-overview">
-        <div class="stat-grid" id="statGrid" style="margin-bottom:var(--space-xl)"></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-lg);margin-bottom:var(--space-2xl)">
+          <div><h3 style="font-size:0.9rem;color:var(--color-muted);margin-bottom:var(--space-md)">◐ Assistance Comptable</h3><div class="stat-grid" id="statGridComptable" style="grid-template-columns:1fr;margin-bottom:0"></div></div>
+          <div><h3 style="font-size:0.9rem;color:var(--color-muted);margin-bottom:var(--space-md)">⚖ Services Juridiques</h3><div class="stat-grid" id="statGridJuridique" style="grid-template-columns:1fr;margin-bottom:0"></div></div>
+          <div><h3 style="font-size:0.9rem;color:var(--color-muted);margin-bottom:var(--space-md)">◆ Stratégie & Growth</h3><div class="stat-grid" id="statGridGrowth" style="grid-template-columns:1fr;margin-bottom:0"></div></div>
+        </div>
         <div class="card">
-          <h2 class="card-title">Clients récents</h2>
+          <h2 class="card-title">Clients & diagnostic récent</h2>
           <table>
-            <thead><tr><th>Client</th><th>Entreprise</th><th>Statut</th><th>Score</th><th>Reçu le</th></tr></thead>
+            <thead><tr><th>Client</th><th>Entreprise</th><th>Services actifs</th><th>Score</th><th>Reçu le</th></tr></thead>
             <tbody id="recentClientsBody"></tbody>
           </table>
         </div>
       </div>
 
       <div class="admin-section" id="section-pipeline">
+        <div style="display:flex;gap:var(--space-md);margin-bottom:var(--space-lg);flex-wrap:wrap">
+          <button class="btn btn-ghost service-tab-btn active" data-service="comptable" style="flex:0;font-weight:600">◐ Comptable</button>
+          <button class="btn btn-ghost service-tab-btn" data-service="juridique" style="flex:0;font-weight:600">⚖ Juridique</button>
+          <button class="btn btn-ghost service-tab-btn" data-service="growth" style="flex:0;font-weight:600">◆ Growth</button>
+        </div>
         <div class="kanban" id="kanban"></div>
       </div>
 
@@ -86,7 +97,7 @@
         </div>
         <div class="card">
           <table>
-            <thead><tr><th>Client</th><th>Email</th><th>Entreprise</th><th>Secteur</th><th>Statut</th><th>Docs</th><th>Rapports</th></tr></thead>
+            <thead><tr><th>Client</th><th>Email</th><th>Entreprise</th><th>Secteur</th><th>Services</th><th>Docs</th><th>Rapports</th></tr></thead>
             <tbody id="clientsBody"></tbody>
           </table>
         </div>
@@ -202,6 +213,16 @@
     });
   });
 
+  // Service tabs (pipeline)
+  document.querySelectorAll('.service-tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      currentServiceTab = e.target.dataset.service;
+      document.querySelectorAll('.service-tab-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      renderPipeline(allClients);
+    });
+  });
+
   document.getElementById('menuToggle').addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('open');
     document.getElementById('sidebarBackdrop').classList.toggle('open');
@@ -213,32 +234,62 @@
 
   // ── OVERVIEW ──────────────────────────────────────────────
   function renderOverview(clients) {
-    const total = clients.length;
-    const active = clients.filter(c => !['delivered', 'feedback'].includes(c.status)).length;
-    const delivered = clients.filter(c => c.status === 'delivered' || c.status === 'feedback').length;
-    const avgScore = total ? Math.round(clients.reduce((s, c) => s + (c.quality_score || 0), 0) / total) : 0;
+    // Stats per service
+    const comptableActive = clients.filter(c => ['validating', 'analyzing', 'delivered', 'feedback'].includes(c.status)).length;
+    const juridiqueActive = clients.filter(c => ['onboarded', 'collecting', 'validating', 'delivered', 'feedback'].includes(c.status)).length;
+    const growthActive = clients.filter(c => ['delivered', 'feedback'].includes(c.status)).length;
 
-    document.getElementById('statGrid').innerHTML = `
-      <div class="stat-card"><div class="stat-label">Clients total</div><div class="stat-value">${total}</div></div>
-      <div class="stat-card"><div class="stat-label">Dossiers actifs</div><div class="stat-value">${active}</div></div>
-      <div class="stat-card"><div class="stat-label">Rapports livrés</div><div class="stat-value">${delivered}</div></div>
-      <div class="stat-card"><div class="stat-label">Score qualité moyen</div><div class="stat-value">${avgScore}/100</div></div>
+    document.getElementById('statGridComptable').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Clients actifs</div><div class="stat-value">${comptableActive}</div></div>
+    `;
+    document.getElementById('statGridJuridique').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Clients actifs</div><div class="stat-value">${juridiqueActive}</div></div>
+    `;
+    document.getElementById('statGridGrowth').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Clients actifs</div><div class="stat-value">${growthActive}</div></div>
     `;
 
-    const recent = [...clients].slice(0, 8);
+    // Services actifs
+    const getServices = (status) => {
+      const svc = [];
+      if (['onboarded', 'collecting', 'validating', 'delivered', 'feedback'].includes(status)) svc.push('⚖');
+      if (['validating', 'analyzing', 'delivered', 'feedback'].includes(status)) svc.push('◐');
+      if (['delivered', 'feedback'].includes(status)) svc.push('◆');
+      return svc.length ? svc.join(' ') : '—';
+    };
+
+    const recent = [...clients].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 8);
     document.getElementById('recentClientsBody').innerHTML = recent.length ? recent.map(c => `
       <tr onclick="openDrawer('${c.id}')">
         <td>${c.name}</td><td>${c.company}</td>
-        <td><span class="pill ${c.status}">${STATUS_LABELS[c.status] || c.status}</span></td>
+        <td>${getServices(c.status)}</td>
         <td>${c.quality_score ?? '—'}</td><td>${fmtDate(c.created_at)}</td>
       </tr>`).join('') : `<tr><td colspan="5"><div class="empty-state">Aucun client encore.</div></td></tr>`;
   }
 
   // ── PIPELINE (KANBAN) ────────────────────────────────────
+  let currentServiceTab = 'comptable';
+
+  function getClientsByService(clients, service) {
+    if (service === 'comptable') return clients.filter(c => ['validating', 'analyzing', 'delivered', 'feedback'].includes(c.status));
+    if (service === 'juridique') return clients.filter(c => ['onboarded', 'collecting', 'validating', 'delivered', 'feedback'].includes(c.status));
+    if (service === 'growth') return clients.filter(c => ['delivered', 'feedback'].includes(c.status));
+    return [];
+  }
+
+  function getServicePipelineColumns(service) {
+    if (service === 'comptable') return ['validating', 'analyzing', 'delivered'];
+    if (service === 'juridique') return ['onboarded', 'collecting', 'validating', 'delivered'];
+    if (service === 'growth') return ['delivered', 'feedback'];
+    return [];
+  }
+
   function renderPipeline(clients) {
+    const serviceClients = getClientsByService(clients, currentServiceTab);
+    const columns = getServicePipelineColumns(currentServiceTab);
     const kanban = document.getElementById('kanban');
-    kanban.innerHTML = PIPELINE_COLUMNS.map(status => {
-      const colClients = clients.filter(c => c.status === status);
+    kanban.innerHTML = columns.map(status => {
+      const colClients = serviceClients.filter(c => c.status === status);
       return `
         <div class="kanban-col" data-status="${status}">
           <div class="kanban-col-title"><span>${STATUS_LABELS[status]}</span><span>${colClients.length}</span></div>
@@ -276,10 +327,17 @@
 
   // ── CLIENTS TABLE ─────────────────────────────────────────
   function renderClientsTable(clients) {
+    const getServices = (status) => {
+      const svc = [];
+      if (['onboarded', 'collecting', 'validating', 'delivered', 'feedback'].includes(status)) svc.push('⚖');
+      if (['validating', 'analyzing', 'delivered', 'feedback'].includes(status)) svc.push('◐');
+      if (['delivered', 'feedback'].includes(status)) svc.push('◆');
+      return svc.length ? svc.join(' ') : '—';
+    };
     document.getElementById('clientsBody').innerHTML = clients.length ? clients.map(c => `
       <tr onclick="openDrawer('${c.id}')">
         <td>${c.name}</td><td>${c.email}</td><td>${c.company}</td><td>${c.sector || '—'}</td>
-        <td><span class="pill ${c.status}">${STATUS_LABELS[c.status] || c.status}</span></td>
+        <td>${getServices(c.status)}</td>
         <td>${(c.documents || []).length}</td><td>${(c.reports || []).length}</td>
       </tr>`).join('') : `<tr><td colspan="7"><div class="empty-state">Aucun client encore.</div></td></tr>`;
   }

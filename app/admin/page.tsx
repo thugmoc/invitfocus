@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Users, FileText, TrendingUp, Clock } from 'lucide-react'
 import AdminStatsGrid from '@/components/admin/AdminStatsGrid'
@@ -7,6 +9,31 @@ import AdminPipeline from '@/components/admin/AdminPipeline'
 import AdminClientsList from '@/components/admin/AdminClientsList'
 
 export default function AdminDashboard() {
+  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const token = localStorage.getItem('admin_token')
+    if (!token) {
+      router.replace('/admin/auth')
+    } else {
+      setIsAuthenticated(true)
+    }
+    setLoading(false)
+  }, [router])
+
+  if (loading || !isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0F172A] to-[#1e293b]">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#2563EB] border-t-white rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white">Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
   const container = {
     hidden: { opacity: 0 },
     show: {

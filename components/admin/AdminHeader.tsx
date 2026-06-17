@@ -1,10 +1,17 @@
 'use client'
 
-import { Bell, Search, Settings, User } from 'lucide-react'
+import { Bell, Search, Settings, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function AdminHeader() {
   const [showNotifications, setShowNotifications] = useState(false)
+  const router = useRouter()
+
+  const handleLogout = () => {
+    localStorage.removeItem('admin_token')
+    router.push('/admin/auth')
+  }
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
@@ -59,9 +66,13 @@ export default function AdminHeader() {
             </div>
           </div>
 
-          {/* Settings */}
-          <button className="p-2 hover:bg-[#FAFAFA] rounded-lg transition-colors">
-            <Settings size={20} className="text-gray-600" />
+          {/* Logout */}
+          <button
+            onClick={handleLogout}
+            className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+            title="Logout"
+          >
+            <LogOut size={20} className="text-red-600" />
           </button>
         </div>
       </div>

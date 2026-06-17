@@ -42,6 +42,13 @@ export function StageEditor({ clientId, currentStage, onStageChange }: StageEdit
     setSuccess(null)
 
     try {
+      // Verify admin authentication
+      const adminToken = localStorage.getItem('admin_token')
+      if (!adminToken) {
+        setError('Unauthorized: Admin token required')
+        return
+      }
+
       // Update stage in database
       await updateClientStage(clientId, newStage)
 

@@ -1,0 +1,244 @@
+{
+  "clients": [
+    {
+      "id": 1,
+      "company_name": "TechStart Africa",
+      "contact_name": "Aminata Diallo",
+      "contact_email": "aminata@techstart.sn",
+      "sector": "Software Development",
+      "employee_count": 12,
+      "annual_revenue": 85000,
+      "current_stage": 5,
+      "started_at": "2024-01-15",
+      "documents": {
+        "accounting": ["États Financiers Juin 2024", "Relevé bancaire Q2 2024"],
+        "legal": ["Statuts constitutifs", "Registre de commerce"],
+        "strategy": ["Business Plan 2024-2026", "Projections financières"]
+      }
+    },
+    {
+      "id": 2,
+      "company_name": "Agri Tech Solutions",
+      "contact_name": "Kofi Mensah",
+      "contact_email": "kofi@agritech.gh",
+      "sector": "Agriculture & Tech",
+      "employee_count": 8,
+      "annual_revenue": 52000,
+      "current_stage": 4,
+      "started_at": "2024-02-20",
+      "documents": {
+        "accounting": ["Factures clients Q1-Q2 2024"],
+        "legal": [],
+        "strategy": []
+      }
+    },
+    {
+      "id": 3,
+      "company_name": "Creative Studio Lagos",
+      "contact_name": "Chioma Okonkwo",
+      "contact_email": "chioma@creativestudio.ng",
+      "sector": "Creative Services",
+      "employee_count": 15,
+      "annual_revenue": 120000,
+      "current_stage": 6,
+      "started_at": "2023-11-10",
+      "documents": {
+        "accounting": ["États Financiers Jan-Jun 2024", "Suivi trésorerie mensuel"],
+        "legal": ["Dossier juridique complet", "Contrats clients"],
+        "strategy": ["Plan croissance 2024-2026", "Analyse marché"]
+      }
+    },
+    {
+      "id": 4,
+      "company_name": "Logistics Express DRC",
+      "contact_name": "Jean Kasongo",
+      "contact_email": "jean@logisticsexpress.cd",
+      "sector": "Logistics & Transport",
+      "employee_count": 25,
+      "annual_revenue": 280000,
+      "current_stage": 5,
+      "started_at": "2023-09-05",
+      "documents": {
+        "accounting": ["Bilan trimestriel Q2 2024", "Analyse de trésorerie"],
+        "legal": ["Dossier de formalisation complète"],
+        "strategy": ["Stratégie régionale"]
+      }
+    },
+    {
+      "id": 5,
+      "company_name": "E-Commerce Côte d'Ivoire",
+      "contact_name": "Amara Toure",
+      "contact_email": "amara@ecommerce.ci",
+      "sector": "E-Commerce",
+      "employee_count": 20,
+      "annual_revenue": 165000,
+      "current_stage": 4,
+      "started_at": "2024-01-30",
+      "documents": {
+        "accounting": ["Factures et relevés bancaires"],
+        "legal": [],
+        "strategy": []
+      }
+    },
+    {
+      "id": 6,
+      "company_name": "Consulting Group Cameroon",
+      "contact_name": "Pierre Ngome",
+      "contact_email": "pierre@consultingcm.cm",
+      "sector": "Business Consulting",
+      "employee_count": 18,
+      "annual_revenue": 195000,
+      "current_stage": 3,
+      "started_at": "2024-03-12",
+      "documents": {
+        "accounting": ["Documents comptables préliminaires"],
+        "legal": [],
+        "strategy": []
+      }
+    },
+    {
+      "id": 7,
+      "company_name": "FinTech Innovation Kenya",
+      "contact_name": "Mwangi Kariuki",
+      "contact_email": "mwangi@fintechke.ke",
+      "sector": "Financial Technology",
+      "employee_count": 22,
+      "annual_revenue": 310000,
+      "current_stage": 5,
+      "started_at": "2023-10-18",
+      "documents": {
+        "accounting": ["États financiers complets", "Analyses détaillées"],
+        "legal": ["Dossier complet de conformité"],
+        "strategy": ["Feuille de route croissance"]
+      }
+    },
+    {
+      "id": 8,
+      "company_name": "Healthcare Solutions Uganda",
+      "contact_name": "Dr. Christine Nanteza",
+      "contact_email": "christine@healthcaresol.ug",
+      "sector": "Healthcare & Wellness",
+      "employee_count": 11,
+      "annual_revenue": 75000,
+      "current_stage": 2,
+      "started_at": "2024-04-01",
+      "documents": {
+        "accounting": [],
+        "legal": [],
+        "strategy": []
+      }
+    },
+    {
+      "id": 9,
+      "company_name": "Education Plus Rwanda",
+      "contact_name": "Jean-Paul Mugisha",
+      "contact_email": "jeanpaul@eduplus.rw",
+      "sector": "EdTech",
+      "employee_count": 14,
+      "annual_revenue": 95000,
+      "current_stage": 4,
+      "started_at": "2024-02-15",
+      "documents": {
+        "accounting": ["Documents financiers Q1-Q2"],
+        "legal": [],
+        "strategy": []
+      }
+    },
+    {
+      "id": 10,
+      "company_name": "Manufacturing Pro Senegal",
+      "contact_name": "Ibrahima Sall",
+      "contact_email": "ibrahima@manufpro.sn",
+      "sector": "Manufacturing",
+      "employee_count": 35,
+      "annual_revenue": 420000,
+      "current_stage": 6,
+      "started_at": "2023-08-22",
+      "documents": {
+        "accounting": ["Rapports financiers complets", "Analyses mensuelles"],
+        "legal": ["Tous documents juridiques"],
+        "strategy": ["Plan stratégique détaillé"]
+      }
+    },
+    {
+      "id": 11,
+      "company_name": "Real Estate Innovations Benin",
+      "contact_name": "Cédric Adeyemi",
+      "contact_email": "cedric@realestateinn.bj",
+      "sector": "Real Estate",
+      "employee_count": 9,
+      "annual_revenue": 68000,
+      "current_stage": 3,
+      "started_at": "2024-03-28",
+      "documents": {
+        "accounting": [],
+        "legal": [],
+        "strategy": []
+      }
+    },
+    {
+      "id": 12,
+      "company_name": "Tourism Ventures Mali",
+      "contact_name": "Fatou Traore",
+      "contact_email": "fatou@tourismventures.ml",
+      "sector": "Tourism & Hospitality",
+      "employee_count": 16,
+      "annual_revenue": 142000,
+      "current_stage": 5,
+      "started_at": "2023-12-05",
+      "documents": {
+        "accounting": ["États financiers 2024", "Trésorerie"],
+        "legal": ["Statuts et enregistrement"],
+        "strategy": ["Plan développement"]
+      }
+    },
+    {
+      "id": 13,
+      "company_name": "Food Processing Niger",
+      "contact_name": "Maïmouna Abdoulaye",
+      "contact_email": "maimouna@foodproc.ne",
+      "sector": "Food & Beverage",
+      "employee_count": 28,
+      "annual_revenue": 275000,
+      "current_stage": 4,
+      "started_at": "2024-01-08",
+      "documents": {
+        "accounting": ["Factures et relevés Q1-Q2"],
+        "legal": [],
+        "strategy": []
+      }
+    },
+    {
+      "id": 14,
+      "company_name": "Energy Solutions Burkina Faso",
+      "contact_name": "Souleymane Ouedraogo",
+      "contact_email": "souleymane@energysol.bf",
+      "sector": "Renewable Energy",
+      "employee_count": 31,
+      "annual_revenue": 385000,
+      "current_stage": 5,
+      "started_at": "2023-11-20",
+      "documents": {
+        "accounting": ["Rapports complets 2024", "Analyses détaillées"],
+        "legal": ["Dossier juridique"],
+        "strategy": ["Stratégie d'expansion"]
+      }
+    },
+    {
+      "id": 15,
+      "company_name": "AI Startup Côte d'Ivoire",
+      "contact_name": "Koffi Leblanc",
+      "contact_email": "koffi@aistartup.ci",
+      "sector": "Artificial Intelligence",
+      "employee_count": 7,
+      "annual_revenue": 45000,
+      "current_stage": 2,
+      "started_at": "2024-04-15",
+      "documents": {
+        "accounting": [],
+        "legal": [],
+        "strategy": []
+      }
+    }
+  ]
+}

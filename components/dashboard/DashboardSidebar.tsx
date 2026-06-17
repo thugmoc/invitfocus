@@ -16,18 +16,22 @@ import {
 } from 'lucide-react'
 
 const menuItems = [
-  { icon: BarChart3, label: 'Overview', href: '/dashboard', id: 'overview' },
-  { icon: FileText, label: 'Accounting', href: '/dashboard/accounting', id: 'accounting' },
-  { icon: Download, label: 'Legal', href: '/dashboard/legal', id: 'legal' },
-  { icon: TrendingUp, label: 'Strategy', href: '/dashboard/strategy', id: 'strategy' },
-  { icon: Zap, label: 'Simulator', href: '/dashboard/simulator', id: 'simulator' },
-  { icon: Zap, label: 'AI Tools', href: '/dashboard/ai', id: 'ai' },
-  { icon: MessageSquare, label: 'Messages', href: '/dashboard/messages', id: 'messages' },
-  { icon: Settings, label: 'Settings', href: '/dashboard/settings', id: 'settings' },
+  { icon: BarChart3, label: 'Overview', href: '/dashboard', id: 'overview', stage: 0 },
+  { icon: FileText, label: 'Accounting', href: '/dashboard/accounting', id: 'accounting', stage: 5 },
+  { icon: Download, label: 'Legal', href: '/dashboard/legal', id: 'legal', stage: 5 },
+  { icon: TrendingUp, label: 'Strategy', href: '/dashboard/strategy', id: 'strategy', stage: 5 },
+  { icon: Zap, label: 'Simulator', href: '/dashboard/simulator', id: 'simulator', stage: 6 },
+  { icon: Zap, label: 'AI Tools', href: '/dashboard/ai', id: 'ai', stage: 6 },
+  { icon: MessageSquare, label: 'Messages', href: '/dashboard/messages', id: 'messages', stage: 6 },
+  { icon: Settings, label: 'Settings', href: '/dashboard/settings', id: 'settings', stage: 0 },
 ]
 
 export default function DashboardSidebar() {
   const [isOpen, setIsOpen] = useState(true)
+  // Mock client stage - will be replaced with real Supabase data
+  const currentStage = 5
+
+  const isModuleUnlocked = (requiredStage: number) => currentStage >= requiredStage
 
   return (
     <>
@@ -52,20 +56,42 @@ export default function DashboardSidebar() {
           </div>
           <h1 className="text-base font-bold text-[#0F172A]">My Account</h1>
           <p className="text-xs text-gray-500 mt-1">TechStart Africa</p>
+          <div className="mt-3 px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-xs font-semibold text-blue-700">Étape {currentStage}/6</p>
+          </div>
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon
+            const isUnlocked = isModuleUnlocked(item.stage)
+            const isDisabled = !isUnlocked
+
             return (
-              <a
+              <div
                 key={item.id}
-                href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-[#FAFAFA] hover:text-[#2563EB] transition-all duration-200 group text-sm font-medium"
+                className={`relative group ${isDisabled ? 'opacity-50' : ''}`}
+                title={isDisabled ? `Débloqué à l'étape ${item.stage}` : ''}
               >
-                <Icon size={18} className="group-hover:scale-110 transition-transform" />
-                <span>{item.label}</span>
-              </a>
+                <a
+                  href={isDisabled ? '#' : item.href}
+                  onClick={(e) => isDisabled && e.preventDefault()}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium ${
+                    isDisabled
+                      ? 'text-gray-400 cursor-not-allowed'
+                      : 'text-gray-600 hover:bg-[#FAFAFA] hover:text-[#2563EB]'
+                  }`}
+                >
+                  <Icon size={18} className={isDisabled ? '' : 'group-hover:scale-110 transition-transform'} />
+                  <span className="flex-1">{item.label}</span>
+                  {isDisabled && <span className="text-xs">🔒</span>}
+                </a>
+                {isDisabled && (
+                  <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 hidden group-hover:block bg-[#0F172A] text-white text-xs rounded px-2 py-1 whitespace-nowrap z-50">
+                    Étape {item.stage}
+                  </div>
+                )}
+              </div>
             )
           })}
         </nav>
@@ -93,15 +119,26 @@ export default function DashboardSidebar() {
           <nav className="flex-1 p-4 space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon
+              const isUnlocked = isModuleUnlocked(item.stage)
+              const isDisabled = !isUnlocked
+
               return (
                 <a
                   key={item.id}
-                  href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-[#FAFAFA] hover:text-[#2563EB] transition-all font-medium"
-                  onClick={() => setIsOpen(false)}
+                  href={isDisabled ? '#' : item.href}
+                  onClick={(e) => {
+                    if (isDisabled) e.preventDefault()
+                    setIsOpen(false)
+                  }}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+                    isDisabled
+                      ? 'text-gray-400 opacity-50 cursor-not-allowed'
+                      : 'text-gray-600 hover:bg-[#FAFAFA] hover:text-[#2563EB]'
+                  }`}
                 >
                   <Icon size={18} />
-                  <span>{item.label}</span>
+                  <span className="flex-1">{item.label}</span>
+                  {isDisabled && <span className="text-xs">🔒</span>}
                 </a>
               )
             })}

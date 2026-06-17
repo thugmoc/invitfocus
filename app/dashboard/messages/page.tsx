@@ -32,7 +32,7 @@ export default function MessagesPage() {
       name: 'Support Team',
       role: 'Technical support',
       avatar: 'ST',
-      lastMessage: 'We've resolved the issue',
+      lastMessage: "We've resolved the issue",
       timestamp: 'Yesterday',
       messages: [
         { sender: 'you', text: 'I encountered an issue with the dashboard', time: 'Yesterday' },

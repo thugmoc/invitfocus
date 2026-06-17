@@ -1,34 +1,22 @@
-import Header from '@/components/Header'
-import Hero from '@/components/Hero'
-import Problem from '@/components/Problem'
-import Solution from '@/components/Solution'
-import Outcomes from '@/components/Outcomes'
-import AISimulationSuite from '@/components/AISimulationSuite'
-import UseCases from '@/components/UseCases'
-import Testimonials from '@/components/Testimonials'
-import FAQ from '@/components/FAQ'
-import FinalCTA from '@/components/FinalCTA'
-import Footer from '@/components/Footer'
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const router = useRouter()
+
+  useEffect(() => {
+    // Redirect to admin dashboard immediately
+    router.replace('/admin')
+  }, [router])
+
   return (
-    <main className="overflow-x-hidden">
-      <Header />
-
-      {/* Add padding for fixed header */}
-      <div className="pt-16">
-        <Hero />
-        <Problem />
-        <Solution />
-        <Outcomes />
-        <AISimulationSuite />
-        <UseCases />
-        <Testimonials />
-        <FAQ />
-        <FinalCTA />
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0F172A] to-[#1e293b]">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-[#2563EB] border-t-white rounded-full animate-spin mx-auto mb-4" />
+        <p className="text-white">Loading admin dashboard...</p>
       </div>
-
-      <Footer />
-    </main>
+    </div>
   )
 }

@@ -8,26 +8,29 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "npx ts-node scripts/seed-clients.ts"
+    "seed": "node scripts/seed-clients.js",
+    "seed:real": "node scripts/seed-real-clients.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "dotenv": "^17.4.2",
+    "framer-motion": "^10.16.0",
+    "lucide-react": "^0.376.0",
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "@supabase/supabase-js": "^2.45.0",
-    "framer-motion": "^10.16.0",
-    "lucide-react": "^0.376.0",
-    "clsx": "^2.1.0",
     "tailwind-merge": "^2.3.0",
-    "class-variance-authority": "^0.7.0"
+    "ws": "^8.21.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.0",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.0"
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.0"
   }
 }

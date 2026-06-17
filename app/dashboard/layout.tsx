@@ -1,7 +1,13 @@
 'use client'
 
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar'
+export const dynamic = 'force-dynamic'
+
+import dynamicImport from 'next/dynamic'
 import DashboardHeader from '@/components/dashboard/DashboardHeader'
+
+const DashboardSidebar = dynamicImport(() => import('@/components/dashboard/DashboardSidebar'), {
+  ssr: false,
+})
 
 export default function DashboardLayout({
   children,

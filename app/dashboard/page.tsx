@@ -1,10 +1,16 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { motion } from 'framer-motion'
+import dynamicImport from 'next/dynamic'
 import DashboardOverview from '@/components/dashboard/DashboardOverview'
-import DashboardModules from '@/components/dashboard/DashboardModules'
 import DashboardActionPlan from '@/components/dashboard/DashboardActionPlan'
 import DashboardQuickStats from '@/components/dashboard/DashboardQuickStats'
+
+const DashboardModules = dynamicImport(() => import('@/components/dashboard/DashboardModules'), {
+  ssr: false,
+})
 
 export default function ClientDashboard() {
   const container = {

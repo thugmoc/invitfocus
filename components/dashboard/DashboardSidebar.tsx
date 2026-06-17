@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useSearchParams } from 'next/navigation'
 import {
   BarChart3,
   Zap,
@@ -14,6 +15,7 @@ import {
   X,
   Download,
 } from 'lucide-react'
+import mockClientsData from '@/mock_clients.json'
 
 const menuItems = [
   { icon: BarChart3, label: 'Overview', href: '/dashboard', id: 'overview', stage: 0 },
@@ -28,8 +30,30 @@ const menuItems = [
 
 export default function DashboardSidebar() {
   const [isOpen, setIsOpen] = useState(true)
-  // Mock client stage - will be replaced with real Supabase data
-  const currentStage = 5
+  const [currentStage, setCurrentStage] = useState(1)
+  const [clientName, setClientName] = useState('Client')
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    // Load client from URL parameter or use first client as default
+    const clientId = searchParams.get('client')
+
+    if (clientId) {
+      // Find client by ID
+      const client = mockClientsData.clients.find(c => c.id === parseInt(clientId))
+      if (client) {
+        setCurrentStage(client.current_stage)
+        setClientName(client.company_name || 'Client')
+      }
+    } else {
+      // Default to first client (TechStart Africa - Stage 5)
+      const defaultClient = mockClientsData.clients[0]
+      if (defaultClient) {
+        setCurrentStage(defaultClient.current_stage)
+        setClientName(defaultClient.company_name || 'Client')
+      }
+    }
+  }, [searchParams])
 
   const isModuleUnlocked = (requiredStage: number) => currentStage >= requiredStage
 
@@ -55,7 +79,7 @@ export default function DashboardSidebar() {
             IF
           </div>
           <h1 className="text-base font-bold text-[#0F172A]">My Account</h1>
-          <p className="text-xs text-gray-500 mt-1">TechStart Africa</p>
+          <p className="text-xs text-gray-500 mt-1">{clientName}</p>
           <div className="mt-3 px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-xs font-semibold text-blue-700">Étape {currentStage}/6</p>
           </div>

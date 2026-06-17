@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { motion } from 'framer-motion'
 import { Download, FileText, TrendingUp, BarChart3, Calendar } from 'lucide-react'
 import { useState } from 'react'

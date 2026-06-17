@@ -18,8 +18,9 @@ import {
 const menuItems = [
   { icon: BarChart3, label: 'Overview', href: '/dashboard', id: 'overview' },
   { icon: FileText, label: 'Accounting', href: '/dashboard/accounting', id: 'accounting' },
-  { icon: Download, label: 'Simulator', href: '/dashboard/simulator', id: 'simulator' },
+  { icon: Download, label: 'Legal', href: '/dashboard/legal', id: 'legal' },
   { icon: TrendingUp, label: 'Strategy', href: '/dashboard/strategy', id: 'strategy' },
+  { icon: Zap, label: 'Simulator', href: '/dashboard/simulator', id: 'simulator' },
   { icon: Zap, label: 'AI Tools', href: '/dashboard/ai', id: 'ai' },
   { icon: MessageSquare, label: 'Messages', href: '/dashboard/messages', id: 'messages' },
   { icon: Settings, label: 'Settings', href: '/dashboard/settings', id: 'settings' },

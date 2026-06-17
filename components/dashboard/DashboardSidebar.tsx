@@ -15,7 +15,7 @@ import {
   X,
   Download,
 } from 'lucide-react'
-import mockClientsData from '@/mock_clients.json'
+import { getAllClients } from '@/lib/supabase'
 
 const menuItems = [
   { icon: BarChart3, label: 'Overview', href: '/dashboard', id: 'overview', stage: 0 },
@@ -32,27 +32,41 @@ export default function DashboardSidebar() {
   const [isOpen, setIsOpen] = useState(true)
   const [currentStage, setCurrentStage] = useState(1)
   const [clientName, setClientName] = useState('Client')
+  const [clients, setClients] = useState<any[]>([])
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    // Load client from URL parameter or use first client as default
-    const clientId = searchParams.get('client')
+    // Load clients from Supabase
+    const loadClients = async () => {
+      try {
+        const data = await getAllClients()
+        setClients(data || [])
 
-    if (clientId) {
-      // Find client by ID
-      const client = mockClientsData.clients.find(c => c.id === parseInt(clientId))
-      if (client) {
-        setCurrentStage(client.current_stage)
-        setClientName(client.company_name || 'Client')
-      }
-    } else {
-      // Default to first client (TechStart Africa - Stage 5)
-      const defaultClient = mockClientsData.clients[0]
-      if (defaultClient) {
-        setCurrentStage(defaultClient.current_stage)
-        setClientName(defaultClient.company_name || 'Client')
+        // Load selected client or use first as default
+        const clientId = searchParams.get('client')
+        if (clientId && data) {
+          const client = data.find((c: any) => c.id === parseInt(clientId))
+          if (client) {
+            setCurrentStage(client.current_stage)
+            setClientName(client.company_name || 'Client')
+            return
+          }
+        }
+
+        // Default to first client
+        if (data && data.length > 0) {
+          setCurrentStage(data[0].current_stage)
+          setClientName(data[0].company_name || 'Client')
+        }
+      } catch (error) {
+        console.error('Failed to load clients:', error)
+        // Fallback to default values
+        setCurrentStage(1)
+        setClientName('Client')
       }
     }
+
+    loadClients()
   }, [searchParams])
 
   const isModuleUnlocked = (requiredStage: number) => currentStage >= requiredStage

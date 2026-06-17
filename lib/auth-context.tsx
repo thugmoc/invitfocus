@@ -8,7 +8,9 @@ interface AuthContextType {
   user: User | null
   session: Session | null
   loading: boolean
+  isDemo: boolean
   signInWithGitHub: () => Promise<void>
+  signInAsDemo: () => void
   signOut: () => Promise<void>
 }
 
@@ -18,8 +20,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isDemo, setIsDemo] = useState(false)
 
   useEffect(() => {
+    // Check for demo mode
+    const demoMode = typeof window !== 'undefined' && localStorage.getItem('demo_mode') === 'true'
+    if (demoMode) {
+      setIsDemo(true)
+      setLoading(false)
+      return
+    }
+
     // Check active session
     const initSession = async () => {
       try {
@@ -64,10 +75,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const signInAsDemo = () => {
+    localStorage.setItem('demo_mode', 'true')
+    setIsDemo(true)
+  }
+
   const signOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut()
-      if (error) throw error
+      // Clear demo mode
+      localStorage.removeItem('demo_mode')
+      setIsDemo(false)
+
+      // Sign out from Supabase if authenticated
+      if (session) {
+        const { error } = await supabase.auth.signOut()
+        if (error) throw error
+      }
+
       setUser(null)
       setSession(null)
     } catch (error) {
@@ -80,7 +104,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     session,
     loading,
+    isDemo,
     signInWithGitHub,
+    signInAsDemo,
     signOut,
   }
 

@@ -3,23 +3,26 @@ import { NextRequest, NextResponse } from 'next/server'
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
-  // Admin dashboard is public (no auth required)
-  // Client dashboard allows demo access
-  // No middleware protection needed
+  // Public routes - allow without auth
+  if (pathname === '/' || pathname === '/login' || pathname.startsWith('/admin')) {
+    return NextResponse.next()
+  }
+
+  // Dashboard routes - allow (demo access enabled)
+  if (pathname.startsWith('/dashboard')) {
+    return NextResponse.next()
+  }
+
+  // API routes - allow
+  if (pathname.startsWith('/api')) {
+    return NextResponse.next()
+  }
 
   return NextResponse.next()
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico|public).*)',
   ],
 }

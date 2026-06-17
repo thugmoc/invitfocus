@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { Github, AlertCircle } from 'lucide-react'
 
 export default function LoginContent() {
-  const { signInWithGitHub, user, loading } = useAuth()
+  const { signInWithGitHub, signInAsDemo, user, loading } = useAuth()
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
 
@@ -40,6 +40,11 @@ export default function LoginContent() {
       setError('Failed to sign in with GitHub. Please try again.')
       console.error(err)
     }
+  }
+
+  const handleDemoAccess = () => {
+    signInAsDemo()
+    router.push('/dashboard')
   }
 
   return (
@@ -94,7 +99,7 @@ export default function LoginContent() {
 
         {/* Demo Access */}
         <motion.button
-          onClick={() => router.push('/dashboard')}
+          onClick={handleDemoAccess}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className="w-full px-6 py-3 bg-blue-50 text-[#2563EB] rounded-lg font-semibold hover:bg-blue-100 transition-colors border border-blue-200"

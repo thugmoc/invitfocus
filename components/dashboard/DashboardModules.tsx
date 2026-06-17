@@ -4,27 +4,40 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Zap, BarChart3, TrendingUp, MessageCircle, ArrowRight, Lock } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import mockClientsData from '@/mock_clients.json'
+import { getAllClients } from '@/lib/supabase'
 
 export default function DashboardModules() {
   const [currentStage, setCurrentStage] = useState(1)
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    // Load client stage from URL parameter or use first client as default
-    const clientId = searchParams.get('client')
+    // Load client stage from Supabase
+    const loadClientStage = async () => {
+      try {
+        const data = await getAllClients()
+        if (!data || data.length === 0) {
+          setCurrentStage(1)
+          return
+        }
 
-    if (clientId) {
-      const client = mockClientsData.clients.find(c => c.id === parseInt(clientId))
-      if (client) {
-        setCurrentStage(client.current_stage)
-      }
-    } else {
-      const defaultClient = mockClientsData.clients[0]
-      if (defaultClient) {
-        setCurrentStage(defaultClient.current_stage)
+        const clientId = searchParams.get('client')
+        if (clientId) {
+          const client = data.find((c: any) => c.id === parseInt(clientId))
+          if (client) {
+            setCurrentStage(client.current_stage)
+            return
+          }
+        }
+
+        // Default to first client
+        setCurrentStage(data[0].current_stage)
+      } catch (error) {
+        console.error('Failed to load client stage:', error)
+        setCurrentStage(1)
       }
     }
+
+    loadClientStage()
   }, [searchParams])
 
   const modules = [

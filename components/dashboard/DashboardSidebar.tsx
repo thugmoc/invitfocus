@@ -13,12 +13,20 @@ import {
   Menu,
   X,
   Download,
+  BookOpen,
+  Shield,
+  Calendar,
+  Briefcase,
 } from 'lucide-react'
 import { getAllClients } from '@/lib/supabase'
 
 const menuItems = [
   { icon: BarChart3, label: 'Overview', href: '/dashboard', id: 'overview', stage: 0 },
-  { icon: FileText, label: 'Accounting', href: '/dashboard/accounting', id: 'accounting', stage: 5 },
+  { icon: FileText, label: 'Comptabilité', href: '/dashboard/comptabilite', id: 'comptabilite', stage: 1 },
+  { icon: Shield, label: 'Conformité', href: '/dashboard/conformite', id: 'conformite', stage: 1 },
+  { icon: BookOpen, label: 'Business Plan', href: '/dashboard/business-plan', id: 'business-plan', stage: 2 },
+  { icon: Briefcase, label: 'Contrats', href: '/dashboard/contrats', id: 'contrats', stage: 2 },
+  { icon: Calendar, label: 'Événements', href: '/dashboard/evenements', id: 'evenements', stage: 1 },
   { icon: Download, label: 'Legal', href: '/dashboard/legal', id: 'legal', stage: 5 },
   { icon: TrendingUp, label: 'Strategy', href: '/dashboard/strategy', id: 'strategy', stage: 5 },
   { icon: Zap, label: 'Simulator', href: '/dashboard/simulator', id: 'simulator', stage: 6 },

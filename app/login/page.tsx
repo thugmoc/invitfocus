@@ -3,10 +3,10 @@
 export const dynamic = 'force-dynamic'
 
 import { Suspense } from 'react'
-import dynamic from 'next/dynamic'
+import dynamicImport from 'next/dynamic'
 import { motion } from 'framer-motion'
 
-const LoginContent = dynamic(() => import('./login-content'), {
+const LoginContent = dynamicImport(() => import('./login-content'), {
   loading: () => (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0F172A] to-[#1e293b]">
       <motion.div

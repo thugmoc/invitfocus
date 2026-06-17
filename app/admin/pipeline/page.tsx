@@ -90,9 +90,7 @@ export default function PipelinePage() {
                     <GripHorizontal size={14} className="text-gray-400 mt-1 group-hover:text-[#2563EB]" />
                     <div className="flex-1">
                       <p className="font-semibold text-[#0F172A] text-sm">{client.name}</p>
-                      <p className="text-xs text-gray-600 mt-1">
-                        {client.value || 'Value: ' + (client.status || client.phase || client.completedDate || '')}
-                      </p>
+                      <p className="text-xs text-gray-600 mt-1">{client.value}</p>
                     </div>
                   </div>
                 </motion.div>

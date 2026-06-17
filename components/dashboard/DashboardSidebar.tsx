@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
 import {
   BarChart3,
   Zap,
@@ -30,44 +29,25 @@ const menuItems = [
 
 export default function DashboardSidebar() {
   const [isOpen, setIsOpen] = useState(true)
-  const [currentStage, setCurrentStage] = useState(1)
-  const [clientName, setClientName] = useState('Client')
-  const [clients, setClients] = useState<any[]>([])
-  const searchParams = useSearchParams()
+  const [currentStage, setCurrentStage] = useState(5)
+  const [clientName, setClientName] = useState('Dashboard')
 
   useEffect(() => {
-    // Load clients from Supabase
+    // Load first client from Supabase
     const loadClients = async () => {
       try {
         const data = await getAllClients()
-        setClients(data || [])
-
-        // Load selected client or use first as default
-        const clientId = searchParams.get('client')
-        if (clientId && data) {
-          const client = data.find((c: any) => c.id === parseInt(clientId))
-          if (client) {
-            setCurrentStage(client.current_stage)
-            setClientName(client.company_name || 'Client')
-            return
-          }
-        }
-
-        // Default to first client
         if (data && data.length > 0) {
           setCurrentStage(data[0].current_stage)
-          setClientName(data[0].company_name || 'Client')
+          setClientName(data[0].company_name || 'Dashboard')
         }
       } catch (error) {
         console.error('Failed to load clients:', error)
-        // Fallback to default values
-        setCurrentStage(1)
-        setClientName('Client')
       }
     }
 
     loadClients()
-  }, [searchParams])
+  }, [])
 
   const isModuleUnlocked = (requiredStage: number) => currentStage >= requiredStage
 

@@ -3,42 +3,26 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Zap, BarChart3, TrendingUp, MessageCircle, ArrowRight, Lock } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
 import { getAllClients } from '@/lib/supabase'
 
 export default function DashboardModules() {
-  const [currentStage, setCurrentStage] = useState(1)
-  const searchParams = useSearchParams()
+  const [currentStage, setCurrentStage] = useState(5)
 
   useEffect(() => {
-    // Load client stage from Supabase
+    // Load first client stage from Supabase
     const loadClientStage = async () => {
       try {
         const data = await getAllClients()
-        if (!data || data.length === 0) {
-          setCurrentStage(1)
-          return
+        if (data && data.length > 0) {
+          setCurrentStage(data[0].current_stage)
         }
-
-        const clientId = searchParams.get('client')
-        if (clientId) {
-          const client = data.find((c: any) => c.id === parseInt(clientId))
-          if (client) {
-            setCurrentStage(client.current_stage)
-            return
-          }
-        }
-
-        // Default to first client
-        setCurrentStage(data[0].current_stage)
       } catch (error) {
         console.error('Failed to load client stage:', error)
-        setCurrentStage(1)
       }
     }
 
     loadClientStage()
-  }, [searchParams])
+  }, [])
 
   const modules = [
     {

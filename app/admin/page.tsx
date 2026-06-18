@@ -1,13 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import AdminSidebar from '@/components/admin/AdminSidebar'
-
-// Enable demo mode automatically
-if (typeof window !== 'undefined' && !localStorage.getItem('demo_mode')) {
-  localStorage.setItem('demo_mode', 'true')
-}
 import AdminDashboardSection from '@/components/admin/sections/AdminDashboardSection'
 import AdminClientsSection from '@/components/admin/sections/AdminClientsSection'
 import AdminPipelineSection from '@/components/admin/sections/AdminPipelineSection'
@@ -21,6 +15,13 @@ import AdminEventsSection from '@/components/admin/sections/AdminEventsSection'
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('dashboard')
+
+  useEffect(() => {
+    // Enable demo mode automatically
+    if (!localStorage.getItem('demo_mode')) {
+      localStorage.setItem('demo_mode', 'true')
+    }
+  }, [])
 
   const renderSection = () => {
     switch (activeSection) {

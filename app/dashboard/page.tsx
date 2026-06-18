@@ -4,11 +4,6 @@ export const dynamic = 'force-dynamic'
 
 import { useState, useEffect } from 'react'
 import ClientSidebar from '@/components/client/ClientSidebar'
-
-// Enable demo mode automatically
-if (typeof window !== 'undefined' && !localStorage.getItem('demo_mode')) {
-  localStorage.setItem('demo_mode', 'true')
-}
 import ClientOverviewTab from '@/components/client/sections/ClientOverviewTab'
 import ClientComptabiliteTab from '@/components/client/sections/ClientComptabiliteTab'
 import ClientConformiteTab from '@/components/client/sections/ClientConformiteTab'
@@ -19,6 +14,13 @@ import ClientSettingsTab from '@/components/client/sections/ClientSettingsTab'
 
 export default function ClientDashboard() {
   const [activeTab, setActiveTab] = useState('overview')
+
+  useEffect(() => {
+    // Enable demo mode automatically
+    if (!localStorage.getItem('demo_mode')) {
+      localStorage.setItem('demo_mode', 'true')
+    }
+  }, [])
 
   const renderTab = () => {
     switch (activeTab) {

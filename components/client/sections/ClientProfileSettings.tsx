@@ -1,6 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { CurrencySwitcher } from '@/components/CurrencySwitcher'
 import { useLanguage } from '@/lib/language-context'
 
 export default function ClientProfileSettings() {
@@ -47,6 +48,10 @@ export default function ClientProfileSettings() {
           </h3>
           <div className="space-y-4">
             <LanguageSwitcher />
+
+            <div className="border-t border-gray-200 pt-4">
+              <CurrencySwitcher />
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

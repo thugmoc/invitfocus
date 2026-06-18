@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { DollarSign, TrendingUp, AlertCircle, Eye, Download, Plus, Filter } from 'lucide-react'
 import { useState } from 'react'
+import { CurrencyValue } from '@/components/CurrencyDisplay'
 
 const mockJournalEntries = [
   { id: 1, date: '2026-06-18', journal: 'VE', entry: 'ENT-001', description: 'Service revenue', debit: 5000, credit: 0, status: 'posted', client: 'ADAA ADA' },
@@ -47,7 +48,9 @@ export default function AdminComptabiliteAdvanced() {
             <h3 className="font-semibold text-[#0F172A] text-sm">Total Revenue</h3>
             <DollarSign className="text-green-600" size={24} />
           </div>
-          <p className="text-3xl font-bold text-[#0F172A] mb-2">$142,500</p>
+          <p className="text-3xl font-bold text-[#0F172A] mb-2">
+            <CurrencyValue amount={142500} />
+          </p>
           <p className="text-sm text-green-600">↑ 12% from last month</p>
         </motion.div>
 
@@ -57,7 +60,9 @@ export default function AdminComptabiliteAdvanced() {
             <AlertCircle className="text-orange-600" size={24} />
           </div>
           <p className="text-3xl font-bold text-[#0F172A] mb-2">5</p>
-          <p className="text-sm text-orange-600">$18,500 pending</p>
+          <p className="text-sm text-orange-600">
+            <CurrencyValue amount={18500} /> pending
+          </p>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white rounded-lg border border-gray-200 p-6">

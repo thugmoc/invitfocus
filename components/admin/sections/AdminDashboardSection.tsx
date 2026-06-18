@@ -1,9 +1,15 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import AdminStatsGrid from '../AdminStatsGrid'
 import AdminPipeline from '../AdminPipeline'
 import AdminClientsList from '../AdminClientsList'
+
+const AdminAIPipelineForecasting = dynamic(() => import('./AdminAIPipelineForecasting'), {
+  ssr: false,
+  loading: () => <div className="bg-gray-50 rounded-lg h-96 animate-pulse" />,
+})
 
 export default function AdminDashboardSection() {
   const container = {
@@ -41,6 +47,17 @@ export default function AdminDashboardSection() {
         className="mb-8"
       >
         <AdminStatsGrid />
+      </motion.div>
+
+      {/* AI Pipeline Forecasting */}
+      <motion.div
+        variants={item}
+        initial="hidden"
+        animate="show"
+        transition={{ delay: 0.2 }}
+        className="mb-8"
+      >
+        <AdminAIPipelineForecasting />
       </motion.div>
 
       <div className="grid lg:grid-cols-3 gap-8">

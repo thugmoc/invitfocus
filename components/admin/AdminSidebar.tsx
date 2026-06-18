@@ -5,25 +5,38 @@ import { motion } from 'framer-motion'
 import {
   BarChart3,
   Users,
-  Settings,
   LogOut,
   Menu,
   X,
   FileText,
   TrendingUp,
   MessageSquare,
+  DollarSign,
+  Shield,
+  Briefcase,
+  FileCheck,
+  Calendar,
 } from 'lucide-react'
 
-const menuItems = [
-  { icon: BarChart3, label: 'Dashboard', href: '/admin', id: 'dashboard' },
-  { icon: Users, label: 'Clients', href: '/admin/clients', id: 'clients' },
-  { icon: TrendingUp, label: 'Pipeline', href: '/admin/pipeline', id: 'pipeline' },
-  { icon: FileText, label: 'Reports', href: '/admin/reports', id: 'reports' },
-  { icon: MessageSquare, label: 'Messages', href: '/admin/messages', id: 'messages' },
-  { icon: Settings, label: 'Settings', href: '/admin/settings', id: 'settings' },
+const adminSections = [
+  { icon: BarChart3, label: 'Dashboard', id: 'dashboard' },
+  { icon: Users, label: 'Clients', id: 'clients' },
+  { icon: TrendingUp, label: 'Pipeline', id: 'pipeline' },
+  { icon: FileText, label: 'Reports', id: 'reports' },
+  { icon: MessageSquare, label: 'Messages', id: 'messages' },
+  { icon: DollarSign, label: 'Comptabilité & Audit', id: 'comptabilite' },
+  { icon: Shield, label: 'Conformité', id: 'conformite' },
+  { icon: Briefcase, label: 'Business Plans', id: 'business-plans' },
+  { icon: FileCheck, label: 'Contracts', id: 'contracts' },
+  { icon: Calendar, label: 'Events', id: 'events' },
 ]
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+  activeSection: string
+  setActiveSection: (id: string) => void
+}
+
+export default function AdminSidebar({ activeSection, setActiveSection }: AdminSidebarProps) {
   const [isOpen, setIsOpen] = useState(true)
 
   return (
@@ -48,18 +61,23 @@ export default function AdminSidebar() {
           <p className="text-sm text-gray-400 mt-1">Admin Console</p>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
-          {menuItems.map((item) => {
-            const Icon = item.icon
+        <nav className="flex-1 p-4 space-y-1">
+          {adminSections.map((section) => {
+            const Icon = section.icon
+            const isActive = activeSection === section.id
             return (
-              <a
-                key={item.id}
-                href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-200 group"
+              <button
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium text-left ${
+                  isActive
+                    ? 'bg-[#2563EB] text-white'
+                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                }`}
               >
-                <Icon size={20} className="group-hover:text-[#2563EB] transition-colors" />
-                <span className="text-sm font-medium">{item.label}</span>
-              </a>
+                <Icon size={18} />
+                <span>{section.label}</span>
+              </button>
             )
           })}
         </nav>
@@ -81,18 +99,25 @@ export default function AdminSidebar() {
           className="lg:hidden fixed inset-0 top-16 z-30 bg-[#0F172A] text-white flex flex-col"
         >
           <nav className="flex-1 p-4 space-y-2">
-            {menuItems.map((item) => {
-              const Icon = item.icon
+            {adminSections.map((section) => {
+              const Icon = section.icon
+              const isActive = activeSection === section.id
               return (
-                <a
-                  key={item.id}
-                  href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all"
-                  onClick={() => setIsOpen(false)}
+                <button
+                  key={section.id}
+                  onClick={() => {
+                    setActiveSection(section.id)
+                    setIsOpen(false)
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-medium text-left ${
+                    isActive
+                      ? 'bg-[#2563EB] text-white'
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  }`}
                 >
-                  <Icon size={20} />
-                  <span className="font-medium">{item.label}</span>
-                </a>
+                  <Icon size={18} />
+                  <span>{section.label}</span>
+                </button>
               )
             })}
           </nav>

@@ -7,11 +7,11 @@ import AdminClientsSection from '@/components/admin/sections/AdminClientsSection
 import AdminPipelineSection from '@/components/admin/sections/AdminPipelineSection'
 import AdminReportsSection from '@/components/admin/sections/AdminReportsSection'
 import AdminMessagesSection from '@/components/admin/sections/AdminMessagesSection'
-import AdminComptabiliteSection from '@/components/admin/sections/AdminComptabiliteSection'
-import AdminConformiteSection from '@/components/admin/sections/AdminConformiteSection'
-import AdminBusinessPlansSection from '@/components/admin/sections/AdminBusinessPlansSection'
-import AdminContractsSection from '@/components/admin/sections/AdminContractsSection'
-import AdminEventsSection from '@/components/admin/sections/AdminEventsSection'
+import AdminComptabiliteAdvanced from '@/components/admin/sections/AdminComptabiliteAdvanced'
+import AdminConformiteAdvanced from '@/components/admin/sections/AdminConformiteAdvanced'
+import AdminBusinessPlanAdvanced from '@/components/admin/sections/AdminBusinessPlanAdvanced'
+import AdminContractsAdvanced from '@/components/admin/sections/AdminContractsAdvanced'
+import AdminEventsAdvanced from '@/components/admin/sections/AdminEventsAdvanced'
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('dashboard')
@@ -36,15 +36,15 @@ export default function AdminDashboard() {
       case 'messages':
         return <AdminMessagesSection />
       case 'comptabilite':
-        return <AdminComptabiliteSection />
+        return <AdminComptabiliteAdvanced />
       case 'conformite':
-        return <AdminConformiteSection />
+        return <AdminConformiteAdvanced />
       case 'business-plans':
-        return <AdminBusinessPlansSection />
+        return <AdminBusinessPlanAdvanced />
       case 'contracts':
-        return <AdminContractsSection />
+        return <AdminContractsAdvanced />
       case 'events':
-        return <AdminEventsSection />
+        return <AdminEventsAdvanced />
       default:
         return <AdminDashboardSection />
     }

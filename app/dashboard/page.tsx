@@ -2,8 +2,13 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ClientSidebar from '@/components/client/ClientSidebar'
+
+// Enable demo mode automatically
+if (typeof window !== 'undefined' && !localStorage.getItem('demo_mode')) {
+  localStorage.setItem('demo_mode', 'true')
+}
 import ClientOverviewTab from '@/components/client/sections/ClientOverviewTab'
 import ClientComptabiliteTab from '@/components/client/sections/ClientComptabiliteTab'
 import ClientConformiteTab from '@/components/client/sections/ClientConformiteTab'

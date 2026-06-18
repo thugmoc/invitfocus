@@ -5,8 +5,8 @@ import AdminSidebar from '@/components/admin/AdminSidebar'
 import AdminDashboardSection from '@/components/admin/sections/AdminDashboardSection'
 import AdminClientsSection from '@/components/admin/sections/AdminClientsSection'
 import AdminPipelineSection from '@/components/admin/sections/AdminPipelineSection'
-import AdminReportsSection from '@/components/admin/sections/AdminReportsSection'
-import AdminMessagesSection from '@/components/admin/sections/AdminMessagesSection'
+import AdminReportsAdvancedFull from '@/components/admin/sections/AdminReportsAdvancedFull'
+import AdminMessagesAdvanced from '@/components/admin/sections/AdminMessagesAdvanced'
 import AdminComptabiliteAdvanced from '@/components/admin/sections/AdminComptabiliteAdvanced'
 import AdminConformiteAdvanced from '@/components/admin/sections/AdminConformiteAdvanced'
 import AdminBusinessPlanAdvanced from '@/components/admin/sections/AdminBusinessPlanAdvanced'
@@ -32,9 +32,9 @@ export default function AdminDashboard() {
       case 'pipeline':
         return <AdminPipelineSection />
       case 'reports':
-        return <AdminReportsSection />
+        return <AdminReportsAdvancedFull />
       case 'messages':
-        return <AdminMessagesSection />
+        return <AdminMessagesAdvanced />
       case 'comptabilite':
         return <AdminComptabiliteAdvanced />
       case 'conformite':

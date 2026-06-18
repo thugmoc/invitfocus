@@ -11,6 +11,7 @@ import ClientContratsTab from '@/components/client/sections/ClientContratsTab'
 import ClientEvenementsTab from '@/components/client/sections/ClientEvenementsTab'
 import ClientMessagesTab from '@/components/client/sections/ClientMessagesTab'
 import ClientSettingsTab from '@/components/client/sections/ClientSettingsTab'
+import ClientProfileSettings from '@/components/client/sections/ClientProfileSettings'
 
 export default function ClientDashboard() {
   const [activeTab, setActiveTab] = useState('overview')
@@ -37,7 +38,7 @@ export default function ClientDashboard() {
       case 'messages':
         return <ClientMessagesTab />
       case 'settings':
-        return <ClientSettingsTab />
+        return <ClientProfileSettings />
       default:
         return <ClientOverviewTab />
     }

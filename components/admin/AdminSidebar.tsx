@@ -17,6 +17,7 @@ import {
   FileCheck,
   Calendar,
   Folder,
+  Download,
 } from 'lucide-react'
 
 const adminSections = [
@@ -26,6 +27,7 @@ const adminSections = [
   { icon: FileText, label: 'Reports', id: 'reports' },
   { icon: MessageSquare, label: 'Messages', id: 'messages' },
   { icon: Folder, label: 'Documents', id: 'documents' },
+  { icon: Download, label: 'Import from Google Drive', id: 'gdrive-import' },
   { icon: DollarSign, label: 'Comptabilité & Audit', id: 'comptabilite' },
   { icon: Shield, label: 'Conformité', id: 'conformite' },
   { icon: Briefcase, label: 'Business Plans', id: 'business-plans' },

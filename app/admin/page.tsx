@@ -19,6 +19,11 @@ const AdminAllClientDocuments = dynamic(
   { ssr: false }
 )
 
+const AdminGoogleDriveImport = dynamic(
+  () => import('@/components/admin/sections/AdminGoogleDriveImport'),
+  { ssr: false }
+)
+
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('dashboard')
 
@@ -53,6 +58,8 @@ export default function AdminDashboard() {
         return <AdminEventsAdvanced />
       case 'documents':
         return <AdminAllClientDocuments />
+      case 'gdrive-import':
+        return <AdminGoogleDriveImport />
       default:
         return <AdminDashboardSection />
     }

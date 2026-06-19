@@ -12,6 +12,12 @@ import AdminConformiteAdvanced from '@/components/admin/sections/AdminConformite
 import AdminBusinessPlanAdvanced from '@/components/admin/sections/AdminBusinessPlanAdvanced'
 import AdminContractsAdvanced from '@/components/admin/sections/AdminContractsAdvanced'
 import AdminEventsAdvanced from '@/components/admin/sections/AdminEventsAdvanced'
+import dynamic from 'next/dynamic'
+
+const AdminAllClientDocuments = dynamic(
+  () => import('@/components/admin/sections/AdminAllClientDocuments'),
+  { ssr: false }
+)
 
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('dashboard')
@@ -45,6 +51,8 @@ export default function AdminDashboard() {
         return <AdminContractsAdvanced />
       case 'events':
         return <AdminEventsAdvanced />
+      case 'documents':
+        return <AdminAllClientDocuments />
       default:
         return <AdminDashboardSection />
     }

@@ -16,6 +16,7 @@ import {
   Briefcase,
   FileCheck,
   Calendar,
+  Folder,
 } from 'lucide-react'
 
 const adminSections = [
@@ -24,6 +25,7 @@ const adminSections = [
   { icon: TrendingUp, label: 'Pipeline', id: 'pipeline' },
   { icon: FileText, label: 'Reports', id: 'reports' },
   { icon: MessageSquare, label: 'Messages', id: 'messages' },
+  { icon: Folder, label: 'Documents', id: 'documents' },
   { icon: DollarSign, label: 'Comptabilité & Audit', id: 'comptabilite' },
   { icon: Shield, label: 'Conformité', id: 'conformite' },
   { icon: Briefcase, label: 'Business Plans', id: 'business-plans' },
